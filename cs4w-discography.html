@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CS4W — Discography</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Raleway:ital,wght@0,200;0,300;0,400;1,300&family=Shippori+Mincho:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#0f0f1c;--bg2:#13132a;--surface:#161630;
+  --ghost:#ddd9e7;--dim:#a8a3c0;--muted:#6a6590;
+  --violet:#b89fff;--teal:#4de8c2;
+  --line:rgba(184,159,255,0.13);
+}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--ghost);font-family:"Shippori Mincho",serif;overflow-x:hidden;}
+
+/* ── BG VIDEO ── */
+.bg-video-wrap{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+.bg-video-wrap video{width:100%;height:100%;object-fit:cover;opacity:0.15;filter:brightness(0.5) saturate(0.6);}
+.bg-video-wrap::after{content:"";position:absolute;inset:0;background:rgba(15,15,28,0.65);}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;align-items:center;justify-content:space-between;padding:1.1rem 3.5rem;background:rgba(15,15,28,0.88);backdrop-filter:blur(24px);border-bottom:1px solid var(--line);}
+nav::after{content:"";position:absolute;bottom:-3px;left:3.5rem;right:3.5rem;height:1px;background:linear-gradient(90deg,transparent,rgba(77,232,194,0.2) 40%,rgba(184,159,255,0.16) 60%,transparent);}
+.logo{font-family:"Cinzel",serif;font-weight:600;font-size:1.25rem;letter-spacing:0.2em;color:var(--ghost);text-decoration:none;display:flex;align-items:center;gap:0.4rem;}
+.logo-cross{color:var(--violet);font-size:0.8rem;font-family:"Raleway",sans-serif;font-weight:300;}
+.nav-links{display:flex;gap:2rem;list-style:none;}
+.nav-links a{font-family:"Raleway",sans-serif;font-weight:300;font-size:0.7rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.3s;position:relative;}
+.nav-links a::after{content:"";position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--teal);transition:width 0.35s;}
+.nav-links a:hover,.nav-active{color:var(--ghost)!important;}
+.nav-links a.nav-active::after,.nav-links a:hover::after{width:100%;}
+
+/* ── REVEAL ── */
+.reveal{opacity:0;transform:translateY(18px);transition:opacity 0.75s cubic-bezier(.22,1,.36,1),transform 0.75s cubic-bezier(.22,1,.36,1);transition-delay:var(--delay,0ms);}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+/* ── PAGE HEADER ── */
+.page-header{position:relative;z-index:1;padding:100px 3.5rem 32px;max-width:1300px;margin:0 auto;}
+.ph-eyebrow{font-family:"Raleway",sans-serif;font-weight:300;font-style:italic;font-size:0.64rem;letter-spacing:0.52em;color:var(--violet);text-transform:uppercase;display:flex;align-items:center;gap:0.55rem;margin-bottom:0.5rem;}
+.ph-eyebrow::before{content:"✦";font-size:0.5rem;}
+.ph-h1{font-family:"Cinzel",serif;font-weight:600;font-size:clamp(1.8rem,3.5vw,3.2rem);letter-spacing:0.1em;color:var(--ghost);margin-bottom:0.35rem;}
+.ph-sub{font-family:"Shippori Mincho",serif;font-size:0.8rem;letter-spacing:0.42em;color:var(--muted);margin-bottom:1.2rem;}
+.ph-count{font-family:"Raleway",sans-serif;font-weight:300;font-size:0.66rem;letter-spacing:0.2em;color:var(--muted);}
+.ph-count em{color:var(--violet);font-style:normal;}
+
+/* ── CTRL BAR ── */
+.ctrl-bar{position:sticky;top:62px;z-index:200;background:rgba(15,15,28,0.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:0.7rem 3.5rem;display:flex;align-items:center;gap:0.7rem;flex-wrap:wrap;}
+.sort-btn{font-family:"Raleway",sans-serif;font-weight:300;font-style:italic;font-size:0.64rem;letter-spacing:0.18em;text-transform:uppercase;padding:0.3rem 0.85rem;border:1px solid var(--line);color:var(--muted);background:transparent;cursor:pointer;transition:all 0.25s;white-space:nowrap;}
+.sort-btn:hover,.sort-btn.active{border-color:var(--violet);color:var(--violet);background:rgba(184,159,255,0.06);}
+.ctrl-sep{width:1px;height:16px;background:var(--line);flex-shrink:0;}
+.search-box{font-family:"Raleway",sans-serif;font-weight:300;font-size:0.7rem;letter-spacing:0.12em;padding:0.3rem 0.85rem;border:1px solid var(--line);color:var(--ghost);background:transparent;outline:none;transition:border-color 0.25s;flex:1;min-width:140px;max-width:220px;}
+.search-box::placeholder{color:var(--muted);font-style:italic;}
+.search-box:focus{border-color:var(--violet);}
+.count-badge{font-family:"Raleway",sans-serif;font-weight:300;font-size:0.6rem;letter-spacing:0.14em;color:var(--muted);margin-left:auto;}
+.count-badge em{color:var(--violet);font-style:normal;}
+
+/* ── GRID ── */
+.dc-main{position:relative;z-index:1;padding:0 3.5rem 100px;max-width:1300px;margin:0 auto;}
+#dcGrid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+  gap:1px;background:var(--line);border:1px solid var(--line);
+}
+
+/* ── CARD ── */
+.dc-card{
+  background:var(--bg);
+  display:flex;flex-direction:column;
+  position:relative;overflow:hidden;
+  transition:background 0.3s;
+}
+.dc-card::before{
+  content:"";position:absolute;top:0;left:0;
+  width:0;height:2px;
+  background:linear-gradient(90deg,var(--violet),var(--teal));
+  transition:width 0.4s;z-index:2;
+}
+.dc-card:hover::before{width:100%;}
+.dc-card:hover{background:rgba(184,159,255,0.045);}
+
+/* ── MEDIA ── */
+.dc-media{width:100%;overflow:hidden;background:var(--bg2);position:relative;}
+
+/* YTあり */
+.dc-card.playing .dc-info{border-top:1px solid var(--violet);}
+.dc-thumb{
+  width:100%;aspect-ratio:16/9;
+  cursor:pointer;position:relative;display:block;overflow:hidden;
+  background:var(--bg2);
+  border:none;padding:0;
+}
+.dc-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.4s,opacity 0.3s;opacity:0.82;}
+.dc-card:hover .dc-thumb img{transform:scale(1.03);opacity:0.95;}
+.dc-play{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  background:rgba(15,15,28,0.28);transition:background 0.3s;
+}
+.dc-card:hover .dc-play{background:rgba(15,15,28,0.1);}
+.dc-play span{
+  width:40px;height:40px;border-radius:50%;
+  background:rgba(184,159,255,0.22);border:1px solid rgba(184,159,255,0.55);
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.9rem;color:var(--ghost);transition:all 0.3s;
+}
+.dc-card:hover .dc-play span{background:rgba(184,159,255,0.38);transform:scale(1.08);}
+.dc-yt-label{
+  position:absolute;bottom:0.5rem;right:0.6rem;
+  font-family:"Raleway",sans-serif;font-weight:300;
+  font-size:0.52rem;letter-spacing:0.15em;text-transform:uppercase;
+  color:rgba(221,217,231,0.6);
+  background:rgba(15,15,28,0.6);
+  padding:0.1rem 0.4rem;
+}
+.dc-embed{display:none;} /* embed disabled */
+.dc-embed.open{display:none;} /* disabled */
+.dc-embed iframe{width:100%;aspect-ratio:16/9;display:block;border:none;}
+
+/* YTなし → 検索リンク */
+.dc-search-link{
+  width:100%;aspect-ratio:16/9;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.5rem;
+  text-decoration:none;
+  background:rgba(15,15,28,0.5);
+  transition:background 0.3s;
+  position:relative;
+}
+.dc-search-link:hover{background:rgba(184,159,255,0.06);}
+.dc-year-big{font-family:"Cinzel",serif;font-weight:900;font-size:2.2rem;color:rgba(184,159,255,0.15);letter-spacing:0.04em;}
+.dc-search-hint{
+  font-family:"Raleway",sans-serif;font-weight:300;
+  font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--muted);
+  opacity:0;transition:opacity 0.3s;
+}
+.dc-search-link:hover .dc-search-hint{opacity:1;}
+.dc-search-link:hover .dc-year-big{color:rgba(184,159,255,0.3);}
+
+/* ── INFO ── */
+.dc-info{padding:1rem 1.2rem 1.3rem;flex:1;display:flex;flex-direction:column;gap:0.15rem;}
+.dc-meta-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.45rem;}
+.dc-date{font-family:"Raleway",sans-serif;font-weight:300;font-style:italic;font-size:0.58rem;letter-spacing:0.25em;color:var(--teal);}
+.dc-note{font-family:"Raleway",sans-serif;font-weight:300;font-size:0.5rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--violet);border:1px solid rgba(184,159,255,0.22);padding:0.1rem 0.38rem;}
+.dc-title-long{font-size:0.76rem;line-height:1.4;}
+.dc-title{font-family:"Cinzel",serif;font-weight:400;font-size:0.88rem;color:var(--ghost);line-height:1.3;letter-spacing:0.05em;transition:color 0.3s;margin-bottom:0.1rem;}
+.dc-card:hover .dc-title-long{font-size:0.76rem;line-height:1.4;}
+.dc-title{color:var(--violet);}
+.dc-collab{font-family:"Raleway",sans-serif;font-weight:300;font-style:italic;font-size:0.62rem;letter-spacing:0.1em;color:var(--teal);}
+.dc-platform{font-family:"Shippori Mincho",serif;font-size:0.7rem;line-height:1.7;color:var(--muted);letter-spacing:0.04em;}
+.dc-ext-link{
+  margin-top:0.4rem;
+  font-family:"Raleway",sans-serif;font-weight:300;font-style:italic;
+  font-size:0.58rem;letter-spacing:0.15em;
+  color:var(--teal);text-decoration:none;transition:opacity 0.2s;
+  display:inline-block;
+}
+.dc-ext-link:hover{opacity:0.7;}
+
+.no-results{text-align:center;padding:4rem;font-family:"Raleway",sans-serif;font-weight:300;font-style:italic;font-size:0.9rem;color:var(--muted);letter-spacing:0.2em;grid-column:1/-1;}
+
+/* ── FOOTER ── */
+footer{position:relative;z-index:1;padding:1.5rem 3.5rem;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;background:rgba(15,15,28,0.9);}
+.footer-l{font-family:"Cinzel",serif;font-weight:600;font-size:0.82rem;letter-spacing:0.2em;color:var(--muted);}
+.footer-r{font-family:"Raleway",sans-serif;font-weight:300;font-size:0.55rem;letter-spacing:0.14em;color:rgba(106,101,133,0.4);}
+
+@media(max-width:640px){
+  nav{padding:1rem 1.2rem;}
+  nav::after{left:1.2rem;right:1.2rem;}
+  .ctrl-bar{padding:0.6rem 1.2rem;top:58px;}
+  .page-header,.dc-main{padding-left:1.2rem;padding-right:1.2rem;}
+  #dcGrid{grid-template-columns:repeat(2,1fr);}
+}
+</style>
+</head>
+<body>
+
+<div class="bg-video-wrap" aria-hidden="true">
+  <video autoplay muted loop playsinline preload="auto">
+    <source src="haikei_mp4.mp4" type="video/mp4">
+  </video>
+</div>
+
+<nav>
+  <a href="cs4w-v6.html" class="logo"><span class="logo-cross">✛</span>CS4W</a>
+  <ul class="nav-links">
+    <li><a href="cs4w-v6.html">Home</a></li>
+    <li><a href="cs4w-works.html">Works</a></li>
+    <li><a href="cs4w-discography.html" class="nav-active">Discography</a></li>
+    <li><a href="cs4w-about.html">About</a></li>
+    <li><a href="cs4w-contact.html">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="page-header">
+  <p class="ph-eyebrow reveal">Discography</p>
+  <h1 class="ph-h1 reveal" style="--delay:70ms">全楽曲リスト</h1>
+  <p class="ph-sub reveal" style="--delay:120ms">Complete Works — 2020–2026</p>
+  <p class="ph-count reveal" style="--delay:160ms">Total <em>47</em> tracks</p>
+</div>
+
+<div class="ctrl-bar">
+  <button class="sort-btn active" onclick="setSort('desc',this)">新しい順</button>
+  <button class="sort-btn" onclick="setSort('asc',this)">古い順</button>
+  <div class="ctrl-sep"></div>
+  <input id="searchBox" class="search-box" type="text" placeholder="Search title / platform...">
+  <span class="count-badge" id="countBadge">全 <em>47</em> 曲</span>
+</div>
+
+<div class="dc-main">
+  <div id="dcGrid">
+<div class="dc-card" data-date="2020/03/31" data-title="stay ch4nged" data-year="2020">
+    <div class="dc-media"><a href="https://www.youtube.com/watch?v=LjMXYiG2jLM" target="_blank" class="dc-thumb" title="Stay Ch4nged">
+        <img src="https://img.youtube.com/vi/LjMXYiG2jLM/mqdefault.jpg" alt="Stay Ch4nged" loading="lazy">
+        <div class="dc-play"><span>▶</span></div>
+      </a></div>
+    <div class="dc-info">
+      <div class="dc-meta-row">
+        <span class="dc-date">2020/03/31</span>
+      </div>
+      <h3 class="dc-title" title="Stay Ch4nged">Stay Ch4nged</h3>
+      
+    </div>
+  </div>
+<div class="dc-card" data-date="2020/07/25" data-title="vallemaison" data-year="2020">
+    <div class="dc-media"><a href="https://www.youtube.com/watch?v=AZVkz-KfhJ8" target="_blank" class="dc-thumb" title="VALLEMAISON">
+        <img src="https://img.youtube.com/vi/AZVkz-KfhJ8/mqdefault.jpg" alt="VALLEMAISON" loading="lazy">
+        <div class="dc-play"><span>▶</span></div>
+      </a></div>
+    <div class="dc-info">
+      <div class="dc-meta-row">
+        <span class="dc-date">2020/07/25</span>
+      </div>
+      <h3 class="dc-title" title="VALLEMAISON">VALLEMAISON</h3>
+      
+    </div>
+  </div>
+<div class="dc-card" data-date="2020/09/07" data-title="nothingnesses" data-year="2020">
+    <div class="dc-media"><a href="https://www.youtube.com/watch?v=Hc3_-If0raw" target="_blank" class="dc-thumb" title="Nothingnesses">
+        <img src="https://img.youtube.com/vi/Hc3_-If0raw/mqdefault.jpg" alt="Nothingnesses" loading="lazy">
+        <div class="dc-play"><span>▶</span></div>
+      </a></div>
+    <div class="dc-info">
+      <div class="dc-meta-row">
+        <span class="dc-date">2020/09/07</span>
+      </div>
+      <h3 class="dc-title" title="Nothingnesses">Nothingnesses</h3>
+      
+    </div>
+  </div>
+<div class="dc-card" data-date="2020/12/26" data-title="dainsleiv" data-year="2020">
+    <div class="dc-media"><a href="https://www.youtube.com/watch?v=QK1ebO9L9OA" target="_blank" class="dc-thumb" title="DainsleIV">
+        <img src="https://img.youtube.com/vi/QK1ebO9L9OA/mqdefault.jpg" alt="DainsleIV" loading="lazy">
+        <div class="dc-play"><span>▶</span></div>
+      </a></div>
+    <div class="dc-info">
+      <div class="dc-meta-row">
+        <span class="dc-date">2020/12/26</span>
+      </div>
+      <h3 class="dc-title" title="DainsleIV">DainsleIV</h3>
+      
+    </div>
+  </div>
+<div class="dc-card" data-date="2020/12/29" data-title="花は溺れて欣喜雀躍と" data-year="2020">
+    <div class="dc-media"><a href="https://www.youtube.com/watch?v=iH3aWhMpi6Q" target="_blank" class="dc-thumb" title="花は溺れて欣喜雀躍と">
+        <img src="https://img.youtube.com/vi/iH3aWhMpi6Q/mqdefault.jpg" alt="花は溺れて欣喜雀躍と" loading="lazy">
+        <div class="dc-play"><span>▶</span></div>
+      </a></div>
+    <div class="dc-info">
+      <div class="dc-meta-row">
+        <span class="dc-date">2020/12/29</span>
+      </div>
+      <h3 class="dc-title" title="花は溺れて欣喜雀躍と">花は溺れて欣喜雀躍と</h3>
+      
+    </div>
+  </div>
+<div class="dc-card" data-date="2021/03/31" data-title="guilty hostage" data-year="2021">
+    <div class="dc-media"><a href="https://www.youtube.com/watch?v=yVQcZ_GgSqU" target="_blank" class="dc-thumb" title="Guilty Hostage">
+        <img src="https://img.youtube.com/vi/yVQcZ_GgSqU/mqdefault.jpg" alt="Guilty Hostage" loading="lazy">
+        <div class="dc-play"><span>▶</span></div>
+      </a></div>
+    <div class="dc-info">
+      <div class="dc-meta-row">
+        <span class="dc-date">2021/03/31</span>
+      </div>
+      <h3 class="dc-title" title="Guilty Hostage">Guilty Hostage</h3>
+      <p class="dc-platform">Dynamix</p>
+    </div>
+  </div>
+<div class="dc-card" data-date="2021/04/09" data-title="vesper" data-year="2021">
+    <div class="dc-media"><a href="https://www.youtube.com/watch?v=fmor-YxZB_U" target="_blank" class="dc-thumb" title="Vesper">
+        <img src="https://img.youtube.com/vi/fmor-YxZB_U/mqdefault.jpg" alt="Vesper" loading="lazy">
+        <div class="dc-play"><span>▶</span></div>
+      </a></div>
+    <div class="dc-info">
+      <div class="dc-meta-row">
+        <span class="dc-date">2021/04/09</span>
+      </div>
+      <h3 class="dc-title" title="Vesper">Vesper</h3>
+      
+    </div>
+  </div>
+<div class="dc-card" data-date="2021/08/13" data-title="all" data-year="2021">
+    <div class="dc-media"><a href="https://www.youtube.com/watch?v=9qrSMRc96DY" target="_blank" class="dc-thumb" title="ALL">
+        <img src="https://img.youtube.com/vi/9qrSMRc96DY/mqdefault.jpg" alt="ALL" loading="lazy">
+        <div class="dc-play"><span>▶</span></div>
+      </a></div>
+    <div class="dc-info">
+      <div class="dc-meta-row">
+        <span class="dc-date">2021/08/13</span>
+      </div>
+      <h3 class="dc-title" title="ALL">ALL</h3>
+      <p class="dc-platform">デカくなりたいコンピ</p>
+    </div>
+  </div>
+<div class="dc-card" data-date="2021/08/15" data-title="absolute disintegration" data-year="2021">
+    <div class="dc-media"><a href="https://www.youtube.com/watch?v=9LoUBqDDYN8" target="_blank" class="dc-thumb" title="Absolute Disintegration">
+        <img src="https://img.youtube.com/vi/9LoUBqDDYN8/mqdefault.jpg" alt="Absolute Disintegration" loading="lazy">
+        <div class="dc-play"><span>▶</span></div>
+      </a></div>
+    <div class="dc-info">
+      <div class="dc-meta-row">
+        <span class="dc-date">2021/08/15</span>
+      </div>
+      <h3 class="dc-title" title="Absolute Disintegration">Absolute Disintegration</h3>
+      <p class="dc-platform">TAKUMI³</p>
+    </div>
+  </div>
+<div class="dc-card" data-date="2021/11/01" data-title="such a sense" data-year="2021">
+    <div class="dc-media"><a href="https://www.youtube.com/watch?v=HM_ClPyGFuk" target="_blank" class="dc-thumb" title="Such a Sense">
+        <img src="https://img.youtube.com/vi/HM_ClPyGFuk/mqdefault.jpg" alt="Such a Sense" loading="lazy">
+        <div class="dc-play"><span>▶</span></div>
+      </a></div>
+    <div class="dc-info">
+      <div class="dc-meta-row">
+        <span class="dc-date">2021/11/01</span>
+      </div>
+      <h3 class="dc-title" title="Such a Sense">Such a Sense</h3>
+      <p class="dc-platform">LIBEREX 002</p>
+    </div>
+  </div>
+<div class="dc-card" data-date="2021/11/28" data-title="asmodeus ~be loyal to your desires~" data-year="2021">
+    <div class="dc-media"><a href="https://www.youtube.com/watch?v=E_23LzoCLeY" target="_blank" class="dc-thumb" title="Asmodeus ~Be loyal to your desires~">
+        <img src="https://img.youtube.com/vi/E_23LzoCLeY/mqdefault.jpg" alt="Asmodeus ~Be loyal to your desires~" loading="lazy">
+        <div class="dc-play"><span>▶</span></div>
+      </a></div>
+    <div class="dc-info">
+      <div class="dc-meta-row">
+        <span class="dc-date">2021/11/28</span>
+      </div>
+      <h3 class="dc-title dc-title-long" title="Asmodeus ~Be loyal to your desires~">Asmodeus ~Be loyal to your desires~</h3>
+      <p class="dc-collab">Garbagecan vs. CS4W</p><p class="dc-platform">Gloomy Goth Project</p>
+    </div>
+  </div>
+<div class="dc-card" data-date="2022/03/18" data-title="cx-ronos" data-year="2022">
+    <div class="dc-media"><a href="https://www.youtube.com/watch?v=GeL8P1m5m1w" target="_blank" class="dc-thumb" title="CX-ronos">
+        <img src="https://img.youtube.com/vi/GeL8P1m5m1w/mqdefault.jpg" alt="CX-ronos" loading="lazy">
+        <div class="dc-play"><span>▶</span></div>
+      </a></div>
+    <div class="dc-info">
+      <div class="dc-meta-row">
+        <span class="dc-date">2022/03/18</span>
+      </div>
+      <h3 class="dc-title" title="CX-ronos">CX-ronos</h3>
+      <p class="dc-platform">DanceRail3 / Berry Melody</p>
+    </div>
+  </div>
+<div class="dc-card" data-date="2022/04/24" data-title="back side of the abyss" data-year="2022">
+    <div class="dc-media"><a href="https://www.youtube.com/watch?v=M00BzU8N2qY" target="_blank" class="dc-thumb" title="Back side of the abyss">
+        <img src="https://img.youtube.com/vi/M00BzU8N2qY/mqdefault.jpg" alt="Back side of the abyss" loading="lazy">
+        <div class="dc-play"><span>▶</span></div>
+      </a></div>
+    <div class="dc-info">
+      <div class="dc-meta-row">
+        <span class="dc-date">2022/04/24</span>
+      </div>
+      <h3 class="dc-title" title="Back side of the abyss">Back side of the abyss</h3>
+      <p class="dc-platform">THE DARKEST HOUR</p>
+    </div>
+  </div>
+<div class="dc-card" data-date="2022/05/17" data-title="v:vallenstein" data-year="2022">
+    <div class="dc-media"><a href="https://www.youtube.com/watch?v=flYWBgoP9fo" target="_blank" class="dc-thumb" title="V:Vallenstein">
+        <img src="https://img.youtube.com/vi/flYWBgoP9fo/mqdefault.jpg" alt="V:Vallenstein" loading="lazy">
+        <div class="dc-play"><span>▶</span></div>
+      </a></div>
+    <div class="dc-info">
+      <div class="dc-meta-row">
+        <span class="dc-date">2022/05/17</span>
+      </div>
+      <h3 class="dc-title" title="V:Vallenstein">V:Vallenstein</h3>
+      <p class="dc-platform">Dynamix</p>
+    </div>
+  </div>
+<div class="dc-card" data-date="2022/07/30" data-title="vintage light" data-year="2022">
+    <div class="dc-media"><a href="https://www.youtube.com/watch?v=wYfdL2-52TY" target="_blank" class="dc-thumb" title="Vintage Light">
+        <img src="https://img.youtube.com/vi/wYfdL2-52TY/mqdefault.jpg" alt="Vintage Light" loading="lazy">
+        <div class="dc-play"><span>▶</span></div>
+      </a></div>
+    <div class="dc-info">
+      <div class="dc-meta-row">
+        <span class="dc-date">2022/07/30</span>
+      </div>
+      <h3 class="dc-title" title="Vintage Light">Vintage Light</h3>
+      
+    </div>
+  </div>
+<div class="dc-card" data-date="2022/08/12" data-title="circumscription" data-year="2022">
+    <div class="dc-media"><a href="https://www.youtube.com/watch?v=B_BbiIyXGNg" target="_blank" class="dc-thumb" title="Circumscription">
+        <img src="https://img.youtube.com/vi/B_BbiIyXGNg/mqdefault.jpg" alt="Circumscription" loading="lazy">
+        <div class="dc-play"><span>▶</span></div>
+      </a></div>
+    <div class="dc-info">
+      <div class="dc-meta-row">
+        <span class="dc-date">2022/08/12</span>
+      </div>
+      <h3 class="dc-title" title="Circumscription">Circumscription</h3>
+      <p class="dc-platform">Dynamix</p>
+    </div>
+  </div>
+<div class="dc-card" data-date="2022/11/13" data-title="artemizija transfiguration" data-year="2022">
+    <div class="dc-media"><a href="https://www.youtube.com/watch?v=_a32LGzqMek" target="_blank" class="dc-thumb" title="Artemizija Transfiguration">
+        <img src="https://img.youtube.com/vi/_a32LGzqMek/mqdefault.jpg" alt="Artemizija Transfiguration" loading="lazy">
+        <div class="dc-play"><span>▶</span></div>
+      </a></div>
+    <div class="dc-info">
+      <div class="dc-meta-row">
+        <span class="dc-date">2022/11/13</span>
+      </div>
+      <h3 class="dc-title" title="Artemizija Transfiguration">Artemizija Transfiguration</h3>
+      <p class="dc-platform">ARTIFACTS:ZERØ</p>
+    </div>
+  </div>
+<div class="dc-card" data-date="2022/11/20" data-title="ignominiously" data-year="2022">
+    <div class="dc-media"><a href="https://www.youtube.com/watch?v=acqe50irjeg" target="_blank" class="dc-thumb" title="Ignominiously">
+        <img src="https://img.youtube.com/vi/acqe50irjeg/mqdefault.jpg" alt="Ignominiously" loading="lazy">
+        <div class="dc-play"><span>▶</span></div>
+      </a></div>
+    <div class="dc-info">
+      <div class="dc-meta-row">
+        <span class="dc-date">2022/11/20</span>
+      </div>
+      <h3 class="dc-title" title="Ignominiously">Ignominiously</h3>
+      <p class="dc-platform">Dystopian Arsenal</p>
+    </div>
+  </div>
+<div class="dc-card" data-date="2022/12/19" data-title="nf:argonaut" data-year="2022">
+    <div class="dc-media"><a href="https://www.youtube.com/watch?v=74J58Lv9zno" target="_blank" class="dc-thumb" title="NF:Argonaut">
+        <img src="https://img.youtube.com/vi/74J58Lv9zno/mqdefault.jpg" alt="NF:Argonaut" loading="lazy">
+        <div class="dc-play"><span>▶</span></div>
+      </a></div>
+    <div class="dc-info">
+      <div class="dc-meta-row">
+        <span class="dc-date">2022/12/19</span>
+      </div>
+      <h3 class="dc-title" title="NF:Argonaut">NF:Argonaut</h3>
+      <p class="dc-collab">Connexio & CS4W</p><p class="dc-platform">Significatio Vitae / Lanota</p>
+    </div>
+  </div>
+<div class="dc-card" data-date="2023/04/24" data-title="phatchiiq" data-year="2023">
+    <div class="dc-media"><a href="https://www.youtube.com/watch?v=6tL1VwTiupc" target="_blank" class="dc-thumb" title="Phatchiiq">
+        <img src="https://img.youtube.com/vi/6tL1VwTiupc/mqdefault.jpg" alt="Phatchiiq" loading="lazy">
+        <div class="dc-play"><span>▶</span></div>
+      </a></div>
+    <div class="dc-info">
+      <div class="dc-meta-row">
+        <span class="dc-date">2023/04/24</span>
+      </div>
+      <h3 class="dc-title" title="Phatchiiq">Phatchiiq</h3>
+      <p class="dc-platform">PSYALUME</p>
+    </div>
+  </div>
+<div class="dc-card" data-date="2023/04/30" data-title="phoenixismia ~hallucination of eternity in a timeless realm~" data-year="2023">
+    <div class="dc-media"><a href="https://www.youtube.com/watch?v=9RHykY_xA4s" target="_blank" class="dc-thumb" title="Phoenixismia ~Hallucination of Eternity in a Timeless Realm~">
+        <img src="https://img.youtube.com/vi/9RHykY_xA4s/mqdefault.jpg" alt="Phoenixismia ~Hallucination of Eternity in a Timeless Realm~" loading="lazy">
+        <div class="dc-play"><span>▶</span></div>
+      </a></div>
+    <div class="dc-info">
+      <div class="dc-meta-row">
+        <span class="dc-date">2023/04/30</span>
+      </div>
+      <h3 class="dc-title dc-title-long" title="Phoenixismia ~Hallucination of Eternity in a Timeless Realm~">Phoenixismia ~Hallucination of Eternity in a Timeless Realm~</h3>
+      <p class="dc-collab">C4ydora (CS4W+Pirendora)</p><p class="dc-platform">evordeation / Dynamix</p>
+    </div>
+  </div>
+<div class="dc-card" data-date="2023/07/03" data-title="hauynite" data-year="2023">
+    <div class="dc-media"><a href="https://www.youtube.com/watch?v=s39x7fSSY1I" target="_blank" class="dc-thumb" title="Hauynite">
+        <img src="https://img.youtube.com/vi/s39x7fSSY1I/mqdefault.jpg" alt="Hauynite" loading="lazy">
+        <div class="dc-play"><span>▶</span></div>
+      </a></div>
+    <div class="dc-info">
+      <div class="dc-meta-row">
+        <span class="dc-date">2023/07/03</span>
+      </div>
+      <h3 class="dc-title" title="Hauynite">Hauynite</h3>
+      <p class="dc-collab">RYOQUCHA & CS4W</p><p class="dc-platform">Dynamix / Lanota / Orzmic</p>
+    </div>
+  </div>
+<div class="dc-card" data-date="2023/08/27" data-title="ex-ris" data-year="2023">
+    <div class="dc-media"><a href="https://www.youtube.com/watch?v=kkE1z76fgFs" target="_blank" class="dc-thumb" title="EX-ris">
+        <img src="https://img.youtube.com/vi/kkE1z76fgFs/mqdefault.jpg" alt="EX-ris" loading="lazy">
+        <div class="dc-play"><span>▶</span></div>
+      </a></div>
+    <div class="dc-info">
+      <div class="dc-meta-row">
+        <span class="dc-date">2023/08/27</span>
+      </div>
+      <h3 class="dc-title" title="EX-ris">EX-ris</h3>
+      <p class="dc-platform">Corsace Open 2023</p>
+    </div>
+  </div>
+<div class="dc-card" data-date="2023/11/12" data-title="artemizija irreversibility" data-year="2023">
+    <div class="dc-media"><a href="https://www.youtube.com/watch?v=iHgUoohbm5k" target="_blank" class="dc-thumb" title="Artemizija Irreversibility">
+        <img src="https://img.youtube.com/vi/iHgUoohbm5k/mqdefault.jpg" alt="Artemizija Irreversibility" loading="lazy">
+        <div class="dc-play"><span>▶</span></div>
+      </a></div>
+    <div class="dc-info">
+      <div class="dc-meta-row">
+        <span class="dc-date">2023/11/12</span>
+      </div>
+      <h3 class="dc-title" title="Artemizija Irreversibility">Artemizija Irreversibility</h3>
+      <p class="dc-platform">ARTIFACTS:ASCENSIØN</p>
+    </div>
+  </div>
+<div class="dc-card" data-date="2023/12/25" data-title="evolve from desol4tion" data-year="2023">
+    <div class="dc-media"><a href="https://www.youtube.com/watch?v=uxLKfquCxco" target="_blank" class="dc-thumb" title="Evolve From Desol4tion">
+        <img src="https://img.youtube.com/vi/uxLKfquCxco/mqdefault.jpg" alt="Evolve From Desol4tion" loading="lazy">
+        <div class="dc-play"><span>▶</span></div>
+      </a></div>
+    <div class="dc-info">
+      <div class="dc-meta-row">
+        <span class="dc-date">2023/12/25</span>
+      </div>
+      <h3 class="dc-title" title="Evolve From Desol4tion">Evolve From Desol4tion</h3>
+      <p class="dc-collab">CS4W vs KONPEKi</p>
+    </div>
+  </div>
+<div class="dc-card" data-date="2024/01/26" data-title="メイガスナイト cs4w remix" data-year="2024">
+    <div class="dc-media"><a href="https://www.youtube.com/watch?v=hnla4xK2djE" target="_blank" class="dc-thumb" title="メイガスナイト CS4W REMIX">
+        <img src="https://img.youtube.com/vi/hnla4xK2djE/mqdefault.jpg" alt="メイガスナイト CS4W REMIX" loading="lazy">
+        <div class="dc-play"><span>▶</span></div>
+      </a></div>
+    <div class="dc-info">
+      <div class="dc-meta-row">
+        <span class="dc-date">2024/01/26</span>
+      </div>
+      <h3 class="dc-title" title="メイガスナイト CS4W REMIX">メイガスナイト CS4W REMIX</h3>
+      
+    </div>
+  </div>
+<div class="dc-card" data-date="2024/06/01" data-title="neo sakura" data-year="2024">
+    <div class="dc-media"><a href="https://www.youtube.com/watch?v=dfdlU7-LxI0" target="_blank" class="dc-thumb" title="NEO SAKURA">
+        <img src="https://img.youtube.com/vi/dfdlU7-LxI0/mqdefault.jpg" alt="NEO SAKURA" loading="lazy">
+        <div class="dc-play"><span>▶</span></div>
+      </a></div>
+    <div class="dc-info">
+      <div class="dc-meta-row">
+        <span class="dc-date">2024/06/01</span>
+      </div>
+      <h3 class="dc-title" title="NEO SAKURA">NEO SAKURA</h3>
+      <p class="dc-collab">RYOQUCHA & CS4W</p><p class="dc-platform">NEURO NATION 02</p>
+    </div>
+  </div>
+<div class="dc-card" data-date="2024/06/15" data-title="collapse" data-year="2024">
+    <div class="dc-media"><a href="https://www.youtube.com/watch?v=yRK1A5yOMJ0" target="_blank" class="dc-thumb" title="Collapse">
+        <img src="https://img.youtube.com/vi/yRK1A5yOMJ0/mqdefault.jpg" alt="Collapse" loading="lazy">
+        <div class="dc-play"><span>▶</span></div>
+      </a></div>
+    <div class="dc-info">
+      <div class="dc-meta-row">
+        <span class="dc-date">2024/06/15</span>
+      </div>
+      <h3 class="dc-title" title="Collapse">Collapse</h3>
+      <p class="dc-platform">Immaculée Sekai / Orzmic</p>
+    </div>
+  </div>
+<div class="dc-card" data-date="2024/09/09" data-title="traxxendenza" data-year="2024">
+    <div class="dc-media"><a href="https://www.youtube.com/watch?v=do-69S1inFM" target="_blank" class="dc-thumb" title="Traxxendenza">
+        <img src="https://img.youtube.com/vi/do-69S1inFM/mqdefault.jpg" alt="Traxxendenza" loading="lazy">
+        <div class="dc-play"><span>▶</span></div>
+      </a></div>
+    <div class="dc-info">
+      <div class="dc-meta-row">
+        <span class="dc-date">2024/09/09</span><span class="dc-note">最優秀賞受賞</span>
+      </div>
+      <h3 class="dc-title" title="Traxxendenza">Traxxendenza</h3>
+      <p class="dc-platform">TAKUMI³ / Paradigm: Reboot</p>
+    </div>
+  </div>
+<div class="dc-card" data-date="2024/10/25" data-title="happy halloween cs4w remix" data-year="2024">
+    <div class="dc-media"><a href="https://www.youtube.com/watch?v=WkZ8SS1Hb5Q" target="_blank" class="dc-thumb" title="Happy Halloween CS4W Remix">
+        <img src="https://img.youtube.com/vi/WkZ8SS1Hb5Q/mqdefault.jpg" alt="Happy Halloween CS4W Remix" loading="lazy">
+        <div class="dc-play"><span>▶</span></div>
+      </a></div>
+    <div class="dc-info">
+      <div class="dc-meta-row">
+        <span class="dc-date">2024/10/25</span>
+      </div>
+      <h3 class="dc-title" title="Happy Halloween CS4W Remix">Happy Halloween CS4W Remix</h3>
+      <p class="dc-platform">Happy Halloween Remix!</p>
+    </div>
+  </div>
+<div class="dc-card" data-date="2024/10/29" data-title="complementary contrast" data-year="2024">
+    <div class="dc-media"><a href="https://www.youtube.com/watch?v=b-eIFTy8DcM" target="_blank" class="dc-thumb" title="Complementary Contrast">
+        <img src="https://img.youtube.com/vi/b-eIFTy8DcM/mqdefault.jpg" alt="Complementary Contrast" loading="lazy">
+        <div class="dc-play"><span>▶</span></div>
+      </a></div>
+    <div class="dc-info">
+      <div class="dc-meta-row">
+        <span class="dc-date">2024/10/29</span>
+      </div>
+      <h3 class="dc-title" title="Complementary Contrast">Complementary Contrast</h3>
+      <p class="dc-platform">Coloration</p>
+    </div>
+  </div>
+<div class="dc-card" data-date="2024/11/17" data-title="v:valküre" data-year="2024">
+    <div class="dc-media"><a href="https://www.youtube.com/watch?v=TWenDqSDPy0" target="_blank" class="dc-thumb" title="V:Valküre">
+        <img src="https://img.youtube.com/vi/TWenDqSDPy0/mqdefault.jpg" alt="V:Valküre" loading="lazy">
+        <div class="dc-play"><span>▶</span></div>
+      </a></div>
+    <div class="dc-info">
+      <div class="dc-meta-row">
+        <span class="dc-date">2024/11/17</span>
+      </div>
+      <h3 class="dc-title" title="V:Valküre">V:Valküre</h3>
+      
+    </div>
+  </div>
+<div class="dc-card" data-date="2025/02/23" data-title="sphalerite" data-year="2025">
+    <div class="dc-media"><a href="https://www.youtube.com/watch?v=6m7wq0mdBL0" target="_blank" class="dc-thumb" title="Sphalerite">
+        <img src="https://img.youtube.com/vi/6m7wq0mdBL0/mqdefault.jpg" alt="Sphalerite" loading="lazy">
+        <div class="dc-play"><span>▶</span></div>
+      </a></div>
+    <div class="dc-info">
+      <div class="dc-meta-row">
+        <span class="dc-date">2025/02/23</span>
+      </div>
+      <h3 class="dc-title" title="Sphalerite">Sphalerite</h3>
+      <p class="dc-collab">RYOQUCHA & CS4W</p><p class="dc-platform">Orzmic / 太鼓の達人</p>
+    </div>
+  </div>
+<div class="dc-card" data-date="2025/02/28" data-title="stellar pulse" data-year="2025">
+    <div class="dc-media"><a href="https://www.youtube.com/watch?v=tPJd98NynHA" target="_blank" class="dc-thumb" title="Stellar Pulse">
+        <img src="https://img.youtube.com/vi/tPJd98NynHA/mqdefault.jpg" alt="Stellar Pulse" loading="lazy">
+        <div class="dc-play"><span>▶</span></div>
+      </a></div>
+    <div class="dc-info">
+      <div class="dc-meta-row">
+        <span class="dc-date">2025/02/28</span>
+      </div>
+      <h3 class="dc-title" title="Stellar Pulse">Stellar Pulse</h3>
+      <p class="dc-collab">VIZZEN & CS4W</p><p class="dc-platform">CHOMPO III</p>
+    </div>
+  </div>
+<div class="dc-card" data-date="2025/03/05" data-title="atomic disassembler" data-year="2025">
+    <div class="dc-media"><a href="https://www.youtube.com/watch?v=R2lh5Lyz888" target="_blank" class="dc-thumb" title="Atomic Disassembler">
+        <img src="https://img.youtube.com/vi/R2lh5Lyz888/mqdefault.jpg" alt="Atomic Disassembler" loading="lazy">
+        <div class="dc-play"><span>▶</span></div>
+      </a></div>
+    <div class="dc-info">
+      <div class="dc-meta-row">
+        <span class="dc-date">2025/03/05</span>
+      </div>
+      <h3 class="dc-title" title="Atomic Disassembler">Atomic Disassembler</h3>
+      <p class="dc-platform">EGTS2025</p>
+    </div>
+  </div>
+<div class="dc-card" data-date="2025/07/11" data-title="we know" data-year="2025">
+    <div class="dc-media"><a href="https://www.youtube.com/watch?v=96SqTO76_t4" target="_blank" class="dc-thumb" title="WE KNOW">
+        <img src="https://img.youtube.com/vi/96SqTO76_t4/mqdefault.jpg" alt="WE KNOW" loading="lazy">
+        <div class="dc-play"><span>▶</span></div>
+      </a></div>
+    <div class="dc-info">
+      <div class="dc-meta-row">
+        <span class="dc-date">2025/07/11</span>
+      </div>
+      <h3 class="dc-title" title="WE KNOW">WE KNOW</h3>
+      <p class="dc-collab">feat. 冬街 緑</p><p class="dc-platform">DTM甲子園</p>
+    </div>
+  </div>
+<div class="dc-card" data-date="2025/07/11" data-title="strange dominator" data-year="2025">
+    <div class="dc-media"><a href="https://www.youtube.com/watch?v=y0MBn5Pm-jQ" target="_blank" class="dc-thumb" title="Strange Dominator">
+        <img src="https://img.youtube.com/vi/y0MBn5Pm-jQ/mqdefault.jpg" alt="Strange Dominator" loading="lazy">
+        <div class="dc-play"><span>▶</span></div>
+      </a></div>
+    <div class="dc-info">
+      <div class="dc-meta-row">
+        <span class="dc-date">2025/07/11</span>
+      </div>
+      <h3 class="dc-title" title="Strange Dominator">Strange Dominator</h3>
+      <p class="dc-platform">COLLECTIONS 401</p>
+    </div>
+  </div>
+<div class="dc-card" data-date="2025/07/11" data-title="ding dong" data-year="2025">
+    <div class="dc-media"><a href="https://www.youtube.com/watch?v=_arSudgBlpY" target="_blank" class="dc-thumb" title="Ding Dong">
+        <img src="https://img.youtube.com/vi/_arSudgBlpY/mqdefault.jpg" alt="Ding Dong" loading="lazy">
+        <div class="dc-play"><span>▶</span></div>
+      </a></div>
+    <div class="dc-info">
+      <div class="dc-meta-row">
+        <span class="dc-date">2025/07/11</span>
+      </div>
+      <h3 class="dc-title" title="Ding Dong">Ding Dong</h3>
+      <p class="dc-collab">feat. 冬街 緑</p><p class="dc-platform">COLLECTIONS 401</p>
+    </div>
+  </div>
+<div class="dc-card" data-date="2025/08/03" data-title="auric ink talisman" data-year="2025">
+    <div class="dc-media"><a href="https://www.youtube.com/watch?v=0goAvo9qKFw" target="_blank" class="dc-thumb" title="AURIC INK TALISMAN">
+        <img src="https://img.youtube.com/vi/0goAvo9qKFw/mqdefault.jpg" alt="AURIC INK TALISMAN" loading="lazy">
+        <div class="dc-play"><span>▶</span></div>
+      </a></div>
+    <div class="dc-info">
+      <div class="dc-meta-row">
+        <span class="dc-date">2025/08/03</span>
+      </div>
+      <h3 class="dc-title" title="AURIC INK TALISMAN">AURIC INK TALISMAN</h3>
+      <p class="dc-collab">Sylphix & CS4W</p><p class="dc-platform">ZZZero Dripfest 2025</p>
+    </div>
+  </div>
+<div class="dc-card" data-date="2025/11/15" data-title="ground zero" data-year="2025">
+    <div class="dc-media"><a href="https://www.youtube.com/watch?v=Cq4d5yBCDP4" target="_blank" class="dc-thumb" title="Ground Zero">
+        <img src="https://img.youtube.com/vi/Cq4d5yBCDP4/mqdefault.jpg" alt="Ground Zero" loading="lazy">
+        <div class="dc-play"><span>▶</span></div>
+      </a></div>
+    <div class="dc-info">
+      <div class="dc-meta-row">
+        <span class="dc-date">2025/11/15</span>
+      </div>
+      <h3 class="dc-title" title="Ground Zero">Ground Zero</h3>
+      <p class="dc-collab">CS4W & Aut0</p><p class="dc-platform">Stream Palette 6 -RANKED-</p>
+    </div>
+  </div>
+<div class="dc-card" data-date="2026/04/03" data-title="risanautr" data-year="2026">
+    <div class="dc-media"><a href="https://www.youtube.com/watch?v=uKN_9m-7Y4o" target="_blank" class="dc-thumb" title="Risanautr">
+        <img src="https://img.youtube.com/vi/uKN_9m-7Y4o/mqdefault.jpg" alt="Risanautr" loading="lazy">
+        <div class="dc-play"><span>▶</span></div>
+      </a></div>
+    <div class="dc-info">
+      <div class="dc-meta-row">
+        <span class="dc-date">2026/04/03</span>
+      </div>
+      <h3 class="dc-title" title="Risanautr">Risanautr</h3>
+      <p class="dc-platform">MUSYNX:RETURN</p>
+    </div>
+  </div>
+<div class="dc-card" data-date="2026/04/26" data-title="aether portal" data-year="2026">
+    <div class="dc-media"><a href="https://www.youtube.com/watch?v=92ZV24CXfWo" target="_blank" class="dc-thumb" title="Aether Portal">
+        <img src="https://img.youtube.com/vi/92ZV24CXfWo/mqdefault.jpg" alt="Aether Portal" loading="lazy">
+        <div class="dc-play"><span>▶</span></div>
+      </a></div>
+    <div class="dc-info">
+      <div class="dc-meta-row">
+        <span class="dc-date">2026/04/26</span>
+      </div>
+      <h3 class="dc-title" title="Aether Portal">Aether Portal</h3>
+      <p class="dc-platform">Myth://2.0</p>
+    </div>
+  </div>
+<div class="dc-card" data-date="2026/04/26" data-title="backalley" data-year="2026">
+    <div class="dc-media"><a href="https://www.youtube.com/watch?v=GIUuHVgcSjw" target="_blank" class="dc-thumb" title="BACKALLEY">
+        <img src="https://img.youtube.com/vi/GIUuHVgcSjw/mqdefault.jpg" alt="BACKALLEY" loading="lazy">
+        <div class="dc-play"><span>▶</span></div>
+      </a></div>
+    <div class="dc-info">
+      <div class="dc-meta-row">
+        <span class="dc-date">2026/04/26</span>
+      </div>
+      <h3 class="dc-title" title="BACKALLEY">BACKALLEY</h3>
+      <p class="dc-platform">Myth://2.0</p>
+    </div>
+  </div>
+<div class="dc-card" data-date="2026/04/26" data-title="synthesized moon-ray" data-year="2026">
+    <div class="dc-media"><a href="https://www.youtube.com/watch?v=RgydPti-jLY" target="_blank" class="dc-thumb" title="Synthesized Moon-ray">
+        <img src="https://img.youtube.com/vi/RgydPti-jLY/mqdefault.jpg" alt="Synthesized Moon-ray" loading="lazy">
+        <div class="dc-play"><span>▶</span></div>
+      </a></div>
+    <div class="dc-info">
+      <div class="dc-meta-row">
+        <span class="dc-date">2026/04/26</span>
+      </div>
+      <h3 class="dc-title" title="Synthesized Moon-ray">Synthesized Moon-ray</h3>
+      <p class="dc-platform">Myth://2.0</p>
+    </div>
+  </div>
+<div class="dc-card" data-date="2026/04/26" data-title="sacrifice feat. つぐ" data-year="2026">
+    <div class="dc-media"><a href="https://www.youtube.com/watch?v=PqvP8a4ytC4" target="_blank" class="dc-thumb" title="Sacrifice feat. つぐ">
+        <img src="https://img.youtube.com/vi/PqvP8a4ytC4/mqdefault.jpg" alt="Sacrifice feat. つぐ" loading="lazy">
+        <div class="dc-play"><span>▶</span></div>
+      </a></div>
+    <div class="dc-info">
+      <div class="dc-meta-row">
+        <span class="dc-date">2026/04/26</span>
+      </div>
+      <h3 class="dc-title" title="Sacrifice feat. つぐ">Sacrifice feat. つぐ</h3>
+      <p class="dc-platform">Myth://2.0</p>
+    </div>
+  </div>
+<div class="dc-card" data-date="2026/05/25" data-title="collapse (new)" data-year="2026">
+    <div class="dc-media"><a href="https://www.youtube.com/watch?v=yRK1A5yOMJ0" target="_blank" class="dc-thumb" title="Collapse (new)">
+        <img src="https://img.youtube.com/vi/yRK1A5yOMJ0/mqdefault.jpg" alt="Collapse (new)" loading="lazy">
+        <div class="dc-play"><span>▶</span></div>
+      </a></div>
+    <div class="dc-info">
+      <div class="dc-meta-row">
+        <span class="dc-date">2026/05/25</span>
+      </div>
+      <h3 class="dc-title" title="Collapse (new)">Collapse (new)</h3>
+      
+    </div>
+  </div>
+<div class="dc-card" data-date="2026/06/06" data-title="subjugator" data-year="2026">
+    <div class="dc-media"><a href="https://www.youtube.com/watch?v=W9nS0Wf_PlQ" target="_blank" class="dc-thumb" title="Subjugator">
+        <img src="https://img.youtube.com/vi/W9nS0Wf_PlQ/mqdefault.jpg" alt="Subjugator" loading="lazy">
+        <div class="dc-play"><span>▶</span></div>
+      </a></div>
+    <div class="dc-info">
+      <div class="dc-meta-row">
+        <span class="dc-date">2026/06/06</span>
+      </div>
+      <h3 class="dc-title" title="Subjugator">Subjugator</h3>
+      
+    </div>
+  </div>
+  </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-l"><span style="color:var(--violet);margin-right:0.45rem;font-family:'Raleway',sans-serif;font-weight:300;font-size:0.75rem;">✛</span>CS4W</div>
+  <div class="footer-r">© 2026 CS4W / しーそー · All rights reserved.</div>
+</footer>
+
+<script>
+/* ── Reveal ── */
+const ro=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');ro.unobserve(e.target);}});},{threshold:0.06,rootMargin:'0px 0px -20px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+
+/* カードを個別に reveal */
+document.querySelectorAll('.dc-card').forEach((el,i)=>{
+  el.style.opacity='0';
+  el.style.transform='translateY(16px)';
+  el.style.transition=`opacity 0.65s cubic-bezier(.22,1,.36,1) ${Math.min(i*20,400)}ms,transform 0.65s cubic-bezier(.22,1,.36,1) ${Math.min(i*20,400)}ms`;
+  const obs=new IntersectionObserver(([e])=>{
+    if(e.isIntersecting){el.style.opacity='1';el.style.transform='translateY(0)';obs.unobserve(el);}
+  },{threshold:0.04});
+  obs.observe(el);
+});
+
+/* ── Sort / Search ── */
+let sortOrder = 'desc';
+
+function setSort(order, btn) {
+  sortOrder = order;
+  document.querySelectorAll('.sort-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  rerender();
+}
+
+function rerender() {
+  const q = document.getElementById('searchBox').value.toLowerCase().trim();
+  const grid = document.getElementById('dcGrid');
+  const cards = Array.from(grid.querySelectorAll('.dc-card'));
+
+  cards.sort((a,b) => {
+    return sortOrder==='desc'
+      ? b.dataset.date.localeCompare(a.dataset.date)
+      : a.dataset.date.localeCompare(b.dataset.date);
+  });
+
+  let visible = 0;
+  cards.forEach(c => {
+    const platform = c.querySelector('.dc-platform')?.textContent.toLowerCase() || '';
+    const collab   = c.querySelector('.dc-collab')?.textContent.toLowerCase()   || '';
+    const match = !q
+      || c.dataset.title.includes(q)
+      || platform.includes(q)
+      || collab.includes(q)
+      || c.dataset.year.includes(q);
+    c.style.display = match ? '' : 'none';
+    if (match) visible++;
+    grid.appendChild(c);
+  });
+
+  const badge = document.getElementById('countBadge');
+  badge.innerHTML = q
+    ? `<em>${visible}</em> / 46 曲`
+    : `全 <em>47</em> 曲`;
+
+  let nr = document.getElementById('noResults');
+  if (!nr) {
+    nr = document.createElement('div');
+    nr.id = 'noResults';
+    nr.className = 'no-results';
+    grid.appendChild(nr);
+  }
+  nr.textContent = visible===0 ? 'No results.' : '';
+}
+
+document.getElementById('searchBox').addEventListener('input', rerender);
+rerender();
+</script>
+</body>
+</html>

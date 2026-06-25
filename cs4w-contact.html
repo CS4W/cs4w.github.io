@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CS4W — Contact</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Raleway:ital,wght@0,200;0,300;0,400;1,300&family=Shippori+Mincho:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{--bg:#0f0f1c;--bg2:#13132a;--surface:#161630;--ghost:#ddd9e7;--dim:#a8a3c0;--muted:#6a6590;--violet:#b89fff;--teal:#4de8c2;--line:rgba(184,159,255,0.13);}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--ghost);font-family:"Shippori Mincho",serif;overflow-x:hidden;}.bg-video-wrap{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}.bg-video-wrap video{width:100%;height:100%;object-fit:cover;opacity:0.18;filter:brightness(0.5) saturate(0.6);}.bg-video-wrap::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,15,28,0.72) 0%,rgba(15,15,28,0.5) 50%,rgba(15,15,28,0.72) 100%);}nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;align-items:center;justify-content:space-between;padding:1.1rem 3.5rem;background:rgba(15,15,28,0.84);backdrop-filter:blur(24px);border-bottom:1px solid var(--line);}nav::after{content:"";position:absolute;bottom:-3px;left:3.5rem;right:3.5rem;height:1px;background:linear-gradient(90deg,transparent,rgba(77,232,194,0.2) 40%,rgba(184,159,255,0.16) 60%,transparent);}.logo{font-family:"Cinzel",serif;font-weight:600;font-size:1.25rem;letter-spacing:0.2em;color:var(--ghost);text-decoration:none;display:flex;align-items:center;gap:0.4rem;}.logo-cross{color:var(--violet);font-size:0.8rem;font-family:"Raleway",sans-serif;font-weight:300;}.nav-links{display:flex;gap:2.2rem;list-style:none;}.nav-links a{font-family:"Raleway",sans-serif;font-weight:300;font-size:0.7rem;letter-spacing:0.24em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.3s;position:relative;}.nav-links a::after{content:"";position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--teal);transition:width 0.35s;}.nav-links a:hover,.nav-active{color:var(--ghost)!important;}.nav-links a.nav-active::after,.nav-links a:hover::after{width:100%;}.reveal{opacity:0;transform:translateY(20px);transition:opacity 0.8s cubic-bezier(.22,1,.36,1),transform 0.8s cubic-bezier(.22,1,.36,1);transition-delay:var(--delay,0ms);}.reveal.visible{opacity:1;transform:translateY(0);}@media(max-width:700px){nav{padding:1rem 1.2rem;}nav::after{left:1.2rem;right:1.2rem;}.nav-links{gap:1.2rem;}.nav-links a{font-size:0.6rem;letter-spacing:0.14em;}}
+
+.ct-wrap{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:100px 3.5rem 100px;}
+.ct-header{margin-bottom:4rem;}
+.ct-eyebrow{font-family:"Raleway",sans-serif;font-weight:300;font-style:italic;font-size:0.64rem;letter-spacing:0.52em;color:var(--violet);text-transform:uppercase;display:flex;align-items:center;gap:0.5rem;margin-bottom:0.55rem;}
+.ct-eyebrow::before{content:"✦";font-size:0.5rem;}
+.ct-h1{font-family:"Cinzel",serif;font-weight:600;font-size:clamp(1.8rem,3.5vw,3.2rem);letter-spacing:0.1em;color:var(--ghost);margin-bottom:0.35rem;}
+.ct-sub{font-family:"Shippori Mincho",serif;font-size:0.8rem;letter-spacing:0.42em;color:var(--muted);}
+.ct-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start;}
+/* left */
+.ct-lead{font-family:"Shippori Mincho",serif;font-size:0.88rem;line-height:2.4;color:var(--dim);margin-bottom:2rem;letter-spacing:0.05em;}
+.ct-email-block{padding:1rem 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-bottom:2rem;}
+.ct-email-label{font-family:"Raleway",sans-serif;font-weight:300;font-style:italic;font-size:0.6rem;letter-spacing:0.4em;text-transform:uppercase;color:var(--muted);margin-bottom:0.3rem;}
+.ct-email{font-family:"Raleway",sans-serif;font-weight:300;font-size:0.92rem;letter-spacing:0.1em;color:var(--ghost);word-break:break-all;}
+.ct-socials{display:flex;flex-direction:column;gap:0.85rem;}
+.ct-social-item{display:flex;align-items:center;gap:0.8rem;text-decoration:none;transition:color 0.3s;color:var(--muted);}
+.ct-social-item::before{content:"";display:block;width:12px;height:1px;background:var(--violet);flex-shrink:0;transition:width 0.3s,background 0.3s;}
+.ct-social-item:hover{color:var(--ghost);}
+.ct-social-item:hover::before{width:20px;background:var(--teal);}
+.ct-social-name{font-family:"Raleway",sans-serif;font-weight:300;font-style:italic;font-size:0.78rem;letter-spacing:0.18em;}
+/* info cards */
+.ct-info-cards{display:flex;flex-direction:column;gap:0.8rem;margin-bottom:2.5rem;}
+.ct-info-card{padding:1.2rem 1.5rem;border:1px solid var(--line);background:rgba(184,159,255,0.03);transition:border-color 0.3s;}
+.ct-info-card:hover{border-color:rgba(184,159,255,0.25);}
+.ct-info-k{font-family:"Raleway",sans-serif;font-weight:300;font-style:italic;font-size:0.6rem;letter-spacing:0.4em;text-transform:uppercase;color:var(--violet);margin-bottom:0.3rem;}
+.ct-info-v{font-family:"Shippori Mincho",serif;font-size:0.84rem;color:var(--ghost);line-height:1.7;}
+/* form */
+.ct-form-section label{display:block;font-family:"Raleway",sans-serif;font-weight:300;font-style:italic;font-size:0.6rem;letter-spacing:0.44em;text-transform:uppercase;color:var(--violet);margin-bottom:0.42rem;margin-top:1.2rem;}
+.ct-form-section label:first-child{margin-top:0;}
+.ct-form-section input,.ct-form-section textarea,.ct-form-section select{width:100%;background:transparent;border:none;border-bottom:1px solid rgba(221,217,231,0.1);padding:0.55rem 0;font-family:"Shippori Mincho",serif;font-size:0.83rem;color:var(--ghost);outline:none;transition:border-color 0.3s;resize:none;appearance:none;}
+.ct-form-section select option{background:var(--bg2);color:var(--ghost);}
+.ct-form-section input::placeholder,.ct-form-section textarea::placeholder{color:var(--muted);font-size:0.78rem;}
+.ct-form-section input:focus,.ct-form-section textarea:focus,.ct-form-section select:focus{border-color:var(--violet);}
+.ct-form-section textarea{min-height:100px;}
+.ct-submit{margin-top:1.5rem;background:transparent;border:1px solid rgba(184,159,255,0.3);padding:0.8rem 2.2rem;font-family:"Cinzel",serif;font-weight:400;font-size:0.75rem;letter-spacing:0.18em;color:var(--ghost);cursor:pointer;transition:all 0.4s;}
+.ct-submit:hover{background:rgba(184,159,255,0.08);border-color:var(--violet);}
+footer{position:relative;z-index:1;padding:1.5rem 3.5rem;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;background:rgba(15,15,28,0.88);}.footer-l{font-family:"Cinzel",serif;font-weight:600;font-size:0.82rem;letter-spacing:0.2em;color:var(--muted);}.footer-r{font-family:"Raleway",sans-serif;font-weight:300;font-size:0.55rem;letter-spacing:0.14em;color:rgba(106,101,133,0.4);}
+@media(max-width:700px){
+  .ct-wrap{padding:90px 1.2rem 80px;}
+  .ct-grid{grid-template-columns:1fr;gap:2.5rem;}
+}
+</style>
+</head>
+<body>
+<div class="bg-video-wrap" aria-hidden="true"><video autoplay muted loop playsinline preload="auto"><source src="haikei_mp4.mp4" type="video/mp4"></video></div>
+<nav><a href="cs4w-v6.html" class="logo"><span class="logo-cross">✛</span>CS4W</a><ul class="nav-links"><li><a href="cs4w-v6.html">Home</a></li><li><a href="cs4w-works.html">Works</a></li><li><a href="cs4w-discography.html">Discography</a></li><li><a href="cs4w-about.html">About</a></li><li><a href="cs4w-contact.html" class="nav-active">Contact</a></li></ul></nav>
+
+<div class="ct-wrap">
+  <div class="ct-header">
+    <p class="ct-eyebrow reveal">Contact</p>
+    <h1 class="ct-h1 reveal" style="--delay:70ms">ご連絡</h1>
+    <p class="ct-sub reveal" style="--delay:120ms">お問い合わせ・楽曲依頼</p>
+  </div>
+
+  <div class="ct-grid">
+
+    <!-- LEFT -->
+    <div>
+      <p class="ct-lead reveal">
+        音ゲー曲・歌モノ・クラブミュージックなど、<br>
+        ジャンル問わず楽曲制作のご依頼を承っています。<br>
+        個人・法人問わず、まずはご相談ください。
+      </p>
+
+      <div class="ct-email-block reveal" style="--delay:60ms">
+        <p class="ct-email-label">Email</p>
+        <p class="ct-email">cs4w.oshigoto@gmail.com</p>
+      </div>
+
+      <div class="ct-info-cards reveal" style="--delay:90ms">
+        <div class="ct-info-card">
+          <p class="ct-info-k">対応ジャンル</p>
+          <p class="ct-info-v">Gothic Hardcore / Bass House / Dark Electro / Artcore / Midtempo / Dubstep / 歌モノ / クラブ系 / 音ゲー専用楽曲 など</p>
+        </div>
+        <div class="ct-info-card">
+          <p class="ct-info-k">対応内容</p>
+          <p class="ct-info-v">楽曲制作・編曲・音楽ゲーム書き下ろし・アルバム参加・ライブ出演・メディア取材など</p>
+        </div>
+        <div class="ct-info-card">
+          <p class="ct-info-k">納期目安</p>
+          <p class="ct-info-v">ご相談の上決定します。まずはお気軽にDMまたはメールにてご連絡ください。</p>
+        </div>
+      </div>
+
+      <div class="ct-socials reveal" style="--delay:120ms">
+        <a href="https://x.com/CS4W_shiso" target="_blank" class="ct-social-item"><span class="ct-social-name">X (Twitter) — @CS4W_shiso</span></a>
+        <a href="https://www.youtube.com/@cs4w-241" target="_blank" class="ct-social-item"><span class="ct-social-name">YouTube — @cs4w-241</span></a>
+        <a href="https://soundcloud.com/yusuke-7328" target="_blank" class="ct-social-item"><span class="ct-social-name">SoundCloud — CS4W / しーそー</span></a>
+        <a href="https://cs4w.bandcamp.com" target="_blank" class="ct-social-item"><span class="ct-social-name">Bandcamp — cs4w</span></a>
+        <a href="https://note.com/cs4w" target="_blank" class="ct-social-item"><span class="ct-social-name">note — CS4W / しーそー</span></a>
+      </div>
+    </div>
+
+    <!-- RIGHT: FORM -->
+    <div class="ct-form-section reveal" style="--delay:100ms">
+      <form onsubmit="handleSubmit(event)">
+        <label>お名前 / Name</label>
+        <input type="text" placeholder="Your name" required>
+        <label>メールアドレス / Email</label>
+        <input type="email" placeholder="your@email.com" required>
+        <label>ご依頼の種類 / Category</label>
+        <select>
+          <option value="">選択してください</option>
+          <option>楽曲制作依頼</option>
+          <option>音楽ゲーム書き下ろし</option>
+          <option>アルバム・コンピ参加</option>
+          <option>ライブ・イベント出演</option>
+          <option>メディア取材・インタビュー</option>
+          <option>その他</option>
+        </select>
+        <label>ご用件 / Subject</label>
+        <input type="text" placeholder="件名をご記入ください">
+        <label>詳細 / Message</label>
+        <textarea placeholder="ご依頼の詳細・納期・予算などをご記入ください..." required></textarea>
+        <button type="submit" class="ct-submit">Send Message →</button>
+      </form>
+      <p id="formMsg" style="margin-top:1rem;font-family:'Raleway',sans-serif;font-size:0.72rem;letter-spacing:0.2em;color:var(--teal);display:none;">送信されました。ありがとうございます ✦</p>
+    </div>
+  </div>
+</div>
+
+<footer><div class="footer-l"><span style="color:var(--violet);margin-right:0.45rem;font-family:'Raleway',sans-serif;font-weight:300;font-size:0.75rem;">✛</span>CS4W</div><div class="footer-r">© 2026 CS4W / しーそー · All rights reserved.</div></footer>
+<script>
+const _ro=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');_ro.unobserve(e.target);}});},{threshold:0.08,rootMargin:'0px 0px -30px 0px'});document.querySelectorAll('.reveal').forEach(el=>_ro.observe(el));
+function handleSubmit(e){
+  e.preventDefault();
+  document.querySelector('.ct-submit').textContent='Sending...';
+  setTimeout(()=>{
+    document.querySelector('.ct-submit').style.display='none';
+    document.getElementById('formMsg').style.display='block';
+  },900);
+}
+</script>
+</body></html>

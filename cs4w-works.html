@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CS4W — Works</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Raleway:ital,wght@0,200;0,300;0,400;1,300&family=Shippori+Mincho:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#0f0f1c;--bg2:#13132a;--ghost:#ddd9e7;--dim:#a8a3c0;--muted:#6a6590;
+  --violet:#b89fff;--teal:#4de8c2;--line:rgba(184,159,255,0.13);
+}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--ghost);font-family:"Shippori Mincho",serif;overflow-x:hidden;}
+.bg-video-wrap{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+.bg-video-wrap video{width:100%;height:100%;object-fit:cover;opacity:0.15;filter:brightness(0.5) saturate(0.6);}
+.bg-video-wrap::after{content:"";position:absolute;inset:0;background:rgba(15,15,28,0.65);}
+nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;align-items:center;justify-content:space-between;padding:1.1rem 3.5rem;background:rgba(15,15,28,0.88);backdrop-filter:blur(24px);border-bottom:1px solid var(--line);}
+nav::after{content:"";position:absolute;bottom:-3px;left:3.5rem;right:3.5rem;height:1px;background:linear-gradient(90deg,transparent,rgba(77,232,194,0.2) 40%,rgba(184,159,255,0.16) 60%,transparent);}
+.logo{font-family:"Cinzel",serif;font-weight:600;font-size:1.25rem;letter-spacing:0.2em;color:var(--ghost);text-decoration:none;display:flex;align-items:center;gap:0.4rem;}
+.logo-cross{color:var(--violet);font-size:0.8rem;font-family:"Raleway",sans-serif;font-weight:300;}
+.nav-links{display:flex;gap:2rem;list-style:none;}
+.nav-links a{font-family:"Raleway",sans-serif;font-weight:300;font-size:0.7rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.3s;position:relative;}
+.nav-links a::after{content:"";position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--teal);transition:width 0.35s;}
+.nav-links a:hover,.nav-active{color:var(--ghost)!important;}
+.nav-links a.nav-active::after,.nav-links a:hover::after{width:100%;}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity 0.8s cubic-bezier(.22,1,.36,1),transform 0.8s cubic-bezier(.22,1,.36,1);transition-delay:var(--delay,0ms);}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.page-header{position:relative;z-index:1;padding:100px 3.5rem 32px;max-width:1300px;margin:0 auto;}
+.ph-eyebrow{font-family:"Raleway",sans-serif;font-weight:300;font-style:italic;font-size:0.64rem;letter-spacing:0.52em;color:var(--violet);text-transform:uppercase;display:flex;align-items:center;gap:0.55rem;margin-bottom:0.5rem;}
+.ph-eyebrow::before{content:"✦";font-size:0.5rem;}
+.ph-h1{font-family:"Cinzel",serif;font-weight:600;font-size:clamp(1.8rem,3.5vw,3.2rem);letter-spacing:0.1em;color:var(--ghost);margin-bottom:0.35rem;}
+.ph-sub{font-family:"Shippori Mincho",serif;font-size:0.8rem;letter-spacing:0.42em;color:var(--muted);margin-bottom:1rem;}
+.ph-count{font-family:"Raleway",sans-serif;font-weight:300;font-size:0.66rem;letter-spacing:0.2em;color:var(--muted);}
+.ph-count em{color:var(--violet);font-style:normal;}
+.filter-bar{position:sticky;top:62px;z-index:200;background:rgba(15,15,28,0.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:0.65rem 3.5rem;display:flex;align-items:center;gap:0.6rem;flex-wrap:wrap;}
+.filter-btn{font-family:"Raleway",sans-serif;font-weight:300;font-style:italic;font-size:0.64rem;letter-spacing:0.18em;text-transform:uppercase;padding:0.28rem 0.85rem;border:1px solid var(--line);color:var(--muted);background:transparent;cursor:pointer;transition:all 0.25s;}
+.filter-btn:hover,.filter-btn.active{border-color:var(--violet);color:var(--violet);background:rgba(184,159,255,0.06);}
+.filter-count{font-family:"Raleway",sans-serif;font-weight:300;font-size:0.6rem;letter-spacing:0.15em;color:var(--muted);margin-left:auto;}
+.filter-count em{color:var(--violet);font-style:normal;}
+.works-main{position:relative;z-index:1;padding:0 3.5rem 100px;max-width:1300px;margin:0 auto;}
+#worksGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);}
+.wcard{background:var(--bg);display:flex;flex-direction:column;position:relative;overflow:hidden;transition:background 0.3s;}
+.wcard::before{content:"";position:absolute;top:0;left:0;width:0;height:2px;background:linear-gradient(90deg,var(--violet),var(--teal));transition:width 0.4s;z-index:2;}
+.wcard:hover::before{width:100%;}
+.wcard:hover{background:rgba(184,159,255,0.04);}
+.wcard-media{width:100%;overflow:hidden;background:var(--bg2);}
+/* YouTube サムネ */
+.wcard-thumb{width:100%;aspect-ratio:16/9;cursor:pointer;position:relative;display:block;overflow:hidden;background:var(--bg2);text-decoration:none;}
+.wcard-thumb img{width:100%;height:100%;object-fit:cover;display:block;opacity:0.82;transition:opacity 0.3s,transform 0.4s;}
+.wcard:hover .wcard-thumb img{opacity:0.96;transform:scale(1.03);}
+.wcard-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(15,15,28,0.25);transition:background 0.3s;}
+.wcard:hover .wcard-play{background:rgba(15,15,28,0.08);}
+.wcard-play span{width:40px;height:40px;border-radius:50%;background:rgba(184,159,255,0.2);border:1px solid rgba(184,159,255,0.5);display:flex;align-items:center;justify-content:center;font-size:0.9rem;color:var(--ghost);transition:all 0.3s;}
+.wcard:hover .wcard-play span{background:rgba(184,159,255,0.35);transform:scale(1.08);}
+.wcard-yt-badge{position:absolute;bottom:0.4rem;right:0.5rem;font-family:"Raleway",sans-serif;font-weight:300;font-size:0.5rem;letter-spacing:0.14em;text-transform:uppercase;color:rgba(221,217,231,0.65);background:rgba(15,15,28,0.6);padding:0.1rem 0.38rem;}
+/* Spotify 埋め込み */
+.wcard-spotify{
+  width:100%;background:var(--bg2);
+  /* YT サムネ(16/9)と高さを揃えるため aspect-ratio を使う */
+  aspect-ratio:16/9;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+}
+.wcard-spotify iframe{
+  position:absolute;inset:0;width:100%;height:100%;
+  border-radius:0;
+}
+/* No YT */
+.wcard-no-yt{width:100%;aspect-ratio:16/9;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.4rem;background:rgba(15,15,28,0.5);text-decoration:none;}
+.wcard-year{font-family:"Cinzel",serif;font-weight:900;font-size:2rem;color:rgba(184,159,255,0.15);}
+.wcard-search{font-size:1.1rem;opacity:0.4;transition:opacity 0.3s;}
+.wcard-no-yt:hover .wcard-search{opacity:0.8;}
+.wcard-no-yt:hover .wcard-year{color:rgba(184,159,255,0.28);}
+/* Info */
+.wcard-info{padding:1rem 1.2rem 1.2rem;flex:1;display:flex;flex-direction:column;gap:0.15rem;}
+.wcard-date{font-family:"Raleway",sans-serif;font-weight:300;font-style:italic;font-size:0.58rem;letter-spacing:0.25em;color:var(--teal);margin-bottom:0.35rem;}
+.wcard-title{font-family:"Cinzel",serif;font-weight:400;font-size:0.92rem;color:var(--ghost);line-height:1.3;letter-spacing:0.05em;transition:color 0.3s;}
+.wcard-title-long{font-size:0.76rem;line-height:1.4;}
+.wcard:hover .wcard-title{color:var(--violet);}
+.wcard-collab{font-family:"Raleway",sans-serif;font-weight:300;font-style:italic;font-size:0.63rem;letter-spacing:0.1em;color:var(--teal);}
+.wcard-sub{font-family:"Raleway",sans-serif;font-weight:300;font-style:italic;font-size:0.6rem;letter-spacing:0.2em;color:var(--muted);}
+.wcard-plat{font-family:"Shippori Mincho",serif;font-size:0.7rem;color:var(--muted);letter-spacing:0.04em;}
+.wcard-tags{display:flex;gap:0.35rem;flex-wrap:wrap;margin-top:0.5rem;}
+.wcard-tag{font-family:"Raleway",sans-serif;font-weight:300;font-size:0.54rem;letter-spacing:0.14em;text-transform:uppercase;padding:0.14rem 0.5rem;}
+.tag-game{border:1px solid rgba(77,232,194,0.3);color:var(--teal);}
+.tag-comm{border:1px solid rgba(184,159,255,0.3);color:var(--violet);}
+footer{position:relative;z-index:1;padding:1.5rem 3.5rem;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;background:rgba(15,15,28,0.9);}
+.footer-l{font-family:"Cinzel",serif;font-weight:600;font-size:0.82rem;letter-spacing:0.2em;color:var(--muted);}
+.footer-r{font-family:"Raleway",sans-serif;font-weight:300;font-size:0.55rem;letter-spacing:0.14em;color:rgba(106,101,133,0.4);}
+@media(max-width:640px){
+  nav{padding:1rem 1.2rem;}nav::after{left:1.2rem;right:1.2rem;}
+  .nav-links{gap:1rem;}.nav-links a{font-size:0.6rem;letter-spacing:0.13em;}
+  .page-header,.works-main{padding-left:1.2rem;padding-right:1.2rem;}
+  .filter-bar{padding:0.6rem 1.2rem;top:58px;}
+  #worksGrid{grid-template-columns:repeat(2,1fr);}
+}
+</style>
+</head>
+<body>
+<div class="bg-video-wrap" aria-hidden="true">
+  <video autoplay muted loop playsinline preload="auto">
+    <source src="haikei_mp4.mp4" type="video/mp4">
+  </video>
+</div>
+<nav>
+  <a href="cs4w-v6.html" class="logo"><span class="logo-cross">✛</span>CS4W</a>
+  <ul class="nav-links">
+    <li><a href="cs4w-v6.html">Home</a></li>
+    <li><a href="cs4w-works.html" class="nav-active">Works</a></li>
+    <li><a href="cs4w-discography.html">Discography</a></li>
+    <li><a href="cs4w-about.html">About</a></li>
+    <li><a href="cs4w-contact.html">Contact</a></li>
+  </ul>
+</nav>
+<div class="page-header">
+  <p class="ph-eyebrow reveal">Works</p>
+  <h1 class="ph-h1 reveal" style="--delay:70ms">楽曲提供一覧</h1>
+  <p class="ph-sub reveal" style="--delay:120ms">Works &amp; Contributions</p>
+  <p class="ph-count reveal" style="--delay:160ms">Total <em>23</em> tracks</p>
+</div>
+<div class="filter-bar">
+  <button class="filter-btn active" onclick="filterWorks('all',this)">All</button>
+  <button class="filter-btn" onclick="filterWorks('music_game',this)">音楽ゲーム</button>
+  <button class="filter-btn" onclick="filterWorks('commission',this)">楽曲提供</button>
+  <span class="filter-count" id="filterCount">全 <em>23</em> 曲</span>
+</div>
+<div class="works-main">
+  <div id="worksGrid">
+  <div class="wcard" data-tags="music_game">
+    <div class="wcard-media"><a href="https://www.youtube.com/watch?v=yVQcZ_GgSqU" target="_blank" class="wcard-thumb" title="Guilty Hostage">
+          <img src="https://img.youtube.com/vi/yVQcZ_GgSqU/mqdefault.jpg" alt="Guilty Hostage" loading="lazy">
+          <div class="wcard-play"><span>▶</span></div>
+          <div class="wcard-yt-badge">YouTube ↗</div>
+        </a></div>
+    <div class="wcard-info">
+      <span class="wcard-date">2021/03/31</span>
+      <h3 class="wcard-title" title="Guilty Hostage">Guilty Hostage</h3>
+      <p class="wcard-plat">Dynamix</p>
+      <div class="wcard-tags"><span class="wcard-tag tag-game">音楽ゲーム</span></div>
+    </div>
+  </div>
+  <div class="wcard" data-tags="music_game">
+    <div class="wcard-media"><a href="https://www.youtube.com/watch?v=9LoUBqDDYN8" target="_blank" class="wcard-thumb" title="Absolute Disintegration">
+          <img src="https://img.youtube.com/vi/9LoUBqDDYN8/mqdefault.jpg" alt="Absolute Disintegration" loading="lazy">
+          <div class="wcard-play"><span>▶</span></div>
+          <div class="wcard-yt-badge">YouTube ↗</div>
+        </a></div>
+    <div class="wcard-info">
+      <span class="wcard-date">2021/08/15</span>
+      <h3 class="wcard-title" title="Absolute Disintegration">Absolute Disintegration</h3>
+      <p class="wcard-plat">TAKUMI³</p>
+      <div class="wcard-tags"><span class="wcard-tag tag-game">音楽ゲーム</span></div>
+    </div>
+  </div>
+  <div class="wcard" data-tags="music_game">
+    <div class="wcard-media"><a href="https://www.youtube.com/watch?v=GeL8P1m5m1w" target="_blank" class="wcard-thumb" title="CX-ronos">
+          <img src="https://img.youtube.com/vi/GeL8P1m5m1w/mqdefault.jpg" alt="CX-ronos" loading="lazy">
+          <div class="wcard-play"><span>▶</span></div>
+          <div class="wcard-yt-badge">YouTube ↗</div>
+        </a></div>
+    <div class="wcard-info">
+      <span class="wcard-date">2022/03/18</span>
+      <h3 class="wcard-title" title="CX-ronos">CX-ronos</h3>
+      <p class="wcard-plat">DanceRail3 / Berry Melody</p>
+      <div class="wcard-tags"><span class="wcard-tag tag-game">音楽ゲーム</span></div>
+    </div>
+  </div>
+  <div class="wcard" data-tags="commission">
+    <div class="wcard-media"><a href="https://www.youtube.com/watch?v=M00BzU8N2qY" target="_blank" class="wcard-thumb" title="Back side of the abyss">
+          <img src="https://img.youtube.com/vi/M00BzU8N2qY/mqdefault.jpg" alt="Back side of the abyss" loading="lazy">
+          <div class="wcard-play"><span>▶</span></div>
+          <div class="wcard-yt-badge">YouTube ↗</div>
+        </a></div>
+    <div class="wcard-info">
+      <span class="wcard-date">2022/04/24</span>
+      <h3 class="wcard-title" title="Back side of the abyss">Back side of the abyss</h3>
+      <p class="wcard-plat">THE DARKEST HOUR</p>
+      <div class="wcard-tags"><span class="wcard-tag tag-comm">楽曲提供</span></div>
+    </div>
+  </div>
+  <div class="wcard" data-tags="music_game">
+    <div class="wcard-media"><a href="https://www.youtube.com/watch?v=flYWBgoP9fo" target="_blank" class="wcard-thumb" title="V:Vallenstein">
+          <img src="https://img.youtube.com/vi/flYWBgoP9fo/mqdefault.jpg" alt="V:Vallenstein" loading="lazy">
+          <div class="wcard-play"><span>▶</span></div>
+          <div class="wcard-yt-badge">YouTube ↗</div>
+        </a></div>
+    <div class="wcard-info">
+      <span class="wcard-date">2022/05/17</span>
+      <h3 class="wcard-title" title="V:Vallenstein">V:Vallenstein</h3>
+      <p class="wcard-plat">Dynamix</p>
+      <div class="wcard-tags"><span class="wcard-tag tag-game">音楽ゲーム</span></div>
+    </div>
+  </div>
+  <div class="wcard" data-tags="music_game">
+    <div class="wcard-media"><a href="https://www.youtube.com/watch?v=B_BbiIyXGNg" target="_blank" class="wcard-thumb" title="Circumscription">
+          <img src="https://img.youtube.com/vi/B_BbiIyXGNg/mqdefault.jpg" alt="Circumscription" loading="lazy">
+          <div class="wcard-play"><span>▶</span></div>
+          <div class="wcard-yt-badge">YouTube ↗</div>
+        </a></div>
+    <div class="wcard-info">
+      <span class="wcard-date">2022/08/12</span>
+      <h3 class="wcard-title" title="Circumscription">Circumscription</h3>
+      <p class="wcard-plat">Dynamix</p>
+      <div class="wcard-tags"><span class="wcard-tag tag-game">音楽ゲーム</span></div>
+    </div>
+  </div>
+  <div class="wcard" data-tags="commission">
+    <div class="wcard-media"><a href="https://www.youtube.com/watch?v=acqe50irjeg" target="_blank" class="wcard-thumb" title="Ignominiously">
+          <img src="https://img.youtube.com/vi/acqe50irjeg/mqdefault.jpg" alt="Ignominiously" loading="lazy">
+          <div class="wcard-play"><span>▶</span></div>
+          <div class="wcard-yt-badge">YouTube ↗</div>
+        </a></div>
+    <div class="wcard-info">
+      <span class="wcard-date">2022/11/20</span>
+      <h3 class="wcard-title" title="Ignominiously">Ignominiously</h3>
+      <p class="wcard-plat">Dystopian Arsenal</p>
+      <div class="wcard-tags"><span class="wcard-tag tag-comm">楽曲提供</span></div>
+    </div>
+  </div>
+  <div class="wcard" data-tags="music_game">
+    <div class="wcard-media"><a href="https://www.youtube.com/watch?v=74J58Lv9zno" target="_blank" class="wcard-thumb" title="NF:Argonaut">
+          <img src="https://img.youtube.com/vi/74J58Lv9zno/mqdefault.jpg" alt="NF:Argonaut" loading="lazy">
+          <div class="wcard-play"><span>▶</span></div>
+          <div class="wcard-yt-badge">YouTube ↗</div>
+        </a></div>
+    <div class="wcard-info">
+      <span class="wcard-date">2022/12/19</span>
+      <h3 class="wcard-title" title="NF:Argonaut">NF:Argonaut</h3>
+      <p class="wcard-collab">Connexio & CS4W</p><p class="wcard-plat">Significatio Vitae / Lanota</p>
+      <div class="wcard-tags"><span class="wcard-tag tag-game">音楽ゲーム</span></div>
+    </div>
+  </div>
+  <div class="wcard" data-tags="music_game">
+    <div class="wcard-media"><a href="https://www.youtube.com/watch?v=9RHykY_xA4s" target="_blank" class="wcard-thumb" title="Phoenixismia ~Hallucination of Eternity in a Timeless Realm~">
+          <img src="https://img.youtube.com/vi/9RHykY_xA4s/mqdefault.jpg" alt="Phoenixismia ~Hallucination of Eternity in a Timeless Realm~" loading="lazy">
+          <div class="wcard-play"><span>▶</span></div>
+          <div class="wcard-yt-badge">YouTube ↗</div>
+        </a></div>
+    <div class="wcard-info">
+      <span class="wcard-date">2023/04/30</span>
+      <h3 class="wcard-title wcard-title-long" title="Phoenixismia ~Hallucination of Eternity in a Timeless Realm~">Phoenixismia ~Hallucination of Eternity in a Timeless Realm~</h3>
+      <p class="wcard-collab">C4ydora (CS4W+Pirendora)</p><p class="wcard-plat">evordeation / Dynamix</p>
+      <div class="wcard-tags"><span class="wcard-tag tag-game">音楽ゲーム</span></div>
+    </div>
+  </div>
+  <div class="wcard" data-tags="music_game">
+    <div class="wcard-media"><a href="https://www.youtube.com/watch?v=s39x7fSSY1I" target="_blank" class="wcard-thumb" title="Hauynite">
+          <img src="https://img.youtube.com/vi/s39x7fSSY1I/mqdefault.jpg" alt="Hauynite" loading="lazy">
+          <div class="wcard-play"><span>▶</span></div>
+          <div class="wcard-yt-badge">YouTube ↗</div>
+        </a></div>
+    <div class="wcard-info">
+      <span class="wcard-date">2023/07/03</span>
+      <h3 class="wcard-title" title="Hauynite">Hauynite</h3>
+      <p class="wcard-collab">RYOQUCHA & CS4W</p><p class="wcard-plat">Dynamix / Lanota / Orzmic</p>
+      <div class="wcard-tags"><span class="wcard-tag tag-game">音楽ゲーム</span></div>
+    </div>
+  </div>
+  <div class="wcard" data-tags="music_game">
+    <div class="wcard-media"><a href="https://www.youtube.com/watch?v=kkE1z76fgFs" target="_blank" class="wcard-thumb" title="EX-ris">
+          <img src="https://img.youtube.com/vi/kkE1z76fgFs/mqdefault.jpg" alt="EX-ris" loading="lazy">
+          <div class="wcard-play"><span>▶</span></div>
+          <div class="wcard-yt-badge">YouTube ↗</div>
+        </a></div>
+    <div class="wcard-info">
+      <span class="wcard-date">2023/08/27</span>
+      <h3 class="wcard-title" title="EX-ris">EX-ris</h3>
+      <p class="wcard-plat">Corsace Open 2023</p>
+      <p class="wcard-sub">osu!</p>
+      <div class="wcard-tags"><span class="wcard-tag tag-game">音楽ゲーム</span></div>
+    </div>
+  </div>
+  <div class="wcard" data-tags="commission">
+    <div class="wcard-media"><a href="https://www.youtube.com/watch?v=UIjqUS7pWD0" target="_blank" class="wcard-thumb" title="ロマン&ヴァイス">
+          <img src="https://img.youtube.com/vi/UIjqUS7pWD0/mqdefault.jpg" alt="ロマン&ヴァイス" loading="lazy">
+          <div class="wcard-play"><span>▶</span></div>
+          <div class="wcard-yt-badge">YouTube ↗</div>
+        </a></div>
+    <div class="wcard-info">
+      <span class="wcard-date">2024/04/04</span>
+      <h3 class="wcard-title" title="ロマン&ヴァイス">ロマン&ヴァイス</h3>
+      <p class="wcard-plat">缶缶様</p>
+      <div class="wcard-tags"><span class="wcard-tag tag-comm">楽曲提供</span></div>
+    </div>
+  </div>
+  <div class="wcard" data-tags="music_game">
+    <div class="wcard-media"><a href="https://www.youtube.com/watch?v=yRK1A5yOMJ0" target="_blank" class="wcard-thumb" title="Collapse">
+          <img src="https://img.youtube.com/vi/yRK1A5yOMJ0/mqdefault.jpg" alt="Collapse" loading="lazy">
+          <div class="wcard-play"><span>▶</span></div>
+          <div class="wcard-yt-badge">YouTube ↗</div>
+        </a></div>
+    <div class="wcard-info">
+      <span class="wcard-date">2024/06/15</span>
+      <h3 class="wcard-title" title="Collapse">Collapse</h3>
+      <p class="wcard-plat">Immaculée Sekai / Orzmic</p>
+      <div class="wcard-tags"><span class="wcard-tag tag-game">音楽ゲーム</span></div>
+    </div>
+  </div>
+  <div class="wcard" data-tags="music_game">
+    <div class="wcard-media"><a href="https://www.youtube.com/watch?v=do-69S1inFM" target="_blank" class="wcard-thumb" title="Traxxendenza">
+          <img src="https://img.youtube.com/vi/do-69S1inFM/mqdefault.jpg" alt="Traxxendenza" loading="lazy">
+          <div class="wcard-play"><span>▶</span></div>
+          <div class="wcard-yt-badge">YouTube ↗</div>
+        </a></div>
+    <div class="wcard-info">
+      <span class="wcard-date">2024/09/09</span>
+      <h3 class="wcard-title" title="Traxxendenza">Traxxendenza</h3>
+      <p class="wcard-plat">TAKUMI³ / Paradigm: Reboot</p>
+      <div class="wcard-tags"><span class="wcard-tag tag-game">音楽ゲーム</span></div>
+    </div>
+  </div>
+  <div class="wcard" data-tags="commission">
+    <div class="wcard-media"><div class="wcard-spotify">
+          <iframe src="https://open.spotify.com/embed/track/5LerS745dIrtRbCysv5igU?utm_source=generator&theme=0"
+            width="100%" height="80" frameborder="0" allowtransparency="true"
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy"></iframe>
+        </div></div>
+    <div class="wcard-info">
+      <span class="wcard-date">2024/10/23</span>
+      <h3 class="wcard-title" title="Paradox Re:Write">Paradox Re:Write</h3>
+      <p class="wcard-plat">原因は自分にある。「核心触発イノベーション」</p>
+      <div class="wcard-tags"><span class="wcard-tag tag-comm">楽曲提供</span></div>
+    </div>
+  </div>
+  <div class="wcard" data-tags="commission">
+    <div class="wcard-media"><a href="https://www.youtube.com/watch?v=WkZ8SS1Hb5Q" target="_blank" class="wcard-thumb" title="Happy Halloween CS4W Remix">
+          <img src="https://img.youtube.com/vi/WkZ8SS1Hb5Q/mqdefault.jpg" alt="Happy Halloween CS4W Remix" loading="lazy">
+          <div class="wcard-play"><span>▶</span></div>
+          <div class="wcard-yt-badge">YouTube ↗</div>
+        </a></div>
+    <div class="wcard-info">
+      <span class="wcard-date">2024/10/25</span>
+      <h3 class="wcard-title wcard-title-long" title="Happy Halloween CS4W Remix">Happy Halloween CS4W Remix</h3>
+      <p class="wcard-plat">Happy Halloween Remix!</p>
+      <div class="wcard-tags"><span class="wcard-tag tag-comm">楽曲提供</span></div>
+    </div>
+  </div>
+  <div class="wcard" data-tags="music_game">
+    <div class="wcard-media"><a href="https://www.youtube.com/watch?v=6m7wq0mdBL0" target="_blank" class="wcard-thumb" title="Sphalerite">
+          <img src="https://img.youtube.com/vi/6m7wq0mdBL0/mqdefault.jpg" alt="Sphalerite" loading="lazy">
+          <div class="wcard-play"><span>▶</span></div>
+          <div class="wcard-yt-badge">YouTube ↗</div>
+        </a></div>
+    <div class="wcard-info">
+      <span class="wcard-date">2025/02/23</span>
+      <h3 class="wcard-title" title="Sphalerite">Sphalerite</h3>
+      <p class="wcard-collab">RYOQUCHA & CS4W</p><p class="wcard-plat">Orzmic / 太鼓の達人</p>
+      <div class="wcard-tags"><span class="wcard-tag tag-game">音楽ゲーム</span></div>
+    </div>
+  </div>
+  <div class="wcard" data-tags="commission">
+    <div class="wcard-media"><a href="https://www.youtube.com/watch?v=tPJd98NynHA" target="_blank" class="wcard-thumb" title="Stellar Pulse">
+          <img src="https://img.youtube.com/vi/tPJd98NynHA/mqdefault.jpg" alt="Stellar Pulse" loading="lazy">
+          <div class="wcard-play"><span>▶</span></div>
+          <div class="wcard-yt-badge">YouTube ↗</div>
+        </a></div>
+    <div class="wcard-info">
+      <span class="wcard-date">2025/02/28</span>
+      <h3 class="wcard-title" title="Stellar Pulse">Stellar Pulse</h3>
+      <p class="wcard-collab">VIZZEN & CS4W</p><p class="wcard-plat">CHOMPO III</p>
+      <div class="wcard-tags"><span class="wcard-tag tag-comm">楽曲提供</span></div>
+    </div>
+  </div>
+  <div class="wcard" data-tags="music_game">
+    <div class="wcard-media"><a href="https://www.youtube.com/watch?v=R2lh5Lyz888" target="_blank" class="wcard-thumb" title="Atomic Disassembler">
+          <img src="https://img.youtube.com/vi/R2lh5Lyz888/mqdefault.jpg" alt="Atomic Disassembler" loading="lazy">
+          <div class="wcard-play"><span>▶</span></div>
+          <div class="wcard-yt-badge">YouTube ↗</div>
+        </a></div>
+    <div class="wcard-info">
+      <span class="wcard-date">2025/03/05</span>
+      <h3 class="wcard-title" title="Atomic Disassembler">Atomic Disassembler</h3>
+      <p class="wcard-plat">EGTS2025</p>
+      <p class="wcard-sub">osu!</p>
+      <div class="wcard-tags"><span class="wcard-tag tag-game">音楽ゲーム</span></div>
+    </div>
+  </div>
+  <div class="wcard" data-tags="commission">
+    <div class="wcard-media"><div class="wcard-spotify">
+          <iframe src="https://open.spotify.com/embed/track/0hQynaZ5ZZD1AFMOIDoJPP?utm_source=generator&theme=0"
+            width="100%" height="80" frameborder="0" allowtransparency="true"
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy"></iframe>
+        </div></div>
+    <div class="wcard-info">
+      <span class="wcard-date">2025/09/24</span>
+      <h3 class="wcard-title" title="Deception Doll">Deception Doll</h3>
+      <p class="wcard-plat">GIRLS' F1ST!!!! GT</p>
+      <div class="wcard-tags"><span class="wcard-tag tag-comm">楽曲提供</span></div>
+    </div>
+  </div>
+  <div class="wcard" data-tags="commission">
+    <div class="wcard-media"><div class="wcard-spotify">
+          <iframe src="https://open.spotify.com/embed/track/4cHArUeZKmxpUsdX29P4xP?utm_source=generator&theme=0"
+            width="100%" height="80" frameborder="0" allowtransparency="true"
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy"></iframe>
+        </div></div>
+    <div class="wcard-info">
+      <span class="wcard-date">2025/09/30</span>
+      <h3 class="wcard-title" title="心あずけて">心あずけて</h3>
+      <p class="wcard-plat">井森美幸様カバーアレンジ</p>
+      <div class="wcard-tags"><span class="wcard-tag tag-comm">楽曲提供</span></div>
+    </div>
+  </div>
+  <div class="wcard">
+    <div class="wcard-media"><a href="https://www.youtube.com/watch?v=Cq4d5yBCDP4" target="_blank" class="wcard-thumb" title="Ground Zero">
+          <img src="https://img.youtube.com/vi/Cq4d5yBCDP4/mqdefault.jpg" alt="Ground Zero" loading="lazy">
+          <div class="wcard-play"><span>▶</span></div>
+          <div class="wcard-yt-badge">YouTube ↗</div>
+        </a></div>
+    <div class="wcard-info">
+      <span class="wcard-date">2025/11/15</span>
+      <h3 class="wcard-title" title="Ground Zero">Ground Zero</h3>
+      <p class="wcard-collab">CS4W & Aut0</p><p class="wcard-plat">Stream Palette 6 -RANKED-</p>
+      <div class="wcard-tags"></div>
+    </div>
+  </div>
+  <div class="wcard" data-tags="music_game">
+    <div class="wcard-media"><a href="https://www.youtube.com/watch?v=uKN_9m-7Y4o" target="_blank" class="wcard-thumb" title="Risanautr">
+          <img src="https://img.youtube.com/vi/uKN_9m-7Y4o/mqdefault.jpg" alt="Risanautr" loading="lazy">
+          <div class="wcard-play"><span>▶</span></div>
+          <div class="wcard-yt-badge">YouTube ↗</div>
+        </a></div>
+    <div class="wcard-info">
+      <span class="wcard-date">2026/04/03</span>
+      <h3 class="wcard-title" title="Risanautr">Risanautr</h3>
+      <p class="wcard-plat">MUSYNX:RETURN</p>
+      <div class="wcard-tags"><span class="wcard-tag tag-game">音楽ゲーム</span></div>
+    </div>
+  </div>
+  </div>
+</div>
+<footer>
+  <div class="footer-l"><span style="color:var(--violet);margin-right:0.45rem;font-family:'Raleway',sans-serif;font-weight:300;font-size:0.75rem;">✛</span>CS4W</div>
+  <div class="footer-r">© 2026 CS4W / しーそー · All rights reserved.</div>
+</footer>
+<script>
+const ro = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); ro.unobserve(e.target); } });
+}, {threshold:0.06, rootMargin:'0px 0px -20px 0px'});
+document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
+document.querySelectorAll('.wcard').forEach((el, i) => {
+  el.style.opacity='0'; el.style.transform='translateY(16px)';
+  el.style.transition=`opacity 0.65s cubic-bezier(.22,1,.36,1) ${Math.min(i*18,360)}ms,transform 0.65s cubic-bezier(.22,1,.36,1) ${Math.min(i*18,360)}ms`;
+  const obs = new IntersectionObserver(([e]) => {
+    if(e.isIntersecting){ el.style.opacity='1'; el.style.transform='translateY(0)'; obs.unobserve(el); }
+  }, {threshold:0.04});
+  obs.observe(el);
+});
+function filterWorks(type, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  let visible = 0;
+  document.querySelectorAll('.wcard').forEach(card => {
+    const tags = card.dataset.tags || '';
+    const show = type === 'all' || tags.includes(type);
+    card.style.display = show ? '' : 'none';
+    if (show) visible++;
+  });
+  document.getElementById('filterCount').innerHTML =
+    type === 'all' ? `全 <em>23</em> 曲` : `<em>${visible}</em> / 23 曲`;
+}
+</script>
+</body>
+</html>
