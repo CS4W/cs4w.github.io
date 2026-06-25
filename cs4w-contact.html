@@ -83,36 +83,7 @@ nav.scrolled{padding-top:0.7rem;padding-bottom:0.7rem;background:rgba(10,10,20,0
 .nav-overlay.open{display:block;}
 
 /* ───────────── モバイル ───────────── */
-@media(max-width:700px){
-  .nav-hamburger{display:flex;}
-  .nav-links{
-    position:fixed;top:0;right:0;bottom:0;
-    width:min(280px,80vw);
-    background:rgba(10,10,20,0.98);
-    backdrop-filter:blur(24px);
-    flex-direction:column;justify-content:center;gap:0;
-    padding:3rem 2rem;
-    transform:translateX(101%);
-    transition:transform 0.35s cubic-bezier(.4,0,.2,1);
-    border-left:1px solid var(--line);
-    z-index:290;
-    list-style:none;
-  }
-  .nav-links.open{transform:translateX(0);}
-  .nav-links li{width:100%;border-bottom:1px solid var(--line);}
-  .nav-links a{
-    display:flex;align-items:center;
-    padding:0.95rem 0;min-height:52px;
-    font-size:0.92rem;letter-spacing:0.18em;color:var(--dim);
-  }
-  .nav-links a:hover,.nav-links a.nav-active{color:var(--ghost)!important;}
-  /* タッチターゲット確保 */
-  button,a{min-height:44px;}
-  /* スクロール慣性 */
-  html{-webkit-overflow-scrolling:touch;}
-  /* タップハイライト除去 */
-  *{-webkit-tap-highlight-color:transparent;}
-}
+
 
 /* スワイプインジケーター（スマホのみ） */
 #swipe-indicator{
@@ -181,6 +152,36 @@ img{background:rgba(184,159,255,0.05);}
   .logo{font-size:1.1rem;}
 }
 
+
+/* ── mobile-nav-fix ── */
+@media(max-width:700px){
+  .logo{display:none!important;}
+  .nav-hamburger{display:none!important;}
+  .nav-overlay{display:none!important;}
+  nav{padding:0!important;justify-content:stretch!important;}
+  nav::after{left:0!important;right:0!important;}
+  .nav-links{
+    position:static!important;transform:none!important;
+    flex-direction:row!important;background:none!important;
+    backdrop-filter:none!important;border:none!important;
+    padding:0!important;gap:0!important;width:100%!important;
+    display:flex!important;overflow-x:auto!important;scrollbar-width:none!important;
+  }
+  .nav-links::-webkit-scrollbar{display:none;}
+  .nav-links li{
+    flex:1!important;flex-shrink:0!important;
+    border:none!important;width:auto!important;min-width:0!important;
+  }
+  .nav-links a{
+    display:flex!important;align-items:center!important;justify-content:center!important;
+    padding:0.75rem 0.3rem!important;font-size:0.58rem!important;
+    letter-spacing:0.06em!important;white-space:nowrap!important;
+    min-height:44px!important;width:100%!important;
+    color:var(--muted,#6a6590)!important;
+  }
+  .nav-links a.nav-active,
+  .nav-links a:hover{color:var(--ghost,#ddd9e7)!important;}
+}
 </style>
 </head>
 <body>
@@ -289,6 +290,12 @@ function handleSubmit(e){
     setTimeout(function(){ window.location.href = href; }, 320);
   }
   if(pf){
+    // bfcache から復元された時に真っ暗のまま固まるのを防ぐ
+    window.addEventListener('pageshow', function(e){
+      pf.style.transition = 'none';
+      pf.classList.remove('on');
+      setTimeout(function(){ pf.style.transition = ''; }, 50);
+    });
     document.querySelectorAll('a[href]').forEach(function(a){
       var href = a.getAttribute('href') || '';
       if(!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto')) return;

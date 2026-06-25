@@ -854,26 +854,29 @@ nav.scrolled{
 .nav-hamburger.open span:nth-child(2){opacity:0;}
 .nav-hamburger.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
 @media(max-width:700px){
-  .nav-hamburger{display:flex;}
+  .nav-hamburger{display:none!important;}
   .nav-links{
-    position:fixed;top:0;right:0;bottom:0;
-    width:min(280px,80vw);
-    background:rgba(10,10,20,0.97);
-    backdrop-filter:blur(20px);
-    flex-direction:column;justify-content:center;gap:0;
-    padding:3rem 2rem;
-    transform:translateX(101%);
-    transition:transform 0.35s cubic-bezier(.4,0,.2,1);
-    border-left:1px solid rgba(184,159,255,0.13);
-    z-index:290;
+    position:static!important;
+    width:auto!important;
+    transform:none!important;
+    flex-direction:row!important;
+    background:none!important;
+    backdrop-filter:none!important;
+    padding:0!important;
+    border:none!important;
+    gap:1.1rem!important;
   }
-  .nav-links.open{transform:translateX(0);}
-  .nav-links li{width:100%;border-bottom:1px solid rgba(184,159,255,0.1);}
+  .nav-links li{border:none!important;width:auto!important;}
   .nav-links a{
-    display:flex;align-items:center;padding:0.95rem 0;
-    font-size:0.88rem;letter-spacing:0.18em;color:#a8a3c0;
+    padding:0!important;
+    font-size:0.62rem!important;
+    letter-spacing:0.14em!important;
+    white-space:nowrap;
+    min-height:44px;
+    display:flex;align-items:center;
+    color:var(--muted);
   }
-  .nav-links a:hover{color:#ddd9e7;}
+  .nav-overlay{display:none!important;}
 }
 /* モバイルオーバーレイ */
 .nav-overlay{
@@ -991,34 +994,15 @@ nav.scrolled{padding-top:0.7rem;padding-bottom:0.7rem;background:rgba(10,10,20,0
 
 /* ───────────── モバイル ───────────── */
 @media(max-width:700px){
-  .nav-hamburger{display:flex;}
+  .nav-hamburger{display:none!important;}
   .nav-links{
-    position:fixed;top:0;right:0;bottom:0;
-    width:min(280px,80vw);
-    background:rgba(10,10,20,0.98);
-    backdrop-filter:blur(24px);
-    flex-direction:column;justify-content:center;gap:0;
-    padding:3rem 2rem;
-    transform:translateX(101%);
-    transition:transform 0.35s cubic-bezier(.4,0,.2,1);
-    border-left:1px solid var(--line);
-    z-index:290;
-    list-style:none;
+    position:static!important;width:auto!important;transform:none!important;
+    flex-direction:row!important;background:none!important;
+    backdrop-filter:none!important;padding:0!important;border:none!important;gap:1.1rem!important;
   }
-  .nav-links.open{transform:translateX(0);}
-  .nav-links li{width:100%;border-bottom:1px solid var(--line);}
-  .nav-links a{
-    display:flex;align-items:center;
-    padding:0.95rem 0;min-height:52px;
-    font-size:0.92rem;letter-spacing:0.18em;color:var(--dim);
-  }
-  .nav-links a:hover,.nav-links a.nav-active{color:var(--ghost)!important;}
-  /* タッチターゲット確保 */
-  button,a{min-height:44px;}
-  /* スクロール慣性 */
-  html{-webkit-overflow-scrolling:touch;}
-  /* タップハイライト除去 */
-  *{-webkit-tap-highlight-color:transparent;}
+  .nav-links li{border:none!important;width:auto!important;}
+  .nav-links a{padding:0!important;font-size:0.62rem!important;letter-spacing:0.14em!important;white-space:nowrap;min-height:44px;display:flex;align-items:center;}
+  .nav-overlay{display:none!important;}
 }
 
 /* スワイプインジケーター（スマホのみ） */
@@ -1072,7 +1056,7 @@ img{background:rgba(184,159,255,0.05);}
   /* グリッドを1列に */
   .works-grid,#worksGrid,.fg-grid,.feat-grid{grid-template-columns:1fr!important;}
   /* ボタン横幅フル */
-  .btn-primary,.btn-ghost,.btn-all-works,.form-submit,.ct-submit{
+  .btn-primary,.btn-ghost,.form-submit,.ct-submit{
     width:100%;justify-content:center;text-align:center;
   }
   /* 入力欄の文字サイズ（iOS ズーム防止） */
@@ -1088,6 +1072,36 @@ img{background:rgba(184,159,255,0.05);}
   .logo{font-size:1.1rem;}
 }
 
+
+/* ── mobile-nav-fix ── */
+@media(max-width:700px){
+  .logo{display:none!important;}
+  .nav-hamburger{display:none!important;}
+  .nav-overlay{display:none!important;}
+  nav{padding:0!important;justify-content:stretch!important;}
+  nav::after{left:0!important;right:0!important;}
+  .nav-links{
+    position:static!important;transform:none!important;
+    flex-direction:row!important;background:none!important;
+    backdrop-filter:none!important;border:none!important;
+    padding:0!important;gap:0!important;width:100%!important;
+    display:flex!important;overflow-x:auto!important;scrollbar-width:none!important;
+  }
+  .nav-links::-webkit-scrollbar{display:none;}
+  .nav-links li{
+    flex:1!important;flex-shrink:0!important;
+    border:none!important;width:auto!important;min-width:0!important;
+  }
+  .nav-links a{
+    display:flex!important;align-items:center!important;justify-content:center!important;
+    padding:0.75rem 0.3rem!important;font-size:0.58rem!important;
+    letter-spacing:0.06em!important;white-space:nowrap!important;
+    min-height:44px!important;width:100%!important;
+    color:var(--muted,#6a6590)!important;
+  }
+  .nav-links a.nav-active,
+  .nav-links a:hover{color:var(--ghost,#ddd9e7)!important;}
+}
 </style>
 </head>
 <body>
@@ -1113,7 +1127,6 @@ img{background:rgba(184,159,255,0.05);}
     <li><a href="cs4w-about.html">About</a></li>
     <li><a href="cs4w-contact.html">Contact</a></li>
   </ul>
-  <button class="nav-hamburger" id="nav-hamburger" aria-label="メニュー" aria-expanded="false"><span></span><span></span><span></span></button>
 </nav>
 
 <!-- ▌HERO -->
@@ -1213,7 +1226,7 @@ img{background:rgba(184,159,255,0.05);}
       <div class="fg-media">
         <div class="fg-bg-text">TRXX</div>
         <div class="fg-yt-player" id="fyt-traxx">
-          <div class="fg-thumb" onclick="playFeat('traxx','do-69S1inFM')">
+          <div class="fg-thumb" onclick="playFeat('traxx','do-69S1inFM')" data-yt="do-69S1inFM">
             <img src="https://img.youtube.com/vi/do-69S1inFM/mqdefault.jpg" alt="Traxxendenza" loading="lazy">
             <div class="fg-play"><span>▶</span></div>
           </div>
@@ -1237,7 +1250,7 @@ img{background:rgba(184,159,255,0.05);}
       <div class="fg-media">
         <div class="fg-bg-text">MYTH</div>
         <div class="fg-yt-player" id="fyt-myth">
-          <div class="fg-thumb" onclick="playFeat('myth','eo0JINPR05o')">
+          <div class="fg-thumb" onclick="playFeat('myth','eo0JINPR05o')" data-yt="eo0JINPR05o">
             <img src="https://img.youtube.com/vi/eo0JINPR05o/mqdefault.jpg" alt="Myth://2.0 XFD" loading="lazy">
             <div class="fg-play"><span>▶</span></div>
           </div>
@@ -1264,7 +1277,7 @@ img{background:rgba(184,159,255,0.05);}
       <div class="fg-media">
         <div class="fg-bg-text">401</div>
         <div class="fg-yt-player" id="fyt-col">
-          <div class="fg-thumb" onclick="playFeat('col','PfLIZaan6Ms')">
+          <div class="fg-thumb" onclick="playFeat('col','PfLIZaan6Ms')" data-yt="PfLIZaan6Ms">
             <img src="https://img.youtube.com/vi/PfLIZaan6Ms/mqdefault.jpg" alt="COLLECTIONS 401" loading="lazy">
             <div class="fg-play"><span>▶</span></div>
           </div>
@@ -1363,7 +1376,7 @@ img{background:rgba(184,159,255,0.05);}
     </div>
 
         <!-- 全曲リンク -->
-    <div class="works-all-link reveal" style="--delay:200ms">
+    <div class="works-all-link">
       <a href="cs4w-works.html" class="btn-all-works">
         全楽曲を見る — Complete Discography
         <span class="btn-arrow">→</span>
@@ -1380,8 +1393,8 @@ img{background:rgba(184,159,255,0.05);}
     <p class="section-eyebrow" style="justify-content:center;">Contact</p>
     <h2 class="section-h2" style="--delay:70ms">楽曲依頼・お問い合わせ</h2>
     <p class="section-ja" style="--delay:120ms;margin-bottom:2.5rem;">音ゲー曲・歌モノ・クラブミュージックなど、ジャンル問わず承ります</p>
-    <p class="reveal" style="--delay:160ms;font-family:'Raleway',sans-serif;font-weight:300;font-size:0.88rem;letter-spacing:0.12em;color:var(--dim);margin-bottom:2.5rem;">cs4w.oshigoto@gmail.com</p>
-    <div class="reveal" style="--delay:200ms;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+    <p style="font-family:'Raleway',sans-serif;font-weight:300;font-size:0.88rem;letter-spacing:0.12em;color:var(--dim);margin-bottom:2.5rem;">cs4w.oshigoto@gmail.com</p>
+    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
       <a href="cs4w-contact.html" class="btn-primary">お問い合わせフォーム <span class="btn-arrow">→</span></a>
       <a href="https://x.com/CS4W_shiso" target="_blank" class="btn-ghost">X (Twitter) DM <span class="btn-arrow">→</span></a>
     </div>
@@ -1394,183 +1407,113 @@ img{background:rgba(184,159,255,0.05);}
 </footer>
 
 <script>
-/* ── Scroll Reveal (robust) ── */
-const revObs = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.classList.add('visible');
-      revObs.unobserve(e.target);
-    }
+/* ── Scroll Reveal ── */
+(function(){
+  var ro = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ e.target.classList.add('visible'); ro.unobserve(e.target); }
+    });
+  }, {threshold:0, rootMargin:'0px 0px 100px 0px'});
+  document.querySelectorAll('.reveal').forEach(function(el){ ro.observe(el); });
+  setTimeout(function(){
+    document.querySelectorAll('.reveal:not(.visible)').forEach(function(el){
+      if(el.getBoundingClientRect().top < window.innerHeight + 200) el.classList.add('visible');
+    });
+  }, 100);
+  window.addEventListener('load', function(){
+    setTimeout(function(){
+      document.querySelectorAll('.reveal:not(.visible)').forEach(function(el){
+        el.classList.add('visible');
+      });
+    }, 300);
   });
-}, { threshold: 0, rootMargin: '0px 0px 100px 0px' });
-document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
-
-/* ── 初期状態でビューポート内にある要素を即時表示 ── */
-setTimeout(function() {
-  document.querySelectorAll('.reveal:not(.visible)').forEach(function(el) {
-    const rect = el.getBoundingClientRect();
-    if (rect.top < window.innerHeight + 200) {
-      el.classList.add('visible');
-    }
-  });
-}, 100);
-
+})();
 
 /* ── Featured YouTube ── */
-/* ── Featured YouTube (iframe on click) ── */
 function playFeat(id, ytId) {
-  const player = document.getElementById('fyt-' + id);
-  if (!player) return;
-  player.innerHTML = '<iframe style="width:100%;aspect-ratio:16/9;display:block;border:none;" ' +
-    'src="https://www.youtube-nocookie.com/embed/' + ytId + '?autoplay=1&rel=0&modestbranding=1" ' +
-    'referrerpolicy="strict-origin-when-cross-origin" ' +
-    'allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" ' +
-    'allowfullscreen></iframe>';
-}
+  var player = document.getElementById('fyt-' + id);
+  if(!player){ window.open('https://www.youtube.com/watch?v='+ytId,'_blank'); return; }
+  var thumb  = player.querySelector('.fg-thumb');
+  var embedId = 'fyt-embed-' + id;
+  var existing = document.getElementById(embedId);
 
-/* ── Small Works Toggle ── */
-function toggleYT(btn) {
-  const embed  = btn.nextElementSibling;
-  const isOpen = embed.classList.toggle('open');
-  btn.classList.toggle('open', isOpen);
-  if (!isOpen) {
-    const iframe = embed.querySelector('iframe');
-    const src = iframe.src; iframe.src = '';
-    setTimeout(() => { iframe.src = src; }, 50);
+  // 既に再生中 → 閉じてサムネを戻す
+  if(existing && existing.style.display !== 'none'){
+    existing.style.display = 'none';
+    existing.innerHTML = '';
+    if(thumb) thumb.style.display = 'block';
+    return;
   }
+
+  // embed div がなければ作成（サムネの隣に置く）
+  if(!existing){
+    existing = document.createElement('div');
+    existing.id = embedId;
+    existing.style.cssText = 'display:none;width:100%;';
+    player.appendChild(existing);
+  }
+
+  // iframe生成
+  var iframe = document.createElement('iframe');
+  iframe.style.cssText = 'width:100%;aspect-ratio:16/9;display:block;border:none;';
+  iframe.src = 'https://www.youtube.com/embed/'+ytId+'?autoplay=1&rel=0&modestbranding=1';
+  iframe.allow = 'accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture';
+  iframe.allowFullscreen = true;
+
+  existing.innerHTML = '';
+  existing.appendChild(iframe);
+  existing.style.display = 'block';
+
+  // サムネを隠す
+  if(thumb) thumb.style.display = 'none';
 }
 
-/* ── Works Preview YouTube ── */
-// openYTPreview: replaced by playFeat
+/* ── Works Preview ── */
+function openYTPreview(el, id){
+  window.open('https://www.youtube.com/watch?v=' + id, '_blank');
+}
 
 /* ── Form ── */
-function handleSubmit(e) {
+function handleSubmit(e){
   e.preventDefault();
-  const btn = e.target.querySelector('.form-submit');
+  var btn = e.target.querySelector('.form-submit');
   btn.textContent = 'Sending...';
-  setTimeout(() => {
+  setTimeout(function(){
     btn.textContent = 'Sent ✦';
     btn.style.color = 'var(--teal)';
     btn.style.borderColor = 'var(--teal)';
   }, 900);
 }
 
-
-
-/* ════════ UX JS ════════ */
-
-/* ナビシュリンク + スクロールトップ表示 */
-const _nav = document.querySelector('nav');
-const _stBtn = document.getElementById('scroll-top');
-window.addEventListener('scroll', function(){
-  if(_nav)  _nav.classList.toggle('scrolled', window.scrollY > 60);
-  if(_stBtn) _stBtn.classList.toggle('vis', window.scrollY > 400);
-}, {passive:true});
-
-/* スクロールトップ */
-if(_stBtn) _stBtn.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
-
-/* アクティブセクション追跡 */
+/* ── Main UX ── */
 (function(){
-  const secs  = document.querySelectorAll('section[id]');
-  const links = document.querySelectorAll('.nav-links a[href^="#"]');
-  if(!secs.length || !links.length) return;
-  const io3 = new IntersectionObserver(function(entries){
-    entries.forEach(function(e){
-      if(e.isIntersecting){
-        links.forEach(function(l){ l.classList.remove('section-active'); });
-        const a = document.querySelector('.nav-links a[href="#'+e.target.id+'"]');
-        if(a) a.classList.add('section-active');
-      }
-    });
-  },{threshold:0.35});
-  secs.forEach(function(s){ io3.observe(s); });
-})();
+  var PAGE_ORDER = ['index.html','cs4w-works.html','cs4w-discography.html','cs4w-about.html','cs4w-contact.html'];
+  var _p = location.pathname.split('/').pop();
+  var CURRENT_FILE = (!_p || _p === '' || _p === '/') ? 'index.html' : _p;
 
-/* モバイルハンバーガー */
-(function(){
-  const btn  = document.getElementById('nav-hamburger');
-  const menu = document.querySelector('.nav-links');
-  const ov   = document.getElementById('nav-overlay');
-  if(!btn) return;
-  function tog(open){
-    btn.classList.toggle('open',open);
-    menu.classList.toggle('open',open);
-    if(ov) ov.classList.toggle('open',open);
-    btn.setAttribute('aria-expanded',open);
-    document.body.style.overflow = open ? 'hidden' : '';
-  }
-  btn.addEventListener('click', function(){ tog(!btn.classList.contains('open')); });
-  if(ov) ov.addEventListener('click', function(){ tog(false); });
-  document.querySelectorAll('.nav-links a').forEach(function(a){
-    a.addEventListener('click', function(){ tog(false); });
-  });
-})();
-
-/* ページ遷移フェード */
-(function(){
-  const pf = document.getElementById('page-fade');
-  if(!pf) return;
-  document.querySelectorAll('a[href]').forEach(function(a){
-    const href = a.getAttribute('href') || '';
-    if(!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto')) return;
-    a.addEventListener('click', function(e){
-      e.preventDefault();
-      pf.classList.add('on');
-      var dest = href;
-      setTimeout(function(){ window.location.href = dest; }, 330);
-    });
-  });
-})();
-
-/* カットインローダー */
-(function(){
-  var el = document.getElementById('ctin');
-  if(!el) return;
-    }, 820);
-  }, 1600);
-})();
-
-
-/* ════ SHARED UX JS ════ */
-
-/* ── スクロール時にreveal補完 ── */
-(function(){
-  var ticking = false;
-  function checkReveal() {
-    document.querySelectorAll('.reveal:not(.visible)').forEach(function(el) {
-      var rect = el.getBoundingClientRect();
-      if (rect.top < window.innerHeight + 50) el.classList.add('visible');
-    });
-    ticking = false;
-  }
-  window.addEventListener('scroll', function() {
-    if (!ticking) { requestAnimationFrame(checkReveal); ticking = true; }
-  }, {passive: true});
-  // ページロード後に一度実行
-  window.addEventListener('load', function() { setTimeout(checkReveal, 200); });
-})();
-
-(function(){
-  var PAGE_ORDER = ["index.html", "cs4w-works.html", "cs4w-discography.html", "cs4w-about.html", "cs4w-contact.html"];
-  var CURRENT_FILE = location.pathname.split('/').pop() || 'index.html';
-
-  /* ── ページ遷移フェード ── */
+  /* ページ遷移フェード */
   var pf = document.getElementById('page-fade');
   function goPage(href){
-    if(!pf) { window.location.href = href; return; }
+    if(!pf){ window.location.href = href; return; }
     pf.classList.add('on');
     setTimeout(function(){ window.location.href = href; }, 320);
   }
   if(pf){
+    // bfcache から復元された時に真っ暗のまま固まるのを防ぐ
+    window.addEventListener('pageshow', function(e){
+      pf.style.transition = 'none';
+      pf.classList.remove('on');
+      // transitionを戻す
+      setTimeout(function(){ pf.style.transition = ''; }, 50);
+    });
     document.querySelectorAll('a[href]').forEach(function(a){
       var href = a.getAttribute('href') || '';
-      if(!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto')) return;
+      if(!href || href.charAt(0)==='#' || href.indexOf('http')===0 || href.indexOf('mailto')===0) return;
       a.addEventListener('click', function(e){ e.preventDefault(); goPage(href); });
     });
   }
 
-  /* ── ナビシュリンク ── */
+  /* ナビシュリンク */
   var navEl = document.querySelector('nav');
   var stBtn = document.getElementById('scroll-top');
   window.addEventListener('scroll', function(){
@@ -1579,11 +1522,11 @@ if(_stBtn) _stBtn.addEventListener('click', function(){ window.scrollTo({top:0, 
   }, {passive:true});
   if(stBtn) stBtn.addEventListener('click', function(){ window.scrollTo({top:0,behavior:'smooth'}); });
 
-  /* ── アクティブセクション ── */
+  /* アクティブセクション */
   var secs  = document.querySelectorAll('section[id]');
   var links = document.querySelectorAll('.nav-links a[href^="#"]');
   if(secs.length && links.length){
-    var io3 = new IntersectionObserver(function(entries){
+    var io2 = new IntersectionObserver(function(entries){
       entries.forEach(function(e){
         if(e.isIntersecting){
           links.forEach(function(l){ l.classList.remove('section-active'); });
@@ -1591,49 +1534,38 @@ if(_stBtn) _stBtn.addEventListener('click', function(){ window.scrollTo({top:0, 
           if(a) a.classList.add('section-active');
         }
       });
-    },{threshold:0.2, rootMargin:'0px 0px -10% 0px'});
-    secs.forEach(function(s){ io3.observe(s); });
+    },{threshold:0.2});
+    secs.forEach(function(s){ io2.observe(s); });
   }
 
-  /* ── ハンバーガー ── */
-  var hbtn = document.getElementById('nav-hamburger');
-  var menu = document.querySelector('.nav-links');
-  var nov  = document.getElementById('nav-overlay');
-  if(hbtn){
-    function togMenu(open){
-      hbtn.classList.toggle('open',open);
-      if(menu) menu.classList.toggle('open',open);
-      if(nov)  nov.classList.toggle('open',open);
-      hbtn.setAttribute('aria-expanded',open);
-      document.body.style.overflow = open ? 'hidden' : '';
-    }
-    hbtn.addEventListener('click', function(){ togMenu(!hbtn.classList.contains('open')); });
-    if(nov) nov.addEventListener('click', function(){ togMenu(false); });
-    document.querySelectorAll('.nav-links a').forEach(function(a){
-      a.addEventListener('click', function(){ togMenu(false); });
-    });
-  }
-
-  /* ── スワイプナビゲーション ── */
-  var swipeStartX = 0, swipeStartY = 0;
-  var SWIPE_THRESHOLD = 60;
+  /* スワイプナビゲーション */
+  var sx = 0, sy = 0;
   document.addEventListener('touchstart', function(e){
-    swipeStartX = e.changedTouches[0].clientX;
-    swipeStartY = e.changedTouches[0].clientY;
+    sx = e.changedTouches[0].clientX;
+    sy = e.changedTouches[0].clientY;
   }, {passive:true});
   document.addEventListener('touchend', function(e){
-    var dx = e.changedTouches[0].clientX - swipeStartX;
-    var dy = e.changedTouches[0].clientY - swipeStartY;
-    if(Math.abs(dx) < SWIPE_THRESHOLD || Math.abs(dy) > Math.abs(dx) * 0.8) return;
+    var dx = e.changedTouches[0].clientX - sx;
+    var dy = e.changedTouches[0].clientY - sy;
+    if(Math.abs(dx) < 60 || Math.abs(dy) > Math.abs(dx) * 0.8) return;
     var idx = PAGE_ORDER.indexOf(CURRENT_FILE);
     if(idx < 0) return;
-    if(dx < 0 && idx < PAGE_ORDER.length - 1){ goPage(PAGE_ORDER[idx+1]); }
-    if(dx > 0 && idx > 0){ goPage(PAGE_ORDER[idx-1]); }
+    if(dx < 0 && idx < PAGE_ORDER.length-1) goPage(PAGE_ORDER[idx+1]);
+    if(dx > 0 && idx > 0) goPage(PAGE_ORDER[idx-1]);
+  }, {passive:true});
+
+  /* スクロール時reveal補完 */
+  var ticking = false;
+  window.addEventListener('scroll', function(){
+    if(!ticking){ requestAnimationFrame(function(){
+      document.querySelectorAll('.reveal:not(.visible)').forEach(function(el){
+        if(el.getBoundingClientRect().top < window.innerHeight + 50) el.classList.add('visible');
+      });
+      ticking = false;
+    }); ticking = true; }
   }, {passive:true});
 
 })();
-
-function openYTPreview(el,id){window.open('https://www.youtube.com/watch?v='+id,'_blank');}
 </script>
 <button id="scroll-top" aria-label="ページトップへ"><svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg"><polyline points="2,10 7,4 12,10"/></svg></button>
 <div id="swipe-indicator">swipe</div>
