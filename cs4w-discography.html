@@ -171,9 +171,143 @@ footer{position:relative;z-index:1;padding:1.5rem 3.5rem;border-top:1px solid va
   .page-header,.dc-main{padding-left:1.2rem;padding-right:1.2rem;}
   #dcGrid{grid-template-columns:repeat(2,1fr);}
 }
+
+/* ════ SHARED UX ════ */
+:root{--ghost:#ddd9e7;--violet:#b89fff;--teal:#4de8c2;--muted:#6a6590;--dim:#a8a3c0;--line:rgba(184,159,255,0.13);--bg:#0f0f1c;}
+
+/* スキップリンク */
+.skip-link{position:absolute;top:-100px;left:1rem;z-index:10000;background:var(--violet);color:#fff;font-family:"Raleway",sans-serif;font-size:0.8rem;padding:0.5rem 1rem;text-decoration:none;border-radius:2px;transition:top 0.2s;}
+.skip-link:focus{top:1rem;}
+:focus-visible{outline:2px solid var(--teal);outline-offset:3px;}
+
+/* ページ遷移フェード */
+.page-fade{position:fixed;inset:0;z-index:8000;background:#0a0a14;opacity:0;pointer-events:none;transition:opacity 0.32s cubic-bezier(.4,0,.2,1);}
+.page-fade.on{opacity:1;pointer-events:all;}
+
+/* ナビシュリンク */
+nav{transition:padding 0.3s ease,background 0.3s ease,box-shadow 0.3s ease;}
+nav.scrolled{padding-top:0.7rem;padding-bottom:0.7rem;background:rgba(10,10,20,0.97);box-shadow:0 2px 20px rgba(0,0,0,0.45);}
+
+/* ナビアクティブ */
+.nav-links a.section-active{color:var(--ghost)!important;}
+.nav-links a.section-active::after{width:100%;background:var(--violet);}
+
+/* ハンバーガー */
+.nav-hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:6px;margin:-6px;}
+.nav-hamburger span{display:block;width:22px;height:1px;background:var(--ghost);transition:transform 0.3s,opacity 0.3s;transform-origin:center;}
+.nav-hamburger.open span:nth-child(1){transform:translateY(6px) rotate(45deg);}
+.nav-hamburger.open span:nth-child(2){opacity:0;}
+.nav-hamburger.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
+
+/* ナビオーバーレイ */
+.nav-overlay{display:none;position:fixed;inset:0;z-index:280;background:rgba(0,0,0,0.55);backdrop-filter:blur(2px);}
+.nav-overlay.open{display:block;}
+
+/* ───────────── モバイル ───────────── */
+@media(max-width:700px){
+  .nav-hamburger{display:flex;}
+  .nav-links{
+    position:fixed;top:0;right:0;bottom:0;
+    width:min(280px,80vw);
+    background:rgba(10,10,20,0.98);
+    backdrop-filter:blur(24px);
+    flex-direction:column;justify-content:center;gap:0;
+    padding:3rem 2rem;
+    transform:translateX(101%);
+    transition:transform 0.35s cubic-bezier(.4,0,.2,1);
+    border-left:1px solid var(--line);
+    z-index:290;
+    list-style:none;
+  }
+  .nav-links.open{transform:translateX(0);}
+  .nav-links li{width:100%;border-bottom:1px solid var(--line);}
+  .nav-links a{
+    display:flex;align-items:center;
+    padding:0.95rem 0;min-height:52px;
+    font-size:0.92rem;letter-spacing:0.18em;color:var(--dim);
+  }
+  .nav-links a:hover,.nav-links a.nav-active{color:var(--ghost)!important;}
+  /* タッチターゲット確保 */
+  button,a{min-height:44px;}
+  /* スクロール慣性 */
+  html{-webkit-overflow-scrolling:touch;}
+  /* タップハイライト除去 */
+  *{-webkit-tap-highlight-color:transparent;}
+}
+
+/* スワイプインジケーター（スマホのみ） */
+#swipe-indicator{
+  display:none;
+  position:fixed;bottom:5rem;left:50%;transform:translateX(-50%);
+  z-index:100;
+  font-family:"Raleway",sans-serif;font-weight:300;font-style:italic;
+  font-size:0.58rem;letter-spacing:0.4em;color:rgba(221,217,231,0.35);
+  text-transform:uppercase;
+  animation:sw-fade 3s 2s ease forwards;
+  pointer-events:none;
+}
+#swipe-indicator::before{content:"← ";}
+#swipe-indicator::after{content:" →";}
+@keyframes sw-fade{0%{opacity:1;}100%{opacity:0;}}
+@media(max-width:700px){#swipe-indicator{display:block;}}
+
+/* スクロールトップ */
+#scroll-top{
+  position:fixed;bottom:1.6rem;right:1.6rem;z-index:150;
+  width:40px;height:40px;
+  background:rgba(15,15,28,0.9);border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  opacity:0;transform:translateY(6px);
+  transition:opacity 0.3s,transform 0.3s,border-color 0.3s;
+  pointer-events:none;border-radius:2px;
+}
+#scroll-top.vis{opacity:1;transform:translateY(0);pointer-events:auto;}
+#scroll-top:hover{border-color:var(--violet);}
+#scroll-top svg{width:13px;height:13px;fill:none;stroke:var(--dim);stroke-width:1.5;}
+#scroll-top:hover svg{stroke:var(--ghost);}
+@media(max-width:700px){#scroll-top{bottom:1rem;right:1rem;width:36px;height:36px;}}
+
+/* 画像プレースホルダー */
+img{background:rgba(184,159,255,0.05);}
+
+
+/* ════ MOBILE UX EXTRA ════ */
+@media(max-width:700px){
+  /* フォントサイズ読みやすく */
+  body{font-size:16px;-webkit-text-size-adjust:100%;}
+  /* セクションパディング縮小 */
+  .sec-pad{padding:72px 1.2rem 60px!important;}
+  .page-header{padding:84px 1.2rem 24px!important;}
+  .ab-wrap{padding:84px 1.2rem 60px!important;}
+  .ct-wrap{padding:84px 1.2rem 60px!important;}
+  /* ヒーローパディング */
+  .hero-inner{padding:100px 1.2rem 72px!important;}
+  /* グリッドを1列に */
+  .works-grid,#worksGrid,.fg-grid,.feat-grid{grid-template-columns:1fr!important;}
+  /* ボタン横幅フル */
+  .btn-primary,.btn-ghost,.btn-all-works,.form-submit,.ct-submit{
+    width:100%;justify-content:center;text-align:center;
+  }
+  /* 入力欄の文字サイズ（iOS ズーム防止） */
+  input,textarea,select{font-size:16px!important;}
+  /* カード内の動画比率維持 */
+  .wcard-thumb,.dc-thumb,.fg-thumb,.wp-thumb{aspect-ratio:16/9;}
+  /* スクロールバー細く */
+  ::-webkit-scrollbar{width:3px;}
+  ::-webkit-scrollbar-thumb{background:rgba(184,159,255,0.3);border-radius:2px;}
+  /* footer */
+  footer{flex-direction:column;gap:0.5rem;text-align:center;padding:1.2rem;}
+  /* navロゴサイズ */
+  .logo{font-size:1.1rem;}
+}
+
 </style>
 </head>
 <body>
+<a href="#main" class="skip-link">コンテンツへスキップ</a>
+<div class="nav-overlay" id="nav-overlay"></div>
+<div class="page-fade" id="page-fade"></div>
 
 <div class="bg-video-wrap" aria-hidden="true">
   <video autoplay muted loop playsinline preload="auto">
@@ -182,14 +316,15 @@ footer{position:relative;z-index:1;padding:1.5rem 3.5rem;border-top:1px solid va
 </div>
 
 <nav>
-  <a href="cs4w-v6.html" class="logo"><span class="logo-cross">✛</span>CS4W</a>
+  <a href="index.html" class="logo"><span class="logo-cross">✛</span>CS4W</a>
   <ul class="nav-links">
-    <li><a href="cs4w-v6.html">Home</a></li>
+    <li><a href="index.html">Home</a></li>
     <li><a href="cs4w-works.html">Works</a></li>
     <li><a href="cs4w-discography.html" class="nav-active">Discography</a></li>
     <li><a href="cs4w-about.html">About</a></li>
     <li><a href="cs4w-contact.html">Contact</a></li>
   </ul>
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="メニュー" aria-expanded="false"><span></span><span></span><span></span></button>
 </nav>
 
 <div class="page-header">
@@ -897,6 +1032,92 @@ function rerender() {
 
 document.getElementById('searchBox').addEventListener('input', rerender);
 rerender();
+
+/* ════ SHARED UX JS ════ */
+(function(){
+  var PAGE_ORDER = ["index.html", "cs4w-works.html", "cs4w-discography.html", "cs4w-about.html", "cs4w-contact.html"];
+  var CURRENT_FILE = location.pathname.split('/').pop() || 'index.html';
+
+  /* ── ページ遷移フェード ── */
+  var pf = document.getElementById('page-fade');
+  function goPage(href){
+    if(!pf) { window.location.href = href; return; }
+    pf.classList.add('on');
+    setTimeout(function(){ window.location.href = href; }, 320);
+  }
+  if(pf){
+    document.querySelectorAll('a[href]').forEach(function(a){
+      var href = a.getAttribute('href') || '';
+      if(!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto')) return;
+      a.addEventListener('click', function(e){ e.preventDefault(); goPage(href); });
+    });
+  }
+
+  /* ── ナビシュリンク ── */
+  var navEl = document.querySelector('nav');
+  var stBtn = document.getElementById('scroll-top');
+  window.addEventListener('scroll', function(){
+    if(navEl) navEl.classList.toggle('scrolled', window.scrollY > 60);
+    if(stBtn) stBtn.classList.toggle('vis', window.scrollY > 400);
+  }, {passive:true});
+  if(stBtn) stBtn.addEventListener('click', function(){ window.scrollTo({top:0,behavior:'smooth'}); });
+
+  /* ── アクティブセクション ── */
+  var secs  = document.querySelectorAll('section[id]');
+  var links = document.querySelectorAll('.nav-links a[href^="#"]');
+  if(secs.length && links.length){
+    var io3 = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){
+          links.forEach(function(l){ l.classList.remove('section-active'); });
+          var a = document.querySelector('.nav-links a[href="#'+e.target.id+'"]');
+          if(a) a.classList.add('section-active');
+        }
+      });
+    },{threshold:0.3});
+    secs.forEach(function(s){ io3.observe(s); });
+  }
+
+  /* ── ハンバーガー ── */
+  var hbtn = document.getElementById('nav-hamburger');
+  var menu = document.querySelector('.nav-links');
+  var nov  = document.getElementById('nav-overlay');
+  if(hbtn){
+    function togMenu(open){
+      hbtn.classList.toggle('open',open);
+      if(menu) menu.classList.toggle('open',open);
+      if(nov)  nov.classList.toggle('open',open);
+      hbtn.setAttribute('aria-expanded',open);
+      document.body.style.overflow = open ? 'hidden' : '';
+    }
+    hbtn.addEventListener('click', function(){ togMenu(!hbtn.classList.contains('open')); });
+    if(nov) nov.addEventListener('click', function(){ togMenu(false); });
+    document.querySelectorAll('.nav-links a').forEach(function(a){
+      a.addEventListener('click', function(){ togMenu(false); });
+    });
+  }
+
+  /* ── スワイプナビゲーション ── */
+  var swipeStartX = 0, swipeStartY = 0;
+  var SWIPE_THRESHOLD = 60;
+  document.addEventListener('touchstart', function(e){
+    swipeStartX = e.changedTouches[0].clientX;
+    swipeStartY = e.changedTouches[0].clientY;
+  }, {passive:true});
+  document.addEventListener('touchend', function(e){
+    var dx = e.changedTouches[0].clientX - swipeStartX;
+    var dy = e.changedTouches[0].clientY - swipeStartY;
+    if(Math.abs(dx) < SWIPE_THRESHOLD || Math.abs(dy) > Math.abs(dx) * 0.8) return;
+    var idx = PAGE_ORDER.indexOf(CURRENT_FILE);
+    if(idx < 0) return;
+    if(dx < 0 && idx < PAGE_ORDER.length - 1){ goPage(PAGE_ORDER[idx+1]); }
+    if(dx > 0 && idx > 0){ goPage(PAGE_ORDER[idx-1]); }
+  }, {passive:true});
+
+})();
+
 </script>
+<button id="scroll-top" aria-label="ページトップへ"><svg viewBox="0 0 14 14"><polyline points="2,10 7,4 12,10"/></svg></button>
+<div id="swipe-indicator">swipe</div>
 </body>
 </html>
