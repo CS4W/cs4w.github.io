@@ -86,7 +86,7 @@ nav::after{content:"";position:absolute;bottom:-3px;left:3.5rem;right:3.5rem;hei
 .wcard-tag{font-family:"Raleway",sans-serif;font-weight:300;font-size:0.54rem;letter-spacing:0.14em;text-transform:uppercase;padding:0.14rem 0.5rem;}
 .tag-game{border:1px solid rgba(77,232,194,0.3);color:var(--teal);}
 .tag-comm{border:1px solid rgba(184,159,255,0.3);color:var(--violet);}
-footer{position:relative;z-index:1;padding:1.5rem 3.5rem;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;background:rgba(15,15,28,0.9);}
+footer{position:relative;z-index:1;padding-bottom:calc(1.5rem + 36px);padding:1.5rem 3.5rem;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;background:rgba(15,15,28,0.9);}
 .footer-l{font-family:"Cinzel",serif;font-weight:600;font-size:0.82rem;letter-spacing:0.2em;color:var(--muted);}
 .footer-r{font-family:"Raleway",sans-serif;font-weight:300;font-size:0.55rem;letter-spacing:0.14em;color:rgba(106,101,133,0.4);}
 @media(max-width:640px){
@@ -231,11 +231,11 @@ img{background:rgba(184,159,255,0.05);}
 
 @media(max-width:700px){
   .filter-bar{
-    position:fixed!important;top:auto!important;bottom:0!important;
+    position:fixed!important;top:auto!important;bottom:32px!important;
     left:0!important;right:0!important;z-index:250!important;
     padding:0.5rem 0.8rem!important;gap:0.4rem!important;
     flex-wrap:nowrap!important;overflow-x:auto!important;
-    border-bottom:none!important;
+    border-bottom:1px solid rgba(184,159,255,0.13)!important;
     border-top:1px solid rgba(184,159,255,0.13)!important;
     background:rgba(10,10,20,0.97)!important;backdrop-filter:blur(20px)!important;
     scrollbar-width:none!important;
@@ -243,8 +243,215 @@ img{background:rgba(184,159,255,0.05);}
   .filter-bar::-webkit-scrollbar{display:none;}
   .filter-btn{flex-shrink:0!important;min-height:36px!important;}
   .filter-count{display:none!important;}
-  .works-main{padding-bottom:80px!important;}
+  .works-main{padding-bottom:96px!important;}
 }
+
+
+#social-float{
+  position:fixed;
+  bottom:1.8rem;
+  left:1.5rem;
+  z-index:200;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:0;
+}
+/* ホバーで展開するトリガーボタン */
+#social-float .sf-trigger{
+  width:36px;height:36px;
+  background:rgba(15,15,28,0.88);
+  border:1px solid rgba(184,159,255,0.22);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  transition:border-color 0.3s,background 0.3s;
+  position:relative;z-index:2;
+  order:99; /* 一番下に */
+}
+#social-float:hover .sf-trigger,
+#social-float.open .sf-trigger{
+  border-color:var(--violet,#b89fff);
+  background:rgba(184,159,255,0.12);
+}
+.sf-trigger-icon{
+  font-size:14px;
+  line-height:1;
+  color:rgba(221,217,231,0.55);
+  transition:color 0.3s, transform 0.3s;
+  user-select:none;
+}
+#social-float:hover .sf-trigger-icon,
+#social-float.open .sf-trigger-icon{
+  color:var(--ghost,#ddd9e7);
+}
+/* アイコンリスト */
+#social-float .sf-links{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+  overflow:hidden;
+  max-height:0;
+  padding:0;
+  transition:max-height 0.4s cubic-bezier(.4,0,.2,1), padding 0.3s;
+}
+#social-float:hover .sf-links,
+#social-float.open .sf-links{
+  max-height:400px;
+  padding-bottom:8px;
+}
+.sf-link{
+  width:34px;height:34px;
+  background:rgba(15,15,28,0.88);
+  border:1px solid rgba(184,159,255,0.15);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  text-decoration:none;
+  transition:border-color 0.25s,background 0.25s,transform 0.25s;
+  position:relative;
+  opacity:0;
+  transform:translateY(8px);
+}
+#social-float:hover .sf-link,
+#social-float.open .sf-link{
+  opacity:1;
+  transform:translateY(0);
+}
+#social-float:hover .sf-link:nth-child(1),#social-float.open .sf-link:nth-child(1){transition-delay:0.02s;}
+#social-float:hover .sf-link:nth-child(2),#social-float.open .sf-link:nth-child(2){transition-delay:0.05s;}
+#social-float:hover .sf-link:nth-child(3),#social-float.open .sf-link:nth-child(3){transition-delay:0.07s;}
+#social-float:hover .sf-link:nth-child(4),#social-float.open .sf-link:nth-child(4){transition-delay:0.09s;}
+#social-float:hover .sf-link:nth-child(5),#social-float.open .sf-link:nth-child(5){transition-delay:0.11s;}
+#social-float:hover .sf-link:nth-child(6),#social-float.open .sf-link:nth-child(6){transition-delay:0.13s;}
+#social-float:hover .sf-link:nth-child(7),#social-float.open .sf-link:nth-child(7){transition-delay:0.15s;}
+.sf-link:hover{
+  border-color:var(--teal,#4de8c2);
+  background:rgba(77,232,194,0.1);
+  transform:translateY(-1px) scale(1.08);
+}
+.sf-link svg{
+  width:16px;height:16px;
+  fill:rgba(221,217,231,0.55);
+  transition:fill 0.25s;
+}
+.sf-link:hover svg{fill:var(--ghost,#ddd9e7);}
+/* ツールチップ */
+.sf-link::after{
+  content:attr(data-tip);
+  position:absolute;
+  left:calc(100% + 8px);
+  top:50%;transform:translateY(-50%);
+  background:rgba(10,10,20,0.92);
+  border:1px solid rgba(184,159,255,0.18);
+  color:var(--ghost,#ddd9e7);
+  font-family:"Raleway",sans-serif;
+  font-weight:300;font-style:italic;
+  font-size:0.58rem;letter-spacing:0.12em;
+  padding:0.2rem 0.5rem;
+  white-space:nowrap;
+  opacity:0;pointer-events:none;
+  transition:opacity 0.2s;
+}
+.sf-link:hover::after{opacity:1;}
+
+/* スマホ時：スクロールトップの上に */
+@media(max-width:700px){
+  #social-float{
+    bottom:3.8rem;
+    left:0.8rem;
+  }
+  #social-float .sf-trigger{width:32px;height:32px;}
+  .sf-link{width:30px;height:30px;}
+  .sf-link svg{width:13px;height:13px;}
+  .sf-link::after{display:none;}
+}
+
+
+/* ── Social Icon Bar ── */
+#social-bar{
+  position:fixed;
+  bottom:0;
+  left:0;right:0;
+  z-index:299;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:0;
+  height:36px;
+  background:rgba(10,10,20,0.88);
+  backdrop-filter:blur(16px);
+  border-top:1px solid rgba(184,159,255,0.1);
+  border-bottom:none;
+}
+.sb-link{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:44px;height:36px;
+  text-decoration:none;
+  position:relative;
+  transition:background 0.22s;
+}
+.sb-link:hover{
+  background:rgba(184,159,255,0.08);
+}
+.sb-link svg{
+  width:15px;height:15px;
+  fill:rgba(221,217,231,0.42);
+  transition:fill 0.22s, transform 0.22s;
+}
+.sb-link:hover svg{
+  fill:rgba(221,217,231,0.95);
+  transform:scale(1.12);
+}
+/* ツールチップ */
+.sb-link::after{
+  content:attr(data-tip);
+  position:absolute;
+  bottom:calc(100% + 5px);
+  top:auto;
+  left:50%;transform:translateX(-50%);
+  background:rgba(10,10,20,0.92);
+  border:1px solid rgba(184,159,255,0.18);
+  color:rgba(221,217,231,0.85);
+  font-family:"Raleway",sans-serif;
+  font-weight:300;font-style:italic;
+  font-size:0.56rem;letter-spacing:0.14em;
+  padding:0.18rem 0.5rem;
+  white-space:nowrap;
+  opacity:0;pointer-events:none;
+  transition:opacity 0.18s;
+}
+.sb-link:hover::after{opacity:1;}
+/* セパレーター */
+.sb-sep{
+  width:1px;height:14px;
+  background:rgba(184,159,255,0.12);
+  flex-shrink:0;
+}
+/* スクロールで薄くなる */
+#social-bar.scrolled{
+  background:rgba(10,10,20,0.7);
+}
+
+/* コンテンツがアイコンバーに隠れないよう下パディング */
+body{ padding-bottom:36px; }
+
+/* モバイル */
+@media(max-width:700px){
+  #social-bar{
+    bottom:0;
+    height:32px;
+    gap:0;
+  }
+  .sb-link{width:38px;height:32px;}
+  .sb-link svg{width:13px;height:13px;}
+  .sb-link::after{display:none;}
+  .sb-sep{height:10px;}
+
+}
+
 </style>
 </head>
 <body>
@@ -266,6 +473,44 @@ img{background:rgba(184,159,255,0.05);}
     <li><a href="cs4w-contact.html">Contact</a></li>
   </ul>
 </nav>
+<!-- ── Social Icon Bar ── -->
+<div id="social-bar">
+  <!-- YouTube -->
+  <a class="sb-link" href="https://www.youtube.com/@cs4w-241" target="_blank" rel="noopener" data-tip="YouTube">
+    <svg viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1C24 15.9 24 12 24 12s0-3.9-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/></svg>
+  </a>
+  <div class="sb-sep"></div>
+  <!-- X / Twitter -->
+  <a class="sb-link" href="https://x.com/CS4W_shiso" target="_blank" rel="noopener" data-tip="X (Twitter)">
+    <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+  </a>
+  <div class="sb-sep"></div>
+  <!-- SoundCloud -->
+  <a class="sb-link" href="https://soundcloud.com/yusuke-7328" target="_blank" rel="noopener" data-tip="SoundCloud">
+    <svg viewBox="0 0 24 24"><path d="M1.175 12.225c-.038 0-.068.03-.08.063l-.452 2.808.452 2.772c.012.033.042.063.08.063.037 0 .068-.03.08-.063l.513-2.772-.513-2.808c-.012-.033-.043-.063-.08-.063zm1.635-.826c-.05 0-.09.038-.1.088L2.21 15.07l.5 3.262c.01.05.05.088.1.088.05 0 .09-.038.1-.088l.568-3.262-.568-3.583c-.01-.05-.05-.088-.1-.088zm1.673-.356c-.062 0-.112.05-.12.113L3.85 15.07l.513 3.556c.008.063.058.113.12.113.062 0 .112-.05.12-.113l.581-3.556-.581-3.514c-.008-.062-.058-.113-.12-.113zm1.685-.213c-.075 0-.138.063-.144.138L5.51 15.07l.514 3.688c.006.075.069.138.144.138.075 0 .138-.063.144-.138l.581-3.688-.581-3.614c-.006-.075-.069-.138-.144-.138zm1.697-.125c-.088 0-.162.075-.169.163L7.18 15.07l.516 3.8c.007.088.081.163.169.163.088 0 .162-.075.169-.163l.581-3.8-.581-3.615c-.007-.088-.081-.163-.169-.163zm1.713-.038c-.1 0-.186.087-.194.188L8.864 15.07l.52 3.912c.008.1.094.188.194.188.1 0 .186-.087.194-.188l.587-3.912-.587-3.612c-.008-.1-.094-.188-.194-.188zm1.725.013c-.113 0-.212.1-.219.213l-.553 3.612.553 4.012c.007.113.106.213.219.213.113 0 .212-.1.219-.213l.625-4.012-.625-3.612c-.007-.113-.106-.213-.219-.213zm5.54-2.038c-.25 0-.494.05-.719.137a5.565 5.565 0 0 0-5.553-5.19c-.738 0-1.47.15-2.15.45-.263.112-.331.225-.338.325v10.244c.007.112.1.2.213.207h8.547c.6 0 1.088-.487 1.088-1.088V9.813c0-.963-.781-1.744-1.744-1.744l.656.013z"/></svg>
+  </a>
+  <div class="sb-sep"></div>
+  <!-- Spotify -->
+  <a class="sb-link" href="https://open.spotify.com/artist/6JFm5BDt6iFkSaJJoFHGZZ" target="_blank" rel="noopener" data-tip="Spotify">
+    <svg viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+  </a>
+  <div class="sb-sep"></div>
+  <!-- Bandcamp -->
+  <a class="sb-link" href="https://cs4w.bandcamp.com" target="_blank" rel="noopener" data-tip="Bandcamp">
+    <svg viewBox="0 0 24 24"><path d="M0 18.75l7.437-13.5H24l-7.438 13.5z"/></svg>
+  </a>
+  <div class="sb-sep"></div>
+  <!-- Fanbox -->
+  <a class="sb-link" href="https://cs4w.fanbox.cc" target="_blank" rel="noopener" data-tip="Fanbox">
+    <svg viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 2c4.418 0 8 3.582 8 8s-3.582 8-8 8-8-3.582-8-8 3.582-8 8-8zm-1 3v2H7v2h4v2H7v2h4v2h2v-2h4v-2h-4v-2h4v-2h-4V7h-2z"/></svg>
+  </a>
+  <div class="sb-sep"></div>
+  <!-- Booth -->
+  <a class="sb-link" href="https://cs4w.booth.pm" target="_blank" rel="noopener" data-tip="Booth">
+    <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm-1.5 5h3c1.38 0 2.5 1.12 2.5 2.5 0 .8-.38 1.5-.96 1.96A2.5 2.5 0 0 1 13.5 16h-3V7zm1.5 1.5v2h1.5a1 1 0 0 0 0-2H12zm0 3.5v2h1.5a1 1 0 0 0 0-2H12z"/></svg>
+  </a>
+</div>
+
 <div class="page-header">
   <p class="ph-eyebrow reveal">Works</p>
   <h1 class="ph-h1 reveal" style="--delay:70ms">楽曲提供一覧</h1>
@@ -595,30 +840,35 @@ const ro = new IntersectionObserver(entries => {
   entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); ro.unobserve(e.target); } });
 }, {threshold:0.06, rootMargin:'0px 0px -20px 0px'});
 document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
-document.querySelectorAll('.wcard').forEach((el, i) => {
-  el.style.opacity='0'; el.style.transform='translateY(16px)';
-  el.style.transition=`opacity 0.65s cubic-bezier(.22,1,.36,1) ${Math.min(i*18,360)}ms,transform 0.65s cubic-bezier(.22,1,.36,1) ${Math.min(i*18,360)}ms`;
-  const obs = new IntersectionObserver(([e]) => {
-    if(e.isIntersecting){ el.style.opacity='1'; el.style.transform='translateY(0)'; obs.unobserve(el); }
-  }, {threshold:0.04});
-  obs.observe(el);
-});
+/* wcard individual animation removed */
 function filterWorks(type, btn) {
-  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.filter-btn').forEach(function(b){ b.classList.remove('active'); });
   btn.classList.add('active');
-  const grid=document.getElementById('worksGrid');
-  const cards=Array.from(grid.querySelectorAll('.wcard'));
-  const shown=[],hidden=[];
-  cards.forEach(card=>{
-    const tags=card.dataset.tags||'';
-    const show=(type==='all')||tags.includes(type);
-    if(show){card.style.display='';shown.push(card);}
-    else{card.style.display='none';hidden.push(card);}
+  var grid = document.getElementById('worksGrid');
+  var pool = document.getElementById('wc-pool');
+  if (!pool) {
+    pool = document.createElement('div');
+    pool.id = 'wc-pool';
+    pool.setAttribute('style','display:none;');
+    grid.parentNode.insertBefore(pool, grid.nextSibling);
+  }
+  var all = Array.from(grid.querySelectorAll('.wcard'))
+            .concat(Array.from(pool.querySelectorAll('.wcard')));
+  var shown = 0;
+  all.forEach(function(card){
+    // inline styleリセット
+    card.style.opacity = '';
+    card.style.transform = '';
+    card.style.transition = '';
+    var tags = card.dataset.tags || '';
+    var show = (type === 'all') || tags.includes(type);
+    if (show) { grid.appendChild(card); shown++; }
+    else       { pool.appendChild(card); }
   });
-  shown.forEach(c=>grid.appendChild(c));
-  hidden.forEach(c=>grid.appendChild(c));
-  const badge=document.getElementById('filterCount');
-  if(badge) badge.innerHTML=type==='all'?`全 <em>${cards.length}</em> 曲`:`<em>${shown.length}</em> / ${cards.length} 曲`;
+  var badge = document.getElementById('filterCount');
+  if (badge) badge.innerHTML = type==='all'
+    ? '全 <em>'+all.length+'</em> 曲'
+    : '<em>'+shown+'</em> / '+all.length+' 曲';
 }
 
 /* ════ SHARED UX JS ════ */
@@ -710,7 +960,25 @@ function filterWorks(type, btn) {
 
 })();
 
+
+
+
+
+/* ── Social Icon Bar ── */
+(function(){
+  var bar = document.getElementById('social-bar');
+  if (!bar) return;
+  window.addEventListener('scroll', function(){
+    bar.classList.toggle('scrolled', window.scrollY > 80);
+  }, {passive:true});
+})();
+
 </script>
+<button class="sf-trigger" id="sf-trigger-btn" aria-label="SNSリンク">
+    <span class="sf-trigger-icon">✦</span>
+  </button>
+</div>
+
 <button id="scroll-top" aria-label="ページトップへ"><svg viewBox="0 0 14 14"><polyline points="2,10 7,4 12,10"/></svg></button>
 <div id="swipe-indicator">swipe</div>
 </body>
