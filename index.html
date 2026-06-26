@@ -1545,10 +1545,10 @@ body{ padding-bottom:36px; }
   <a href="#home" class="logo"><span class="logo-cross">✛</span>CS4W</a>
   <ul class="nav-links">
     <li><a href="#home" class="nav-active">Home</a></li>
-    <li><a ="./works/">Works</a></li>
-    <li><a ="./discography/">Discography</a></li>
-    <li><a ="./about/">About</a></li>
-    <li><a ="./contact/">Contact</a></li>
+    <li><a href="./works/">Works</a></li>
+    <li><a href="./discography/">Discography</a></li>
+    <li><a href="./about/">About</a></li>
+    <li><a href="./contact/">Contact</a></li>
   </ul>
 </nav>
 
@@ -1867,7 +1867,7 @@ body{ padding-bottom:36px; }
 
         <!-- 全曲リンク -->
     <div class="works-all-link">
-      <a ="./discography/" class="btn-all-works">
+      <a href="./discography/" class="btn-all-works">
         全楽曲を見る — Complete Discography
         <span class="btn-arrow">→</span>
       </a>
@@ -1885,7 +1885,7 @@ body{ padding-bottom:36px; }
     <p class="section-ja" style="--delay:120ms;margin-bottom:2.5rem;">音ゲー曲・歌モノ・クラブミュージックなど、ジャンル問わず承ります</p>
     <p style="font-family:'Raleway',sans-serif;font-weight:300;font-size:0.88rem;letter-spacing:0.12em;color:var(--dim);margin-bottom:2.5rem;">cs4w.oshigoto@gmail.com</p>
     <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
-      <a ="./contact/" class="btn-primary">お問い合わせフォーム <span class="btn-arrow">→</span></a>
+      <a href="./contact/" class="btn-primary">お問い合わせフォーム <span class="btn-arrow">→</span></a>
       <a href="https://x.com/CS4W_shiso" target="_blank" class="btn-ghost">X (Twitter) DM <span class="btn-arrow">→</span></a>
     </div>
   </div>
@@ -1978,7 +1978,6 @@ function handleSubmit(e){
 /* ── Main UX ── */
 (function(){
   var PAGE_ORDER = ['index.html', '../works/', '../discography/', '../about/', '../contact/'];
-  var _p = location.pathname.split('/').pop();
   var _p = location.pathname; var CURRENT_FILE = (_p === '/' || _p.endsWith('/index.html') || _p === '') ? 'index.html' : _p.replace(/\/index\.html$/, '').split('/').pop() + '/';
 
   /* ページ遷移フェード */
