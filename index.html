@@ -1579,6 +1579,85 @@ body{ padding-bottom:36px; }
   .mp-title{font-size:0.65rem;}
 }
 
+
+/* ── NR Loading Animation ── */
+.nr-loading{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:0.8rem;
+  padding:2rem;
+  font-family:"Raleway",sans-serif;font-weight:300;font-style:italic;
+  font-size:0.64rem;letter-spacing:0.3em;color:var(--muted);
+}
+/* スピナー */
+.nr-spinner{
+  width:28px;height:28px;
+  border:2px solid rgba(184,159,255,0.15);
+  border-top:2px solid rgba(184,159,255,0.7);
+  border-radius:50%;
+  animation:nr-spin 0.8s linear infinite;
+}
+@keyframes nr-spin{to{transform:rotate(360deg);}}
+/* リストのスケルトン */
+.nr-skeleton{
+  display:flex;gap:0.75rem;align-items:center;
+  padding:0.55rem 0;border-bottom:1px solid var(--line);
+}
+.nr-skel-thumb{
+  width:70px;height:39px;flex-shrink:0;
+  background:linear-gradient(90deg,rgba(184,159,255,0.06) 25%,rgba(184,159,255,0.12) 50%,rgba(184,159,255,0.06) 75%);
+  background-size:200% 100%;
+  animation:nr-shimmer 1.4s ease infinite;
+}
+.nr-skel-text{flex:1;display:flex;flex-direction:column;gap:0.4rem;}
+.nr-skel-line{
+  height:8px;border-radius:4px;
+  background:linear-gradient(90deg,rgba(184,159,255,0.06) 25%,rgba(184,159,255,0.12) 50%,rgba(184,159,255,0.06) 75%);
+  background-size:200% 100%;
+  animation:nr-shimmer 1.4s ease infinite;
+}
+.nr-skel-line.short{width:50%;}
+@keyframes nr-shimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
+/* エラー表示 */
+.nr-error{
+  display:flex;flex-direction:column;align-items:center;gap:0.6rem;
+  padding:1.5rem;text-align:center;
+}
+.nr-error-icon{font-size:1.4rem;opacity:0.4;}
+.nr-error-msg{
+  font-family:"Raleway",sans-serif;font-weight:300;font-style:italic;
+  font-size:0.62rem;letter-spacing:0.2em;color:var(--muted);
+}
+.nr-error-retry{
+  font-family:"Raleway",sans-serif;font-weight:300;font-style:italic;
+  font-size:0.6rem;letter-spacing:0.18em;
+  color:var(--violet);background:none;border:1px solid rgba(184,159,255,0.3);
+  padding:0.3rem 0.8rem;cursor:pointer;margin-top:0.2rem;
+  transition:border-color 0.2s,color 0.2s;
+}
+.nr-error-retry:hover{border-color:var(--violet);color:var(--ghost);}
+
+
+/* ── NR skeleton loading ── */
+.nr-skel{
+  background:linear-gradient(90deg,
+    rgba(184,159,255,0.06) 25%,
+    rgba(184,159,255,0.14) 50%,
+    rgba(184,159,255,0.06) 75%);
+  background-size:200% 100%;
+  animation:nr-shimmer 1.4s infinite;
+  border-radius:2px;
+}
+@keyframes nr-shimmer{
+  0%  {background-position:200% 0;}
+  100%{background-position:-200% 0;}
+}
+.nr-item-skeleton{pointer-events:none;opacity:0.6;}
+.nr-offline-badge{
+  font-family:"Raleway",sans-serif;font-weight:300;font-style:italic;
+  font-size:0.52rem;letter-spacing:0.16em;
+  color:rgba(221,217,231,0.25);margin-top:0.4rem;
+}
+
 </style>
 <!-- Google Analytics (GA4) - IDをG-RVNXNJB2Q1に置き換えてください -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-RVNXNJB2Q1"></script>
@@ -1745,7 +1824,7 @@ body{ padding-bottom:36px; }
       <div class="nr-left">
         <p class="nr-col-label yt">Latest Video</p>
         <div class="nr-player" id="nr-player">
-          <div class="nr-loading">Loading...</div>
+          <div class="nr-loading"><div class="nr-spinner"></div>Loading...</div>
         </div>
         <div id="nr-info"></div>
       </div>
@@ -1756,7 +1835,7 @@ body{ padding-bottom:36px; }
         </div>
         <p class="nr-col-label rv" style="margin-top:0.4rem;">Recent Videos</p>
         <div class="nr-list" id="nr-list">
-          <div class="nr-loading">Loading...</div>
+          <div class="nr-loading"><div class="nr-spinner"></div>Loading...</div>
         </div>
       </div>
     </div>
@@ -2147,68 +2226,180 @@ function nrPlay(ytId) {
 (function(){
   var CHANNEL_ID = 'UCRh8owDtQAUKvRfwnagz84g';
   var RSS_URL    = 'https://www.youtube.com/feeds/videos.xml?channel_id=' + CHANNEL_ID;
-  // CORSプロキシ（公開サーバー用）
-  var PROXY      = 'https://api.allorigins.win/get?url=';
+  var CACHE_KEY  = 'nr_rss_v2';
+  var CACHE_TTL  = 5 * 60 * 1000; // 5分
 
-  var player  = document.getElementById('nr-player');
-  var info    = document.getElementById('nr-info');
-  var listEl  = document.getElementById('nr-list');
+  // ── フォールバック用既知動画（全プロキシ失敗時に表示）
+  var FALLBACK = [{"id": "W9nS0Wf_PlQ", "title": "CS4W - Subjugator", "date": "2026/06/06"}, {"id": "yRK1A5yOMJ0", "title": "CS4W - Collapse", "date": "2026/05/25"}, {"id": "RgydPti-jLY", "title": "CS4W - Synthesized Moon-ray", "date": "2026/04/26"}, {"id": "GIUuHVgcSjw", "title": "CS4W - BACKALLEY", "date": "2026/04/26"}];
 
-  function ytThumb(id){ return 'https://img.youtube.com/vi/' + id + '/mqdefault.jpg'; }
-  function ytUrl(id)  { return 'https://www.youtube.com/watch?v=' + id; }
+  // ── CORSプロキシリスト（速い順）
+  var PROXIES = [
+    { url: 'https://api.allorigins.win/get?url=',       json: true  },
+    { url: 'https://corsproxy.io/?',                    json: false },
+    { url: 'https://api.codetabs.com/v1/proxy?quest=', json: false },
+  ];
 
-  function parseRSS(xml) {
-    var parser = new DOMParser();
-    var doc    = parser.parseFromString(xml, 'text/xml');
-    var entries= Array.from(doc.querySelectorAll('entry'));
-    return entries.map(function(e){
-      var id    = (e.querySelector('videoId') || {textContent:''}).textContent;
-      var title = (e.querySelector('title')   || {textContent:''}).textContent;
-      var pub   = (e.querySelector('published')|| {textContent:''}).textContent.slice(0,10);
-      return { id: id, title: title, date: pub };
-    }).filter(function(v){ return v.id; });
+  var player = document.getElementById('nr-player');
+  var info   = document.getElementById('nr-info');
+  var listEl = document.getElementById('nr-list');
+
+  function ytThumb(id, q){ return 'https://img.youtube.com/vi/' + id + '/' + (q||'mqdefault') + '.jpg'; }
+  function ytUrl(id){ return 'https://www.youtube.com/watch?v=' + id; }
+
+  // ── パルスローディングをプレイヤーに表示
+  function showLoading(){
+    if(player) player.innerHTML =
+      '<div class="nr-loading">' +
+        '<div class="nr-spinner"></div>' +
+        '<span style="margin-top:0.6rem;display:block;">Loading...</span>' +
+      '</div>';
+    if(listEl) listEl.innerHTML =
+      [1,2,3].map(function(){
+        return '<div class="nr-item nr-item-skeleton">' +
+          '<div class="nr-item-thumb nr-skel"></div>' +
+          '<div class="nr-item-info">' +
+            '<div class="nr-skel" style="height:0.7rem;width:80%;margin-bottom:0.4rem;"></div>' +
+            '<div class="nr-skel" style="height:0.55rem;width:40%;"></div>' +
+          '</div>' +
+        '</div>';
+      }).join('');
   }
 
-  function renderMain(v) {
+  // ── タイムアウト付き fetch（ms）
+  function fetchT(url, ms){
+    var ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+    var tid  = ctrl ? setTimeout(function(){ ctrl.abort(); }, ms) : null;
+    return fetch(url, ctrl ? {signal:ctrl.signal} : {})
+      .then(function(r){ if(tid) clearTimeout(tid); if(!r.ok) throw new Error(r.status); return r; })
+      .catch(function(e){ if(tid) clearTimeout(tid); throw e; });
+  }
+
+  // ── 1プロキシから XML文字列を取得
+  function fetchProxy(proxy, targetUrl){
+    var url = proxy.url + encodeURIComponent(targetUrl);
+    return fetchT(url, 4000)
+      .then(function(r){ return r.text(); })
+      .then(function(text){
+        if(proxy.json){
+          try{ return JSON.parse(text).contents || text; }catch(e){ return text; }
+        }
+        return text;
+      });
+  }
+
+  // ── 全プロキシを並列で投げて最速を採用（Promise.any相当）
+  function fetchParallel(targetUrl){
+    var settled = false;
+    return new Promise(function(resolve, reject){
+      var errors = [];
+      var total  = PROXIES.length;
+      PROXIES.forEach(function(proxy){
+        fetchProxy(proxy, targetUrl)
+          .then(function(xml){
+            if(!settled){ settled = true; resolve(xml); }
+          })
+          .catch(function(e){
+            errors.push(e);
+            if(errors.length === total && !settled) reject(new Error('all failed'));
+          });
+      });
+    });
+  }
+
+  // ── RSS XML をパース
+  function parseRSS(xml){
+    var parser = new DOMParser();
+    var doc    = parser.parseFromString(xml, 'text/xml');
+    if(doc.querySelector('parsererror')) return [];
+    return Array.from(doc.querySelectorAll('entry')).map(function(e){
+      return {
+        id:    (e.querySelector('videoId')  ||{textContent:''}).textContent.trim(),
+        title: (e.querySelector('title')    ||{textContent:''}).textContent.trim(),
+        date:  (e.querySelector('published')||{textContent:''}).textContent.slice(0,10),
+      };
+    }).filter(function(v){ return v.id && v.id.length > 5; });
+  }
+
+  // ── 描画
+  function renderMain(v){
+    if(!player) return;
     player.innerHTML =
       '<div class="nr-thumb" onclick="nrPlay(\'' + v.id + '\')">' +
-        '<img src="' + ytThumb(v.id) + '" alt="' + v.title.replace(/"/g,'') + '" loading="lazy">' +
+        '<img src="' + ytThumb(v.id,'hqdefault') + '" alt="' + v.title.replace(/"/g,'') + '" loading="eager">' +
         '<div class="nr-thumb-play"><span>▶</span></div>' +
       '</div>';
-    info.innerHTML =
-      '<p class="nr-vid-title">' + v.title + '</p>' +
-      '<p class="nr-vid-date">' + v.date + '</p>' +
+    if(info) info.innerHTML =
+      '<p class="nr-vid-title">'  + v.title + '</p>' +
+      '<p class="nr-vid-date">'   + v.date  + '</p>' +
       '<a class="nr-vid-link" href="' + ytUrl(v.id) + '" target="_blank" rel="noopener">YouTube で見る →</a>';
   }
 
-  function renderList(videos) {
-    listEl.innerHTML = videos.slice(1, 5).map(function(v){
+  function renderList(videos){
+    if(!listEl) return;
+    listEl.innerHTML = videos.slice(1,5).map(function(v){
       return '<a class="nr-item" href="' + ytUrl(v.id) + '" target="_blank" rel="noopener">' +
-        '<div class="nr-item-thumb"><img src="' + ytThumb(v.id) + '" alt="" loading="lazy"></div>' +
+        '<div class="nr-item-thumb"><img src="' + ytThumb(v.id,'default') + '" alt="" loading="lazy"></div>' +
         '<div class="nr-item-info"><h4>' + v.title + '</h4><p>' + v.date + '</p></div>' +
       '</a>';
     }).join('');
   }
 
-  function onError() {
-    if (player) player.innerHTML = '<div class="nr-loading">読み込めませんでした</div>';
-    if (listEl) listEl.innerHTML = '';
+  function onError(){
+    // フォールバック動画を表示（エラー表示ではなく既知データで補完）
+    renderMain(FALLBACK[0]);
+    renderList(FALLBACK);
+    // 右下に小さなバッジで「オフライン表示」を示す
+    if(info){
+      var existing = info.innerHTML;
+      info.innerHTML = existing +
+        '<p class="nr-offline-badge">※ オフラインデータ表示中</p>';
+    }
   }
 
-  fetch(PROXY + encodeURIComponent(RSS_URL))
-    .then(function(r){ return r.json(); })
-    .then(function(data){
-      var videos = parseRSS(data.contents);
-      if (!videos.length) { onError(); return; }
-      renderMain(videos[0]);
-      renderList(videos);
-    })
-    .catch(onError);
+  // ── キャッシュ
+  function loadCache(){
+    try{
+      var r = sessionStorage.getItem(CACHE_KEY);
+      if(!r) return null;
+      var o = JSON.parse(r);
+      if(Date.now() - o.ts > CACHE_TTL) return null;
+      return o.videos;
+    }catch(e){ return null; }
+  }
+  function saveCache(videos){
+    try{ sessionStorage.setItem(CACHE_KEY, JSON.stringify({ts:Date.now(),videos:videos})); }catch(e){}
+  }
+
+  // ── メイン処理
+  function doFetch(silent){
+    if(!silent) showLoading();
+    return fetchParallel(RSS_URL)
+      .then(function(xml){
+        var videos = parseRSS(xml);
+        if(!videos.length) throw new Error('empty');
+        saveCache(videos);
+        renderMain(videos[0]);
+        renderList(videos);
+      })
+      .catch(function(){ if(!silent) onError(); });
+  }
+
+  window.nrRetry = function(){ doFetch(false); };
+
+  // キャッシュ即表示 → バックグラウンド更新
+  var cached = loadCache();
+  if(cached && cached.length){
+    renderMain(cached[0]);
+    renderList(cached);
+    setTimeout(function(){ doFetch(true); }, 300);
+  } else {
+    doFetch(false);
+  }
 })();
 
-function nrPlay(ytId) {
+function nrPlay(ytId){
   var p = document.getElementById('nr-player');
-  if (!p) return;
+  if(!p) return;
   p.innerHTML = '<iframe src="https://www.youtube.com/embed/' + ytId +
     '?autoplay=1&rel=0&modestbranding=1" ' +
     'allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" ' +
