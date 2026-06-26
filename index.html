@@ -1670,10 +1670,7 @@ body{ padding-bottom:36px; }
       <div class="nr-right">
         <p class="nr-col-label sp">Streaming</p>
         <div class="nr-spotify">
-          <iframe src="https://open.spotify.com/embed/artist/6JFm5BDt6iFkSaJJoFHGZZ?utm_source=generator&theme=0"
-            width="100%" height="152" frameborder="0"
-            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-            loading="lazy"></iframe>
+          <div id="nr-spotify-player"></div>
         </div>
         <p class="nr-col-label rv" style="margin-top:0.4rem;">Recent Videos</p>
         <div class="nr-list" id="nr-list">
@@ -2136,6 +2133,41 @@ function nrPlay(ytId) {
     'allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" ' +
     'allowfullscreen></iframe>';
 }
+
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   🎵 SPOTIFY 最新曲設定
+   ──────────────────────────────────────
+   最新曲が出たらここだけ変更してください：
+
+   type: "track" / "album" / "playlist"
+   id  : SpotifyのURLの末尾のID
+         例）open.spotify.com/track/【ここ】
+             open.spotify.com/album/【ここ】
+   height: プレイヤーの高さ（track=80, album=352）
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+var SPOTIFY_LATEST = {
+  type:   'album',
+  id:     '0pvG8QkpF9AA0Zn5Pco2EH',  // ← ここを変更
+  height: 352
+};
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+(function(){
+  var cfg = SPOTIFY_LATEST;
+  var el  = document.getElementById('nr-spotify-player');
+  if (!el) return;
+  var iframe = document.createElement('iframe');
+  iframe.style.cssText = 'border-radius:0;display:block;';
+  iframe.src = 'https://open.spotify.com/embed/' + cfg.type + '/' + cfg.id +
+               '?utm_source=generator&theme=0';
+  iframe.width  = '100%';
+  iframe.height = cfg.height;
+  iframe.setAttribute('frameborder', '0');
+  iframe.setAttribute('allow', 'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture');
+  iframe.setAttribute('loading', 'lazy');
+  el.appendChild(iframe);
+})();
 
 </script>
 <button class="sf-trigger" id="sf-trigger-btn" aria-label="SNSリンク">
