@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CS4W — Works</title>
+  <meta name="description" content="CS4W（しーそー）の楽曲提供一覧。Dynamix・太鼓の達人・maimai・TAKUMI³など10以上のタイトルへの収録曲。">
+
+  <!-- OGP / Twitter Card -->
+  <meta property="og:type"        content="website">
+  <meta property="og:title"       content="Works — CS4W | 楽曲提供一覧">
+  <meta property="og:description" content="CS4W（しーそー）の楽曲提供一覧。Dynamix・太鼓の達人・maimai・TAKUMI³など10以上のタイトルへの収録曲。">
+  <meta property="og:url"         content="https://cs4w.net/cs4w-works.html">
+  <meta property="og:image"       content="https://cs4w.net/ogp.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height"content="630">
+  <meta property="og:site_name"   content="CS4W">
+  <meta property="og:locale"      content="ja_JP">
+  <meta name="twitter:card"       content="summary_large_image">
+  <meta name="twitter:site"       content="@CS4W_shiso">
+  <meta name="twitter:title"      content="Works — CS4W | 楽曲提供一覧">
+  <meta name="twitter:description"content="CS4W（しーそー）の楽曲提供一覧。Dynamix・太鼓の達人・maimai・TAKUMI³など10以上のタイトルへの収録曲。">
+  <meta name="twitter:image"      content="https://cs4w.net/ogp.png">
+  <!-- /OGP -->
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Raleway:ital,wght@0,200;0,300;0,400;1,300&family=Shippori+Mincho:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#0f0f1c;--bg2:#13132a;--ghost:#ddd9e7;--dim:#a8a3c0;--muted:#6a6590;
+  --violet:#b89fff;--teal:#4de8c2;--line:rgba(184,159,255,0.13);
+}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--ghost);font-family:"Shippori Mincho",serif;overflow-x:hidden;}
+.bg-video-wrap{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+.bg-video-wrap video{width:100%;height:100%;object-fit:cover;opacity:0.15;filter:brightness(0.5) saturate(0.6);}
+.bg-video-wrap::after{content:"";position:absolute;inset:0;background:rgba(15,15,28,0.65);}
+nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;align-items:center;justify-content:space-between;padding:1.1rem 3.5rem;background:rgba(15,15,28,0.88);backdrop-filter:blur(24px);border-bottom:1px solid var(--line);}
+nav::after{content:"";position:absolute;bottom:-3px;left:3.5rem;right:3.5rem;height:1px;background:linear-gradient(90deg,transparent,rgba(77,232,194,0.2) 40%,rgba(184,159,255,0.16) 60%,transparent);}
+.logo{font-family:"Cinzel",serif;font-weight:600;font-size:1.25rem;letter-spacing:0.2em;color:var(--ghost);text-decoration:none;display:flex;align-items:center;gap:0.4rem;}
+.logo-cross{color:var(--violet);font-size:0.8rem;font-family:"Raleway",sans-serif;font-weight:300;}
+.nav-links{display:flex;gap:2rem;list-style:none;}
+.nav-links a{font-family:"Raleway",sans-serif;font-weight:300;font-size:0.7rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.3s;position:relative;}
+.nav-links a::after{content:"";position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--teal);transition:width 0.35s;}
+.nav-links a:hover,.nav-active{color:var(--ghost)!important;}
+.nav-links a.nav-active::after,.nav-links a:hover::after{width:100%;}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity 0.8s cubic-bezier(.22,1,.36,1),transform 0.8s cubic-bezier(.22,1,.36,1);transition-delay:var(--delay,0ms);}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.page-header{position:relative;z-index:1;padding:100px 3.5rem 32px;max-width:1300px;margin:0 auto;}
+.ph-eyebrow{font-family:"Raleway",sans-serif;font-weight:300;font-style:italic;font-size:0.64rem;letter-spacing:0.52em;color:var(--violet);text-transform:uppercase;display:flex;align-items:center;gap:0.55rem;margin-bottom:0.5rem;}
+.ph-eyebrow::before{content:"✦";font-size:0.5rem;}
+.ph-h1{font-family:"Cinzel",serif;font-weight:600;font-size:clamp(1.8rem,3.5vw,3.2rem);letter-spacing:0.1em;color:var(--ghost);margin-bottom:0.35rem;}
+.ph-sub{font-family:"Shippori Mincho",serif;font-size:0.8rem;letter-spacing:0.42em;color:var(--muted);margin-bottom:1rem;}
+.ph-count{font-family:"Raleway",sans-serif;font-weight:300;font-size:0.66rem;letter-spacing:0.2em;color:var(--muted);}
+.ph-count em{color:var(--violet);font-style:normal;}
+.filter-bar{position:sticky;top:62px;z-index:200;background:rgba(15,15,28,0.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:0.65rem 3.5rem;display:flex;align-items:center;gap:0.6rem;flex-wrap:wrap;}
+.filter-btn{font-family:"Raleway",sans-serif;font-weight:300;font-style:italic;font-size:0.64rem;letter-spacing:0.18em;text-transform:uppercase;padding:0.28rem 0.85rem;border:1px solid var(--line);color:var(--muted);background:transparent;cursor:pointer;transition:all 0.25s;}
+.filter-btn:hover,.filter-btn.active{border-color:var(--violet);color:var(--violet);background:rgba(184,159,255,0.06);}
+.filter-count{font-family:"Raleway",sans-serif;font-weight:300;font-size:0.6rem;letter-spacing:0.15em;color:var(--muted);margin-left:auto;}
+.filter-count em{color:var(--violet);font-style:normal;}
+.works-main{position:relative;z-index:1;padding:0 3.5rem 100px;max-width:1300px;margin:0 auto;}
+#worksGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);}
+.wcard{background:var(--bg);display:flex;flex-direction:column;position:relative;overflow:hidden;transition:background 0.3s;}
+.wcard::before{content:"";position:absolute;top:0;left:0;width:0;height:2px;background:linear-gradient(90deg,var(--violet),var(--teal));transition:width 0.4s;z-index:2;}
+.wcard:hover::before{width:100%;}
+.wcard:hover{background:rgba(184,159,255,0.04);}
+.wcard-media{width:100%;overflow:hidden;background:var(--bg2);}
+/* YouTube サムネ */
+.wcard-thumb{width:100%;aspect-ratio:16/9;cursor:pointer;position:relative;display:block;overflow:hidden;background:var(--bg2);text-decoration:none;}
+.wcard-thumb img{width:100%;height:100%;object-fit:cover;display:block;opacity:0.82;transition:opacity 0.3s,transform 0.4s;}
+.wcard:hover .wcard-thumb img{opacity:0.96;transform:scale(1.03);}
+.wcard-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(15,15,28,0.25);transition:background 0.3s;}
+.wcard:hover .wcard-play{background:rgba(15,15,28,0.08);}
+.wcard-play span{width:40px;height:40px;border-radius:50%;background:rgba(184,159,255,0.2);border:1px solid rgba(184,159,255,0.5);display:flex;align-items:center;justify-content:center;font-size:0.9rem;color:var(--ghost);transition:all 0.3s;}
+.wcard:hover .wcard-play span{background:rgba(184,159,255,0.35);transform:scale(1.08);}
+.wcard-yt-badge{position:absolute;bottom:0.4rem;right:0.5rem;font-family:"Raleway",sans-serif;font-weight:300;font-size:0.5rem;letter-spacing:0.14em;text-transform:uppercase;color:rgba(221,217,231,0.65);background:rgba(15,15,28,0.6);padding:0.1rem 0.38rem;}
+/* Spotify 埋め込み */
+.wcard-spotify{
+  width:100%;background:var(--bg2);
+  /* YT サムネ(16/9)と高さを揃えるため aspect-ratio を使う */
+  aspect-ratio:16/9;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+}
+.wcard-spotify iframe{
+  position:absolute;inset:0;width:100%;height:100%;
+  border-radius:0;
+}
+/* No YT */
+.wcard-no-yt{width:100%;aspect-ratio:16/9;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.4rem;background:rgba(15,15,28,0.5);text-decoration:none;}
+.wcard-year{font-family:"Cinzel",serif;font-weight:900;font-size:2rem;color:rgba(184,159,255,0.15);}
+.wcard-search{font-size:1.1rem;opacity:0.4;transition:opacity 0.3s;}
+.wcard-no-yt:hover .wcard-search{opacity:0.8;}
+.wcard-no-yt:hover .wcard-year{color:rgba(184,159,255,0.28);}
+/* Info */
+.wcard-info{padding:1rem 1.2rem 1.2rem;flex:1;display:flex;flex-direction:column;gap:0.15rem;}
+.wcard-date{font-family:"Raleway",sans-serif;font-weight:300;font-style:italic;font-size:0.58rem;letter-spacing:0.25em;color:var(--teal);margin-bottom:0.35rem;}
+.wcard-title{font-family:"Cinzel",serif;font-weight:400;font-size:0.92rem;color:var(--ghost);line-height:1.3;letter-spacing:0.05em;transition:color 0.3s;}
+.wcard-title-long{font-size:0.76rem;line-height:1.4;}
+.wcard:hover .wcard-title{color:var(--violet);}
+.wcard-collab{font-family:"Raleway",sans-serif;font-weight:300;font-style:italic;font-size:0.63rem;letter-spacing:0.1em;color:var(--teal);}
+.wcard-sub{font-family:"Raleway",sans-serif;font-weight:300;font-style:italic;font-size:0.6rem;letter-spacing:0.2em;color:var(--muted);}
+.wcard-plat{font-family:"Shippori Mincho",serif;font-size:0.7rem;color:var(--muted);letter-spacing:0.04em;}
+.wcard-tags{display:flex;gap:0.35rem;flex-wrap:wrap;margin-top:0.5rem;}
+.wcard-tag{font-family:"Raleway",sans-serif;font-weight:300;font-size:0.54rem;letter-spacing:0.14em;text-transform:uppercase;padding:0.14rem 0.5rem;}
+.tag-game{border:1px solid rgba(77,232,194,0.3);color:var(--teal);}
+.tag-comm{border:1px solid rgba(184,159,255,0.3);color:var(--violet);}
+footer{position:relative;z-index:1;padding-bottom:calc(1.5rem + 36px);padding:1.5rem 3.5rem;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;background:rgba(15,15,28,0.9);}
+.footer-l{font-family:"Cinzel",serif;font-weight:600;font-size:0.82rem;letter-spacing:0.2em;color:var(--muted);}
+.footer-r{font-family:"Raleway",sans-serif;font-weight:300;font-size:0.55rem;letter-spacing:0.14em;color:rgba(106,101,133,0.4);}
+@media(max-width:640px){
+  nav{padding:1rem 1.2rem;}nav::after{left:1.2rem;right:1.2rem;}
+  .nav-links{gap:1rem;}.nav-links a{font-size:0.6rem;letter-spacing:0.13em;}
+  .page-header,.works-main{padding-left:1.2rem;padding-right:1.2rem;}
+  .filter-bar{padding:0.6rem 1.2rem;top:58px;}
+  #worksGrid{grid-template-columns:repeat(2,1fr);}
+}
+
+/* ════ SHARED UX ════ */
+:root{--ghost:#ddd9e7;--violet:#b89fff;--teal:#4de8c2;--muted:#6a6590;--dim:#a8a3c0;--line:rgba(184,159,255,0.13);--bg:#0f0f1c;}
+
+/* スキップリンク */
+.skip-link{position:absolute;top:-100px;left:1rem;z-index:10000;background:var(--violet);color:#fff;font-family:"Raleway",sans-serif;font-size:0.8rem;padding:0.5rem 1rem;text-decoration:none;border-radius:2px;transition:top 0.2s;}
+.skip-link:focus{top:1rem;}
+:focus-visible{outline:2px solid var(--teal);outline-offset:3px;}
+
+/* ページ遷移フェード */
+.page-fade{position:fixed;inset:0;z-index:8000;background:#0a0a14;opacity:0;pointer-events:none;transition:opacity 0.32s cubic-bezier(.4,0,.2,1);}
+.page-fade.on{opacity:1;pointer-events:all;}
+
+/* ナビシュリンク */
+nav{transition:padding 0.3s ease,background 0.3s ease,box-shadow 0.3s ease;}
+nav.scrolled{padding-top:0.7rem;padding-bottom:0.7rem;background:rgba(10,10,20,0.97);box-shadow:0 2px 20px rgba(0,0,0,0.45);}
+
+/* ナビアクティブ */
+.nav-links a.section-active{color:var(--ghost)!important;}
+.nav-links a.section-active::after{width:100%;background:var(--violet);}
+
+/* ハンバーガー */
+.nav-hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:6px;margin:-6px;}
+.nav-hamburger span{display:block;width:22px;height:1px;background:var(--ghost);transition:transform 0.3s,opacity 0.3s;transform-origin:center;}
+.nav-hamburger.open span:nth-child(1){transform:translateY(6px) rotate(45deg);}
+.nav-hamburger.open span:nth-child(2){opacity:0;}
+.nav-hamburger.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
+
+/* ナビオーバーレイ */
+.nav-overlay{display:none;position:fixed;inset:0;z-index:280;background:rgba(0,0,0,0.55);backdrop-filter:blur(2px);}
+.nav-overlay.open{display:block;}
+
+/* ───────────── モバイル ───────────── */
+
+
+/* スワイプインジケーター（スマホのみ） */
+#swipe-indicator{
+  display:none;
+  position:fixed;bottom:5rem;left:50%;transform:translateX(-50%);
+  z-index:100;
+  font-family:"Raleway",sans-serif;font-weight:300;font-style:italic;
+  font-size:0.58rem;letter-spacing:0.4em;color:rgba(221,217,231,0.35);
+  text-transform:uppercase;
+  animation:sw-fade 3s 2s ease forwards;
+  pointer-events:none;
+}
+#swipe-indicator::before{content:"← ";}
+#swipe-indicator::after{content:" →";}
+@keyframes sw-fade{0%{opacity:1;}100%{opacity:0;}}
+@media(max-width:700px){#swipe-indicator{display:block;}}
+
+/* スクロールトップ */
+#scroll-top{
+  position:fixed;bottom:1.6rem;right:1.6rem;z-index:150;
+  width:40px;height:40px;
+  background:rgba(15,15,28,0.9);border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  opacity:0;transform:translateY(6px);
+  transition:opacity 0.3s,transform 0.3s,border-color 0.3s;
+  pointer-events:none;border-radius:2px;
+}
+#scroll-top.vis{opacity:1;transform:translateY(0);pointer-events:auto;}
+#scroll-top:hover{border-color:var(--violet);}
+#scroll-top svg{width:13px;height:13px;fill:none;stroke:var(--dim);stroke-width:1.5;}
+#scroll-top:hover svg{stroke:var(--ghost);}
+@media(max-width:700px){#scroll-top{bottom:1rem;right:1rem;width:36px;height:36px;}}
+
+/* 画像プレースホルダー */
+img{background:rgba(184,159,255,0.05);}
+
+
+/* ════ MOBILE UX EXTRA ════ */
+@media(max-width:700px){
+  /* フォントサイズ読みやすく */
+  body{font-size:16px;-webkit-text-size-adjust:100%;}
+  /* セクションパディング縮小 */
+  .sec-pad{padding:72px 1.2rem 60px!important;}
+  .page-header{padding:84px 1.2rem 24px!important;}
+  .ab-wrap{padding:84px 1.2rem 60px!important;}
+  .ct-wrap{padding:84px 1.2rem 60px!important;}
+  /* ヒーローパディング */
+  .hero-inner{padding:100px 1.2rem 72px!important;}
+  /* グリッドを1列に */
+  .works-grid,#worksGrid,.fg-grid,.feat-grid{grid-template-columns:1fr!important;}
+  /* ボタン横幅フル */
+  .btn-primary,.btn-ghost,.btn-all-works,.form-submit,.ct-submit{
+    width:100%;justify-content:center;text-align:center;
+  }
+  /* 入力欄の文字サイズ（iOS ズーム防止） */
+  input,textarea,select{font-size:16px!important;}
+  /* カード内の動画比率維持 */
+  .wcard-thumb,.dc-thumb,.fg-thumb,.wp-thumb{aspect-ratio:16/9;}
+  /* スクロールバー細く */
+  ::-webkit-scrollbar{width:3px;}
+  ::-webkit-scrollbar-thumb{background:rgba(184,159,255,0.3);border-radius:2px;}
+  /* footer */
+  footer{flex-direction:column;gap:0.5rem;text-align:center;padding:1.2rem;}
+  /* navロゴサイズ */
+  .logo{font-size:1.1rem;}
+}
+
+
+/* ── mobile-nav-fix ── */
+@media(max-width:700px){
+  .logo{display:none!important;}
+  .nav-hamburger{display:none!important;}
+  .nav-overlay{display:none!important;}
+  nav{padding:0!important;justify-content:stretch!important;}
+  nav::after{left:0!important;right:0!important;}
+  .nav-links{
+    position:static!important;transform:none!important;
+    flex-direction:row!important;background:none!important;
+    backdrop-filter:none!important;border:none!important;
+    padding:0!important;gap:0!important;width:100%!important;
+    display:flex!important;overflow-x:auto!important;scrollbar-width:none!important;
+  }
+  .nav-links::-webkit-scrollbar{display:none;}
+  .nav-links li{
+    flex:1!important;flex-shrink:0!important;
+    border:none!important;width:auto!important;min-width:0!important;
+  }
+  .nav-links a{
+    display:flex!important;align-items:center!important;justify-content:center!important;
+    padding:0.75rem 0.3rem!important;font-size:0.58rem!important;
+    letter-spacing:0.06em!important;white-space:nowrap!important;
+    min-height:44px!important;width:100%!important;
+    color:var(--muted,#6a6590)!important;
+  }
+  .nav-links a.nav-active,
+  .nav-links a:hover{color:var(--ghost,#ddd9e7)!important;}
+}
+
+@media(max-width:700px){
+  .filter-bar{
+    position:fixed!important;top:auto!important;bottom:32px!important;
+    left:0!important;right:0!important;z-index:250!important;
+    padding:0.5rem 0.8rem!important;gap:0.4rem!important;
+    flex-wrap:nowrap!important;overflow-x:auto!important;
+    border-bottom:1px solid rgba(184,159,255,0.13)!important;
+    border-top:1px solid rgba(184,159,255,0.13)!important;
+    background:rgba(10,10,20,0.97)!important;backdrop-filter:blur(20px)!important;
+    scrollbar-width:none!important;
+  }
+  .filter-bar::-webkit-scrollbar{display:none;}
+  .filter-btn{flex-shrink:0!important;min-height:36px!important;}
+  .filter-count{display:none!important;}
+  .works-main{padding-bottom:96px!important;}
+}
+
+
+#social-float{
+  position:fixed;
+  bottom:1.8rem;
+  left:1.5rem;
+  z-index:200;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:0;
+}
+/* ホバーで展開するトリガーボタン */
+#social-float .sf-trigger{
+  width:36px;height:36px;
+  background:rgba(15,15,28,0.88);
+  border:1px solid rgba(184,159,255,0.22);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  transition:border-color 0.3s,background 0.3s;
+  position:relative;z-index:2;
+  order:99; /* 一番下に */
+}
+#social-float:hover .sf-trigger,
+#social-float.open .sf-trigger{
+  border-color:var(--violet,#b89fff);
+  background:rgba(184,159,255,0.12);
+}
+.sf-trigger-icon{
+  font-size:14px;
+  line-height:1;
+  color:rgba(221,217,231,0.55);
+  transition:color 0.3s, transform 0.3s;
+  user-select:none;
+}
+#social-float:hover .sf-trigger-icon,
+#social-float.open .sf-trigger-icon{
+  color:var(--ghost,#ddd9e7);
+}
+/* アイコンリスト */
+#social-float .sf-links{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+  overflow:hidden;
+  max-height:0;
+  padding:0;
+  transition:max-height 0.4s cubic-bezier(.4,0,.2,1), padding 0.3s;
+}
+#social-float:hover .sf-links,
+#social-float.open .sf-links{
+  max-height:400px;
+  padding-bottom:8px;
+}
+.sf-link{
+  width:34px;height:34px;
+  background:rgba(15,15,28,0.88);
+  border:1px solid rgba(184,159,255,0.15);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  text-decoration:none;
+  transition:border-color 0.25s,background 0.25s,transform 0.25s;
+  position:relative;
+  opacity:0;
+  transform:translateY(8px);
+}
+#social-float:hover .sf-link,
+#social-float.open .sf-link{
+  opacity:1;
+  transform:translateY(0);
+}
+#social-float:hover .sf-link:nth-child(1),#social-float.open .sf-link:nth-child(1){transition-delay:0.02s;}
+#social-float:hover .sf-link:nth-child(2),#social-float.open .sf-link:nth-child(2){transition-delay:0.05s;}
+#social-float:hover .sf-link:nth-child(3),#social-float.open .sf-link:nth-child(3){transition-delay:0.07s;}
+#social-float:hover .sf-link:nth-child(4),#social-float.open .sf-link:nth-child(4){transition-delay:0.09s;}
+#social-float:hover .sf-link:nth-child(5),#social-float.open .sf-link:nth-child(5){transition-delay:0.11s;}
+#social-float:hover .sf-link:nth-child(6),#social-float.open .sf-link:nth-child(6){transition-delay:0.13s;}
+#social-float:hover .sf-link:nth-child(7),#social-float.open .sf-link:nth-child(7){transition-delay:0.15s;}
+.sf-link:hover{
+  border-color:var(--teal,#4de8c2);
+  background:rgba(77,232,194,0.1);
+  transform:translateY(-1px) scale(1.08);
+}
+.sf-link svg{
+  width:16px;height:16px;
+  fill:rgba(221,217,231,0.55);
+  transition:fill 0.25s;
+}
+.sf-link:hover svg{fill:var(--ghost,#ddd9e7);}
+/* ツールチップ */
+.sf-link::after{
+  content:attr(data-tip);
+  position:absolute;
+  left:calc(100% + 8px);
+  top:50%;transform:translateY(-50%);
+  background:rgba(10,10,20,0.92);
+  border:1px solid rgba(184,159,255,0.18);
+  color:var(--ghost,#ddd9e7);
+  font-family:"Raleway",sans-serif;
+  font-weight:300;font-style:italic;
+  font-size:0.58rem;letter-spacing:0.12em;
+  padding:0.2rem 0.5rem;
+  white-space:nowrap;
+  opacity:0;pointer-events:none;
+  transition:opacity 0.2s;
+}
+.sf-link:hover::after{opacity:1;}
+
+/* スマホ時：スクロールトップの上に */
+@media(max-width:700px){
+  #social-float{
+    bottom:3.8rem;
+    left:0.8rem;
+  }
+  #social-float .sf-trigger{width:32px;height:32px;}
+  .sf-link{width:30px;height:30px;}
+  .sf-link svg{width:13px;height:13px;}
+  .sf-link::after{display:none;}
+}
+
+
+/* ── Social Icon Bar ── */
+#social-bar{
+  position:fixed;
+  bottom:0;
+  left:0;right:0;
+  z-index:299;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:0;
+  height:36px;
+  background:rgba(10,10,20,0.88);
+  backdrop-filter:blur(16px);
+  border-top:1px solid rgba(184,159,255,0.1);
+  border-bottom:none;
+}
+.sb-link{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:44px;height:36px;
+  text-decoration:none;
+  position:relative;
+  transition:background 0.22s;
+}
+.sb-link:hover{
+  background:rgba(184,159,255,0.08);
+}
+.sb-link svg{
+  width:15px;height:15px;
+  fill:rgba(221,217,231,0.42);
+  transition:fill 0.22s, transform 0.22s;
+}
+.sb-link:hover svg{
+  fill:rgba(221,217,231,0.95);
+  transform:scale(1.12);
+}
+/* ツールチップ */
+.sb-link::after{
+  content:attr(data-tip);
+  position:absolute;
+  bottom:calc(100% + 5px);
+  top:auto;
+  left:50%;transform:translateX(-50%);
+  background:rgba(10,10,20,0.92);
+  border:1px solid rgba(184,159,255,0.18);
+  color:rgba(221,217,231,0.85);
+  font-family:"Raleway",sans-serif;
+  font-weight:300;font-style:italic;
+  font-size:0.56rem;letter-spacing:0.14em;
+  padding:0.18rem 0.5rem;
+  white-space:nowrap;
+  opacity:0;pointer-events:none;
+  transition:opacity 0.18s;
+}
+.sb-link:hover::after{opacity:1;}
+/* セパレーター */
+.sb-sep{
+  width:1px;height:14px;
+  background:rgba(184,159,255,0.12);
+  flex-shrink:0;
+}
+/* スクロールで薄くなる */
+#social-bar.scrolled{
+  background:rgba(10,10,20,0.7);
+}
+
+/* コンテンツがアイコンバーに隠れないよう下パディング */
+body{ padding-bottom:36px; }
+
+/* モバイル */
+@media(max-width:700px){
+  #social-bar{
+    bottom:0;
+    height:32px;
+    gap:0;
+  }
+  .sb-link{width:38px;height:32px;}
+  .sb-link svg{width:13px;height:13px;}
+  .sb-link::after{display:none;}
+  .sb-sep{height:10px;}
+
+}
+
+</style>
+</head>
+<body>
+<a href="#main" class="skip-link">コンテンツへスキップ</a>
+<div class="nav-overlay" id="nav-overlay"></div>
+<div class="page-fade" id="page-fade"></div>
+<div class="bg-video-wrap" aria-hidden="true">
+  <video autoplay muted loop playsinline preload="auto">
+    <source src="../haikei_mp4.mp4" type="video/mp4">
+  </video>
+</div>
+<nav>
+  <a ="../" class="logo"><span class="logo-cross">✛</span>CS4W</a>
+  <ul class="nav-links">
+    <li><a ="../">Home</a></li>
+    <li><a ="../works/" class="nav-active">Works</a></li>
+    <li><a ="../discography/">Discography</a></li>
+    <li><a ="../about/">About</a></li>
+    <li><a ="../contact/">Contact</a></li>
+  </ul>
+</nav>
+<!-- ── Social Icon Bar ── -->
+<div id="social-bar">
+  <!-- YouTube -->
+  <a class="sb-link" href="https://www.youtube.com/@cs4w-241" target="_blank" rel="noopener" data-tip="YouTube">
+    <svg viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1C24 15.9 24 12 24 12s0-3.9-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/></svg>
+  </a>
+  <div class="sb-sep"></div>
+  <!-- X / Twitter -->
+  <a class="sb-link" href="https://x.com/CS4W_shiso" target="_blank" rel="noopener" data-tip="X (Twitter)">
+    <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+  </a>
+  <div class="sb-sep"></div>
+  <!-- SoundCloud -->
+  <a class="sb-link" href="https://soundcloud.com/yusuke-7328" target="_blank" rel="noopener" data-tip="SoundCloud">
+    <svg viewBox="0 0 24 24"><path d="M1.175 12.225c-.038 0-.068.03-.08.063l-.452 2.808.452 2.772c.012.033.042.063.08.063.037 0 .068-.03.08-.063l.513-2.772-.513-2.808c-.012-.033-.043-.063-.08-.063zm1.635-.826c-.05 0-.09.038-.1.088L2.21 15.07l.5 3.262c.01.05.05.088.1.088.05 0 .09-.038.1-.088l.568-3.262-.568-3.583c-.01-.05-.05-.088-.1-.088zm1.673-.356c-.062 0-.112.05-.12.113L3.85 15.07l.513 3.556c.008.063.058.113.12.113.062 0 .112-.05.12-.113l.581-3.556-.581-3.514c-.008-.062-.058-.113-.12-.113zm1.685-.213c-.075 0-.138.063-.144.138L5.51 15.07l.514 3.688c.006.075.069.138.144.138.075 0 .138-.063.144-.138l.581-3.688-.581-3.614c-.006-.075-.069-.138-.144-.138zm1.697-.125c-.088 0-.162.075-.169.163L7.18 15.07l.516 3.8c.007.088.081.163.169.163.088 0 .162-.075.169-.163l.581-3.8-.581-3.615c-.007-.088-.081-.163-.169-.163zm1.713-.038c-.1 0-.186.087-.194.188L8.864 15.07l.52 3.912c.008.1.094.188.194.188.1 0 .186-.087.194-.188l.587-3.912-.587-3.612c-.008-.1-.094-.188-.194-.188zm1.725.013c-.113 0-.212.1-.219.213l-.553 3.612.553 4.012c.007.113.106.213.219.213.113 0 .212-.1.219-.213l.625-4.012-.625-3.612c-.007-.113-.106-.213-.219-.213zm5.54-2.038c-.25 0-.494.05-.719.137a5.565 5.565 0 0 0-5.553-5.19c-.738 0-1.47.15-2.15.45-.263.112-.331.225-.338.325v10.244c.007.112.1.2.213.207h8.547c.6 0 1.088-.487 1.088-1.088V9.813c0-.963-.781-1.744-1.744-1.744l.656.013z"/></svg>
+  </a>
+  <div class="sb-sep"></div>
+  <!-- Spotify -->
+  <a class="sb-link" href="https://open.spotify.com/intl-ja/artist/3Butq05aasS9fG07iwUvzw?si=KveF0L_FQsOM3HGi1rNDKw" target="_blank" rel="noopener" data-tip="Spotify">
+    <svg viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+  </a>
+  <div class="sb-sep"></div>
+  <!-- Bandcamp -->
+  <a class="sb-link" href="https://cs4w.bandcamp.com" target="_blank" rel="noopener" data-tip="Bandcamp">
+    <svg viewBox="0 0 24 24"><path d="M0 18.75l7.437-13.5H24l-7.438 13.5z"/></svg>
+  </a>
+  <div class="sb-sep"></div>
+  <!-- Fanbox -->
+  <a class="sb-link" href="https://cs4w.fanbox.cc" target="_blank" rel="noopener" data-tip="Fanbox">
+    <svg viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 2c4.418 0 8 3.582 8 8s-3.582 8-8 8-8-3.582-8-8 3.582-8 8-8zm-1 3v2H7v2h4v2H7v2h4v2h2v-2h4v-2h-4v-2h4v-2h-4V7h-2z"/></svg>
+  </a>
+  <div class="sb-sep"></div>
+  <!-- Booth -->
+  <a class="sb-link" href="https://cs4w.booth.pm" target="_blank" rel="noopener" data-tip="Booth">
+    <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm-1.5 5h3c1.38 0 2.5 1.12 2.5 2.5 0 .8-.38 1.5-.96 1.96A2.5 2.5 0 0 1 13.5 16h-3V7zm1.5 1.5v2h1.5a1 1 0 0 0 0-2H12zm0 3.5v2h1.5a1 1 0 0 0 0-2H12z"/></svg>
+  </a>
+</div>
+
+<div class="page-header">
+  <p class="ph-eyebrow reveal">Works</p>
+  <h1 class="ph-h1 reveal" style="--delay:70ms">楽曲提供一覧</h1>
+  <p class="ph-sub reveal" style="--delay:120ms">Works &amp; Contributions</p>
+  <p class="ph-count reveal" style="--delay:160ms">Total <em>23</em> tracks</p>
+</div>
+<div class="filter-bar">
+  <button class="filter-btn active" onclick="filterWorks('all',this)">All</button>
+  <button class="filter-btn" onclick="filterWorks('music_game',this)">音楽ゲーム</button>
+  <button class="filter-btn" onclick="filterWorks('commission',this)">楽曲提供</button>
+  <span class="filter-count" id="filterCount">全 <em>23</em> 曲</span>
+</div>
+<div class="works-main">
+  <div id="worksGrid">
+  <div class="wcard" data-tags="music_game">
+    <div class="wcard-media"><a href="https://www.youtube.com/watch?v=yVQcZ_GgSqU" target="_blank" class="wcard-thumb" title="Guilty Hostage">
+          <img src="https://img.youtube.com/vi/yVQcZ_GgSqU/mqdefault.jpg" alt="Guilty Hostage" loading="lazy">
+          <div class="wcard-play"><span>▶</span></div>
+          <div class="wcard-yt-badge">YouTube ↗</div>
+        </a></div>
+    <div class="wcard-info">
+      <span class="wcard-date">2021/03/31</span>
+      <h3 class="wcard-title" title="Guilty Hostage">Guilty Hostage</h3>
+      <p class="wcard-plat">Dynamix</p>
+      <div class="wcard-tags"><span class="wcard-tag tag-game">音楽ゲーム</span></div>
+    </div>
+  </div>
+  <div class="wcard" data-tags="music_game">
+    <div class="wcard-media"><a href="https://www.youtube.com/watch?v=9LoUBqDDYN8" target="_blank" class="wcard-thumb" title="Absolute Disintegration">
+          <img src="https://img.youtube.com/vi/9LoUBqDDYN8/mqdefault.jpg" alt="Absolute Disintegration" loading="lazy">
+          <div class="wcard-play"><span>▶</span></div>
+          <div class="wcard-yt-badge">YouTube ↗</div>
+        </a></div>
+    <div class="wcard-info">
+      <span class="wcard-date">2021/08/15</span>
+      <h3 class="wcard-title" title="Absolute Disintegration">Absolute Disintegration</h3>
+      <p class="wcard-plat">TAKUMI³</p>
+      <div class="wcard-tags"><span class="wcard-tag tag-game">音楽ゲーム</span></div>
+    </div>
+  </div>
+  <div class="wcard" data-tags="music_game">
+    <div class="wcard-media"><a href="https://www.youtube.com/watch?v=GeL8P1m5m1w" target="_blank" class="wcard-thumb" title="CX-ronos">
+          <img src="https://img.youtube.com/vi/GeL8P1m5m1w/mqdefault.jpg" alt="CX-ronos" loading="lazy">
+          <div class="wcard-play"><span>▶</span></div>
+          <div class="wcard-yt-badge">YouTube ↗</div>
+        </a></div>
+    <div class="wcard-info">
+      <span class="wcard-date">2022/03/18</span>
+      <h3 class="wcard-title" title="CX-ronos">CX-ronos</h3>
+      <p class="wcard-plat">DanceRail3 / Berry Melody</p>
+      <div class="wcard-tags"><span class="wcard-tag tag-game">音楽ゲーム</span></div>
+    </div>
+  </div>
+  <div class="wcard" data-tags="commission">
+    <div class="wcard-media"><a href="https://www.youtube.com/watch?v=M00BzU8N2qY" target="_blank" class="wcard-thumb" title="Back side of the abyss">
+          <img src="https://img.youtube.com/vi/M00BzU8N2qY/mqdefault.jpg" alt="Back side of the abyss" loading="lazy">
+          <div class="wcard-play"><span>▶</span></div>
+          <div class="wcard-yt-badge">YouTube ↗</div>
+        </a></div>
+    <div class="wcard-info">
+      <span class="wcard-date">2022/04/24</span>
+      <h3 class="wcard-title" title="Back side of the abyss">Back side of the abyss</h3>
+      <p class="wcard-plat">THE DARKEST HOUR</p>
+      <div class="wcard-tags"><span class="wcard-tag tag-comm">楽曲提供</span></div>
+    </div>
+  </div>
+  <div class="wcard" data-tags="music_game">
+    <div class="wcard-media"><a href="https://www.youtube.com/watch?v=flYWBgoP9fo" target="_blank" class="wcard-thumb" title="V:Vallenstein">
+          <img src="https://img.youtube.com/vi/flYWBgoP9fo/mqdefault.jpg" alt="V:Vallenstein" loading="lazy">
+          <div class="wcard-play"><span>▶</span></div>
+          <div class="wcard-yt-badge">YouTube ↗</div>
+        </a></div>
+    <div class="wcard-info">
+      <span class="wcard-date">2022/05/17</span>
+      <h3 class="wcard-title" title="V:Vallenstein">V:Vallenstein</h3>
+      <p class="wcard-plat">Dynamix</p>
+      <div class="wcard-tags"><span class="wcard-tag tag-game">音楽ゲーム</span></div>
+    </div>
+  </div>
+  <div class="wcard" data-tags="music_game">
+    <div class="wcard-media"><a href="https://www.youtube.com/watch?v=B_BbiIyXGNg" target="_blank" class="wcard-thumb" title="Circumscription">
+          <img src="https://img.youtube.com/vi/B_BbiIyXGNg/mqdefault.jpg" alt="Circumscription" loading="lazy">
+          <div class="wcard-play"><span>▶</span></div>
+          <div class="wcard-yt-badge">YouTube ↗</div>
+        </a></div>
+    <div class="wcard-info">
+      <span class="wcard-date">2022/08/12</span>
+      <h3 class="wcard-title" title="Circumscription">Circumscription</h3>
+      <p class="wcard-plat">Dynamix</p>
+      <div class="wcard-tags"><span class="wcard-tag tag-game">音楽ゲーム</span></div>
+    </div>
+  </div>
+  <div class="wcard" data-tags="commission">
+    <div class="wcard-media"><a href="https://www.youtube.com/watch?v=acqe50irjeg" target="_blank" class="wcard-thumb" title="Ignominiously">
+          <img src="https://img.youtube.com/vi/acqe50irjeg/mqdefault.jpg" alt="Ignominiously" loading="lazy">
+          <div class="wcard-play"><span>▶</span></div>
+          <div class="wcard-yt-badge">YouTube ↗</div>
+        </a></div>
+    <div class="wcard-info">
+      <span class="wcard-date">2022/11/20</span>
+      <h3 class="wcard-title" title="Ignominiously">Ignominiously</h3>
+      <p class="wcard-plat">Dystopian Arsenal</p>
+      <div class="wcard-tags"><span class="wcard-tag tag-comm">楽曲提供</span></div>
+    </div>
+  </div>
+  <div class="wcard" data-tags="music_game">
+    <div class="wcard-media"><a href="https://www.youtube.com/watch?v=74J58Lv9zno" target="_blank" class="wcard-thumb" title="NF:Argonaut">
+          <img src="https://img.youtube.com/vi/74J58Lv9zno/mqdefault.jpg" alt="NF:Argonaut" loading="lazy">
+          <div class="wcard-play"><span>▶</span></div>
+          <div class="wcard-yt-badge">YouTube ↗</div>
+        </a></div>
+    <div class="wcard-info">
+      <span class="wcard-date">2022/12/19</span>
+      <h3 class="wcard-title" title="NF:Argonaut">NF:Argonaut</h3>
+      <p class="wcard-collab">Connexio & CS4W</p><p class="wcard-plat">Significatio Vitae / Lanota</p>
+      <div class="wcard-tags"><span class="wcard-tag tag-game">音楽ゲーム</span></div>
+    </div>
+  </div>
+  <div class="wcard" data-tags="music_game">
+    <div class="wcard-media"><a href="https://www.youtube.com/watch?v=9RHykY_xA4s" target="_blank" class="wcard-thumb" title="Phoenixismia ~Hallucination of Eternity in a Timeless Realm~">
+          <img src="https://img.youtube.com/vi/9RHykY_xA4s/mqdefault.jpg" alt="Phoenixismia ~Hallucination of Eternity in a Timeless Realm~" loading="lazy">
+          <div class="wcard-play"><span>▶</span></div>
+          <div class="wcard-yt-badge">YouTube ↗</div>
+        </a></div>
+    <div class="wcard-info">
+      <span class="wcard-date">2023/04/30</span>
+      <h3 class="wcard-title wcard-title-long" title="Phoenixismia ~Hallucination of Eternity in a Timeless Realm~">Phoenixismia ~Hallucination of Eternity in a Timeless Realm~</h3>
+      <p class="wcard-collab">C4ydora (CS4W+Pirendora)</p><p class="wcard-plat">evordeation / Dynamix</p>
+      <div class="wcard-tags"><span class="wcard-tag tag-game">音楽ゲーム</span></div>
+    </div>
+  </div>
+  <div class="wcard" data-tags="music_game">
+    <div class="wcard-media"><a href="https://www.youtube.com/watch?v=s39x7fSSY1I" target="_blank" class="wcard-thumb" title="Hauynite">
+          <img src="https://img.youtube.com/vi/s39x7fSSY1I/mqdefault.jpg" alt="Hauynite" loading="lazy">
+          <div class="wcard-play"><span>▶</span></div>
+          <div class="wcard-yt-badge">YouTube ↗</div>
+        </a></div>
+    <div class="wcard-info">
+      <span class="wcard-date">2023/07/03</span>
+      <h3 class="wcard-title" title="Hauynite">Hauynite</h3>
+      <p class="wcard-collab">RYOQUCHA & CS4W</p><p class="wcard-plat">Dynamix / Lanota / Orzmic</p>
+      <div class="wcard-tags"><span class="wcard-tag tag-game">音楽ゲーム</span></div>
+    </div>
+  </div>
+  <div class="wcard" data-tags="music_game">
+    <div class="wcard-media"><a href="https://www.youtube.com/watch?v=kkE1z76fgFs" target="_blank" class="wcard-thumb" title="EX-ris">
+          <img src="https://img.youtube.com/vi/kkE1z76fgFs/mqdefault.jpg" alt="EX-ris" loading="lazy">
+          <div class="wcard-play"><span>▶</span></div>
+          <div class="wcard-yt-badge">YouTube ↗</div>
+        </a></div>
+    <div class="wcard-info">
+      <span class="wcard-date">2023/08/27</span>
+      <h3 class="wcard-title" title="EX-ris">EX-ris</h3>
+      <p class="wcard-plat">Corsace Open 2023</p>
+      <p class="wcard-sub">osu!</p>
+      <div class="wcard-tags"><span class="wcard-tag tag-game">音楽ゲーム</span></div>
+    </div>
+  </div>
+  <div class="wcard" data-tags="commission">
+    <div class="wcard-media"><a href="https://www.youtube.com/watch?v=UIjqUS7pWD0" target="_blank" class="wcard-thumb" title="ロマン&ヴァイス">
+          <img src="https://img.youtube.com/vi/UIjqUS7pWD0/mqdefault.jpg" alt="ロマン&ヴァイス" loading="lazy">
+          <div class="wcard-play"><span>▶</span></div>
+          <div class="wcard-yt-badge">YouTube ↗</div>
+        </a></div>
+    <div class="wcard-info">
+      <span class="wcard-date">2024/04/04</span>
+      <h3 class="wcard-title" title="ロマン&ヴァイス">ロマン&ヴァイス</h3>
+      <p class="wcard-plat">缶缶様</p>
+      <div class="wcard-tags"><span class="wcard-tag tag-comm">楽曲提供</span></div>
+    </div>
+  </div>
+  <div class="wcard" data-tags="music_game">
+    <div class="wcard-media"><a href="https://www.youtube.com/watch?v=yRK1A5yOMJ0" target="_blank" class="wcard-thumb" title="Collapse">
+          <img src="https://img.youtube.com/vi/yRK1A5yOMJ0/mqdefault.jpg" alt="Collapse" loading="lazy">
+          <div class="wcard-play"><span>▶</span></div>
+          <div class="wcard-yt-badge">YouTube ↗</div>
+        </a></div>
+    <div class="wcard-info">
+      <span class="wcard-date">2024/06/15</span>
+      <h3 class="wcard-title" title="Collapse">Collapse</h3>
+      <p class="wcard-plat">Immaculée Sekai / Orzmic</p>
+      <div class="wcard-tags"><span class="wcard-tag tag-game">音楽ゲーム</span></div>
+    </div>
+  </div>
+  <div class="wcard" data-tags="music_game">
+    <div class="wcard-media"><a href="https://www.youtube.com/watch?v=do-69S1inFM" target="_blank" class="wcard-thumb" title="Traxxendenza">
+          <img src="https://img.youtube.com/vi/do-69S1inFM/mqdefault.jpg" alt="Traxxendenza" loading="lazy">
+          <div class="wcard-play"><span>▶</span></div>
+          <div class="wcard-yt-badge">YouTube ↗</div>
+        </a></div>
+    <div class="wcard-info">
+      <span class="wcard-date">2024/09/09</span>
+      <h3 class="wcard-title" title="Traxxendenza">Traxxendenza</h3>
+      <p class="wcard-plat">TAKUMI³ / Paradigm: Reboot</p>
+      <div class="wcard-tags"><span class="wcard-tag tag-game">音楽ゲーム</span></div>
+    </div>
+  </div>
+  <div class="wcard" data-tags="commission">
+    <div class="wcard-media"><div class="wcard-spotify">
+          <iframe src="https://open.spotify.com/embed/track/5LerS745dIrtRbCysv5igU?utm_source=generator&theme=0"
+            width="100%" height="80" frameborder="0" allowtransparency="true"
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy"></iframe>
+        </div></div>
+    <div class="wcard-info">
+      <span class="wcard-date">2024/10/23</span>
+      <h3 class="wcard-title" title="Paradox Re:Write">Paradox Re:Write</h3>
+      <p class="wcard-plat">原因は自分にある。「核心触発イノベーション」</p>
+      <div class="wcard-tags"><span class="wcard-tag tag-comm">楽曲提供</span></div>
+    </div>
+  </div>
+  <div class="wcard" data-tags="commission">
+    <div class="wcard-media"><a href="https://www.youtube.com/watch?v=WkZ8SS1Hb5Q" target="_blank" class="wcard-thumb" title="Happy Halloween CS4W Remix">
+          <img src="https://img.youtube.com/vi/WkZ8SS1Hb5Q/mqdefault.jpg" alt="Happy Halloween CS4W Remix" loading="lazy">
+          <div class="wcard-play"><span>▶</span></div>
+          <div class="wcard-yt-badge">YouTube ↗</div>
+        </a></div>
+    <div class="wcard-info">
+      <span class="wcard-date">2024/10/25</span>
+      <h3 class="wcard-title wcard-title-long" title="Happy Halloween CS4W Remix">Happy Halloween CS4W Remix</h3>
+      <p class="wcard-plat">Happy Halloween Remix!</p>
+      <div class="wcard-tags"><span class="wcard-tag tag-comm">楽曲提供</span></div>
+    </div>
+  </div>
+  <div class="wcard" data-tags="music_game">
+    <div class="wcard-media"><a href="https://www.youtube.com/watch?v=6m7wq0mdBL0" target="_blank" class="wcard-thumb" title="Sphalerite">
+          <img src="https://img.youtube.com/vi/6m7wq0mdBL0/mqdefault.jpg" alt="Sphalerite" loading="lazy">
+          <div class="wcard-play"><span>▶</span></div>
+          <div class="wcard-yt-badge">YouTube ↗</div>
+        </a></div>
+    <div class="wcard-info">
+      <span class="wcard-date">2025/02/23</span>
+      <h3 class="wcard-title" title="Sphalerite">Sphalerite</h3>
+      <p class="wcard-collab">RYOQUCHA & CS4W</p><p class="wcard-plat">Orzmic / 太鼓の達人</p>
+      <div class="wcard-tags"><span class="wcard-tag tag-game">音楽ゲーム</span></div>
+    </div>
+  </div>
+  <div class="wcard" data-tags="commission">
+    <div class="wcard-media"><a href="https://www.youtube.com/watch?v=tPJd98NynHA" target="_blank" class="wcard-thumb" title="Stellar Pulse">
+          <img src="https://img.youtube.com/vi/tPJd98NynHA/mqdefault.jpg" alt="Stellar Pulse" loading="lazy">
+          <div class="wcard-play"><span>▶</span></div>
+          <div class="wcard-yt-badge">YouTube ↗</div>
+        </a></div>
+    <div class="wcard-info">
+      <span class="wcard-date">2025/02/28</span>
+      <h3 class="wcard-title" title="Stellar Pulse">Stellar Pulse</h3>
+      <p class="wcard-collab">VIZZEN & CS4W</p><p class="wcard-plat">CHOMPO III</p>
+      <div class="wcard-tags"><span class="wcard-tag tag-comm">楽曲提供</span></div>
+    </div>
+  </div>
+  <div class="wcard" data-tags="music_game">
+    <div class="wcard-media"><a href="https://www.youtube.com/watch?v=R2lh5Lyz888" target="_blank" class="wcard-thumb" title="Atomic Disassembler">
+          <img src="https://img.youtube.com/vi/R2lh5Lyz888/mqdefault.jpg" alt="Atomic Disassembler" loading="lazy">
+          <div class="wcard-play"><span>▶</span></div>
+          <div class="wcard-yt-badge">YouTube ↗</div>
+        </a></div>
+    <div class="wcard-info">
+      <span class="wcard-date">2025/03/05</span>
+      <h3 class="wcard-title" title="Atomic Disassembler">Atomic Disassembler</h3>
+      <p class="wcard-plat">EGTS2025</p>
+      <p class="wcard-sub">osu!</p>
+      <div class="wcard-tags"><span class="wcard-tag tag-game">音楽ゲーム</span></div>
+    </div>
+  </div>
+  <div class="wcard" data-tags="commission">
+    <div class="wcard-media"><div class="wcard-spotify">
+          <iframe src="https://open.spotify.com/embed/track/0hQynaZ5ZZD1AFMOIDoJPP?utm_source=generator&theme=0"
+            width="100%" height="80" frameborder="0" allowtransparency="true"
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy"></iframe>
+        </div></div>
+    <div class="wcard-info">
+      <span class="wcard-date">2025/09/24</span>
+      <h3 class="wcard-title" title="Deception Doll">Deception Doll</h3>
+      <p class="wcard-plat">GIRLS' F1ST!!!! GT</p>
+      <div class="wcard-tags"><span class="wcard-tag tag-comm">楽曲提供</span></div>
+    </div>
+  </div>
+  <div class="wcard" data-tags="commission">
+    <div class="wcard-media"><div class="wcard-spotify">
+          <iframe src="https://open.spotify.com/embed/track/4cHArUeZKmxpUsdX29P4xP?utm_source=generator&theme=0"
+            width="100%" height="80" frameborder="0" allowtransparency="true"
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy"></iframe>
+        </div></div>
+    <div class="wcard-info">
+      <span class="wcard-date">2025/09/30</span>
+      <h3 class="wcard-title" title="心あずけて">心あずけて</h3>
+      <p class="wcard-plat">井森美幸様カバーアレンジ</p>
+      <div class="wcard-tags"><span class="wcard-tag tag-comm">楽曲提供</span></div>
+    </div>
+  </div>
+  <div class="wcard">
+    <div class="wcard-media"><a href="https://www.youtube.com/watch?v=Cq4d5yBCDP4" target="_blank" class="wcard-thumb" title="Ground Zero">
+          <img src="https://img.youtube.com/vi/Cq4d5yBCDP4/mqdefault.jpg" alt="Ground Zero" loading="lazy">
+          <div class="wcard-play"><span>▶</span></div>
+          <div class="wcard-yt-badge">YouTube ↗</div>
+        </a></div>
+    <div class="wcard-info">
+      <span class="wcard-date">2025/11/15</span>
+      <h3 class="wcard-title" title="Ground Zero">Ground Zero</h3>
+      <p class="wcard-collab">CS4W & Aut0</p><p class="wcard-plat">Stream Palette 6 -RANKED-</p>
+      <div class="wcard-tags"></div>
+    </div>
+  </div>
+  <div class="wcard" data-tags="music_game">
+    <div class="wcard-media"><a href="https://www.youtube.com/watch?v=uKN_9m-7Y4o" target="_blank" class="wcard-thumb" title="Risanautr">
+          <img src="https://img.youtube.com/vi/uKN_9m-7Y4o/mqdefault.jpg" alt="Risanautr" loading="lazy">
+          <div class="wcard-play"><span>▶</span></div>
+          <div class="wcard-yt-badge">YouTube ↗</div>
+        </a></div>
+    <div class="wcard-info">
+      <span class="wcard-date">2026/04/03</span>
+      <h3 class="wcard-title" title="Risanautr">Risanautr</h3>
+      <p class="wcard-plat">MUSYNX:RETURN</p>
+      <div class="wcard-tags"><span class="wcard-tag tag-game">音楽ゲーム</span></div>
+    </div>
+  </div>
+  </div>
+</div>
+<footer>
+  <div class="footer-l"><span style="color:var(--violet);margin-right:0.45rem;font-family:'Raleway',sans-serif;font-weight:300;font-size:0.75rem;">✛</span>CS4W</div>
+  <div class="footer-r">© 2026 CS4W / しーそー · All rights reserved.</div>
+</footer>
+<script>
+const ro = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); ro.unobserve(e.target); } });
+}, {threshold:0.06, rootMargin:'0px 0px -20px 0px'});
+document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
+/* wcard individual animation removed */
+function filterWorks(type, btn) {
+  document.querySelectorAll('.filter-btn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  var grid = document.getElementById('worksGrid');
+  var pool = document.getElementById('wc-pool');
+  if (!pool) {
+    pool = document.createElement('div');
+    pool.id = 'wc-pool';
+    pool.setAttribute('style','display:none;');
+    grid.parentNode.insertBefore(pool, grid.nextSibling);
+  }
+  var all = Array.from(grid.querySelectorAll('.wcard'))
+            .concat(Array.from(pool.querySelectorAll('.wcard')));
+  var shown = 0;
+  all.forEach(function(card){
+    // inline styleリセット
+    card.style.opacity = '';
+    card.style.transform = '';
+    card.style.transition = '';
+    var tags = card.dataset.tags || '';
+    var show = (type === 'all') || tags.includes(type);
+    if (show) { grid.appendChild(card); shown++; }
+    else       { pool.appendChild(card); }
+  });
+  var badge = document.getElementById('filterCount');
+  if (badge) badge.innerHTML = type==='all'
+    ? '全 <em>'+all.length+'</em> 曲'
+    : '<em>'+shown+'</em> / '+all.length+' 曲';
+}
+
+/* ════ SHARED UX JS ════ */
+(function(){
+  var PAGE_ORDER = ['../', '../works/', '../discography/', '../about/', '../contact/'];
+  var CURRENT_FILE = '../works/';
+
+  /* ── ページ遷移フェード ── */
+  var pf = document.getElementById('page-fade');
+  function goPage(href){
+    if(!pf) { window.location.href = href; return; }
+    pf.classList.add('on');
+    setTimeout(function(){ window.location.href = href; }, 320);
+  }
+  if(pf){
+    // bfcache から復元された時に真っ暗のまま固まるのを防ぐ
+    window.addEventListener('pageshow', function(e){
+      pf.style.transition = 'none';
+      pf.classList.remove('on');
+      setTimeout(function(){ pf.style.transition = ''; }, 50);
+    });
+    document.querySelectorAll('a[href]').forEach(function(a){
+      var href = a.getAttribute('href') || '';
+      if(!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto')) return;
+      a.addEventListener('click', function(e){ e.preventDefault(); goPage(href); });
+    });
+  }
+
+  /* ── ナビシュリンク ── */
+  var navEl = document.querySelector('nav');
+  var stBtn = document.getElementById('scroll-top');
+  window.addEventListener('scroll', function(){
+    if(navEl) navEl.classList.toggle('scrolled', window.scrollY > 60);
+    if(stBtn) stBtn.classList.toggle('vis', window.scrollY > 400);
+  }, {passive:true});
+  if(stBtn) stBtn.addEventListener('click', function(){ window.scrollTo({top:0,behavior:'smooth'}); });
+
+  /* ── アクティブセクション ── */
+  var secs  = document.querySelectorAll('section[id]');
+  var links = document.querySelectorAll('.nav-links a[href^="#"]');
+  if(secs.length && links.length){
+    var io3 = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){
+          links.forEach(function(l){ l.classList.remove('section-active'); });
+          var a = document.querySelector('.nav-links a[href="#'+e.target.id+'"]');
+          if(a) a.classList.add('section-active');
+        }
+      });
+    },{threshold:0.3});
+    secs.forEach(function(s){ io3.observe(s); });
+  }
+
+  /* ── ハンバーガー ── */
+  var hbtn = document.getElementById('nav-hamburger');
+  var menu = document.querySelector('.nav-links');
+  var nov  = document.getElementById('nav-overlay');
+  if(hbtn){
+    function togMenu(open){
+      hbtn.classList.toggle('open',open);
+      if(menu) menu.classList.toggle('open',open);
+      if(nov)  nov.classList.toggle('open',open);
+      hbtn.setAttribute('aria-expanded',open);
+      document.body.style.overflow = open ? 'hidden' : '';
+    }
+    hbtn.addEventListener('click', function(){ togMenu(!hbtn.classList.contains('open')); });
+    if(nov) nov.addEventListener('click', function(){ togMenu(false); });
+    document.querySelectorAll('.nav-links a').forEach(function(a){
+      a.addEventListener('click', function(){ togMenu(false); });
+    });
+  }
+
+  /* ── スワイプナビゲーション ── */
+  var swipeStartX = 0, swipeStartY = 0;
+  var SWIPE_THRESHOLD = 60;
+  document.addEventListener('touchstart', function(e){
+    swipeStartX = e.changedTouches[0].clientX;
+    swipeStartY = e.changedTouches[0].clientY;
+  }, {passive:true});
+  document.addEventListener('touchend', function(e){
+    var dx = e.changedTouches[0].clientX - swipeStartX;
+    var dy = e.changedTouches[0].clientY - swipeStartY;
+    if(Math.abs(dx) < SWIPE_THRESHOLD || Math.abs(dy) > Math.abs(dx) * 0.8) return;
+    var idx = PAGE_ORDER.indexOf(CURRENT_FILE);
+    if(idx < 0) return;
+    if(dx < 0 && idx < PAGE_ORDER.length - 1){ goPage(PAGE_ORDER[idx+1]); }
+    if(dx > 0 && idx > 0){ goPage(PAGE_ORDER[idx-1]); }
+  }, {passive:true});
+
+})();
+
+
+
+
+
+/* ── Social Icon Bar ── */
+(function(){
+  var bar = document.getElementById('social-bar');
+  if (!bar) return;
+  window.addEventListener('scroll', function(){
+    bar.classList.toggle('scrolled', window.scrollY > 80);
+  }, {passive:true});
+})();
+
+</script>
+<button class="sf-trigger" id="sf-trigger-btn" aria-label="SNSリンク">
+    <span class="sf-trigger-icon">✦</span>
+  </button>
+</div>
+
+<button id="scroll-top" aria-label="ページトップへ"><svg viewBox="0 0 14 14"><polyline points="2,10 7,4 12,10"/></svg></button>
+<div id="swipe-indicator">swipe</div>
+</body>
+</html>
