@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://cs4w.net/sitemap.xml

@@ -2,7 +2,12 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="CS4W">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CS4W — Discography</title>
   <meta name="description" content="CS4W（しーそー）の全楽曲リスト。2020年〜2026年の47曲を収録。Gothic Hardcore・Bass House・Artcore。">
 
@@ -10,7 +15,7 @@
   <meta property="og:type"        content="website">
   <meta property="og:title"       content="Discography — CS4W | 全楽曲リスト">
   <meta property="og:description" content="CS4W（しーそー）の全楽曲リスト。2020年〜2026年の47曲を収録。Gothic Hardcore・Bass House・Artcore。">
-  <meta property="og:url"         content="https://cs4w.net/cs4w-discography.html">
+  <meta property="og:url"         content="https://cs4w.net/discography/">
   <meta property="og:image"       content="https://cs4w.net/ogp.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height"content="630">
@@ -86,7 +91,7 @@ nav::after{content:"";position:absolute;bottom:-3px;left:3.5rem;right:3.5rem;hei
 .dc-card{
   background:var(--bg);
   display:flex;flex-direction:column;
-  position:relative;overflow:hidden;
+  position:relative;overflow:visible;
   transition:background 0.3s;
   border-right:1px solid var(--line);
   border-bottom:1px solid var(--line);
@@ -562,7 +567,195 @@ body{ padding-bottom:36px; }
 .ctrl-select option{background:#13132a;color:#ddd9e7;}
 @media(max-width:700px){.ctrl-select{font-size:0.6rem;padding:0.25rem 0.45rem;}}
 
+
+
+#mini-player{
+  position:fixed;bottom:36px;left:0;right:0;z-index:400;
+  background:rgba(10,10,20,0.97);
+  backdrop-filter:blur(20px);
+  border-top:1px solid rgba(184,159,255,0.15);
+  display:flex;align-items:center;gap:0;
+  height:52px;
+  transform:translateY(100%);
+  transition:transform 0.35s cubic-bezier(.4,0,.2,1);
+}
+#mini-player.active{transform:translateY(0);}
+.mp-thumb{
+  width:80px;height:52px;flex-shrink:0;overflow:hidden;position:relative;cursor:pointer;
+}
+.mp-thumb img{width:100%;height:100%;object-fit:cover;opacity:0.85;}
+.mp-thumb iframe{position:absolute;inset:0;width:100%;height:100%;border:none;}
+.mp-info{flex:1;min-width:0;padding:0 0.8rem;}
+.mp-title{
+  font-family:"Cinzel",serif;font-weight:400;font-size:0.72rem;
+  color:#ddd9e7;letter-spacing:0.05em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.mp-platform{
+  font-family:"Raleway",sans-serif;font-weight:300;font-style:italic;
+  font-size:0.56rem;letter-spacing:0.18em;color:rgba(221,217,231,0.45);margin-top:0.1rem;
+}
+.mp-controls{display:flex;align-items:center;gap:0;padding-right:0.6rem;}
+.mp-btn{
+  width:40px;height:52px;display:flex;align-items:center;justify-content:center;
+  background:none;border:none;cursor:pointer;color:rgba(221,217,231,0.55);
+  font-size:0.9rem;transition:color 0.2s;
+}
+.mp-btn:hover{color:#ddd9e7;}
+.mp-btn.play-btn{font-size:1rem;color:rgba(184,159,255,0.8);}
+.mp-btn.play-btn:hover{color:#b89fff;}
+.mp-close{
+  width:36px;height:52px;display:flex;align-items:center;justify-content:center;
+  background:none;border:none;cursor:pointer;
+  color:rgba(221,217,231,0.3);font-size:0.7rem;transition:color 0.2s;
+}
+.mp-close:hover{color:rgba(221,217,231,0.7);}
+@media(max-width:700px){
+  #mini-player{bottom:32px;height:46px;}
+  .mp-thumb{width:64px;height:46px;}
+  .mp-title{font-size:0.65rem;}
+}
+
+
+
+.share-btn{
+  display:inline-flex;align-items:center;gap:0.3rem;
+  font-family:"Raleway",sans-serif;font-weight:300;font-style:italic;
+  font-size:0.54rem;letter-spacing:0.18em;text-transform:uppercase;
+  color:rgba(221,217,231,0.35);background:none;border:none;cursor:pointer;
+  padding:0;margin-top:0.4rem;transition:color 0.2s;
+}
+.share-btn:hover{color:rgba(77,232,194,0.8);}
+.share-btn svg{width:11px;height:11px;fill:currentColor;}
+
+
+
+.like-btn{
+  display:inline-flex;align-items:center;gap:0.25rem;
+  font-family:"Raleway",sans-serif;font-weight:300;font-style:italic;
+  font-size:0.54rem;letter-spacing:0.16em;
+  color:rgba(221,217,231,0.3);background:none;border:none;cursor:pointer;
+  padding:0;transition:color 0.2s;
+}
+.like-btn.liked{color:rgba(184,159,255,0.9);}
+.like-btn:hover{color:rgba(184,159,255,0.7);}
+.like-btn .lheart{font-size:0.75rem;transition:transform 0.2s;}
+.like-btn:hover .lheart,.like-btn.liked .lheart{transform:scale(1.2);}
+
+
+/* ── dc-btn-row ── */
+.dc-btn-row{
+  display:flex;align-items:center;gap:0.6rem;
+  padding:0.5rem 0 0;
+  margin-top:auto;
+}
+.share-btn{
+  display:inline-flex;align-items:center;gap:0.25rem;
+  font-family:"Raleway",sans-serif;font-weight:300;font-style:italic;
+  font-size:0.56rem;letter-spacing:0.16em;text-transform:uppercase;
+  color:rgba(221,217,231,0.4);background:none;border:none;
+  cursor:pointer;padding:0;transition:color 0.2s;
+  flex-shrink:0;
+}
+.share-btn svg{width:11px;height:11px;fill:currentColor;}
+.share-btn:hover{color:rgba(77,232,194,0.85);}
+.like-btn{
+  display:inline-flex;align-items:center;gap:0.22rem;
+  font-family:"Raleway",sans-serif;font-weight:300;
+  font-size:0.56rem;letter-spacing:0.12em;
+  color:rgba(221,217,231,0.35);background:none;border:none;
+  cursor:pointer;padding:0;transition:color 0.2s;
+  flex-shrink:0;
+}
+.like-btn.liked,.like-btn.liked .lheart{color:rgba(184,159,255,0.9);}
+.like-btn:hover{color:rgba(184,159,255,0.65);}
+.like-btn .lheart{font-size:0.78rem;transition:transform 0.18s;}
+.like-btn:hover .lheart,.like-btn.liked .lheart{transform:scale(1.2);}
+
+
+/* ── Mini Player ── */
+#mini-player{
+  position:fixed;bottom:36px;left:0;right:0;z-index:400;
+  background:rgba(10,10,20,0.97);
+  backdrop-filter:blur(20px);
+  border-top:1px solid rgba(184,159,255,0.15);
+  display:none;align-items:center;height:56px;
+}
+#mini-player.mp-active{display:flex;}
+.mp-thumb{
+  width:88px;height:56px;flex-shrink:0;overflow:hidden;
+  position:relative;cursor:pointer;background:var(--bg2);
+}
+.mp-thumb img{width:100%;height:100%;object-fit:cover;opacity:0.85;}
+.mp-thumb iframe{position:absolute;inset:0;width:100%;height:100%;border:none;pointer-events:none;}
+.mp-info{flex:1;min-width:0;padding:0 0.7rem;}
+.mp-title{
+  font-family:"Cinzel",serif;font-weight:400;font-size:0.72rem;
+  color:#ddd9e7;letter-spacing:0.05em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.mp-plat{
+  font-family:"Raleway",sans-serif;font-weight:300;font-style:italic;
+  font-size:0.55rem;letter-spacing:0.16em;color:rgba(221,217,231,0.4);margin-top:0.1rem;
+}
+.mp-controls{display:flex;align-items:center;gap:2px;padding-right:0.3rem;flex-shrink:0;}
+.mp-btn{
+  width:36px;height:56px;display:flex;align-items:center;justify-content:center;
+  background:none;border:none;cursor:pointer;
+  color:rgba(221,217,231,0.5);font-size:0.85rem;transition:color 0.2s;flex-shrink:0;
+}
+.mp-btn:hover{color:#ddd9e7;}
+#mp-play-btn{color:rgba(184,159,255,0.85);font-size:1rem;}
+#mp-play-btn:hover{color:#b89fff;}
+/* 音量 */
+.mp-vol-wrap{
+  display:flex;align-items:center;gap:0.3rem;
+  padding:0 0.4rem;flex-shrink:0;
+}
+.mp-vol-icon{
+  font-size:0.7rem;color:rgba(221,217,231,0.4);cursor:pointer;
+  transition:color 0.2s;flex-shrink:0;line-height:1;
+}
+.mp-vol-icon:hover{color:#ddd9e7;}
+#mp-vol{
+  -webkit-appearance:none;appearance:none;
+  width:60px;height:2px;
+  background:linear-gradient(90deg,rgba(184,159,255,0.7) var(--v,70%), rgba(221,217,231,0.15) var(--v,70%));
+  border:none;outline:none;cursor:pointer;
+}
+#mp-vol::-webkit-slider-thumb{
+  -webkit-appearance:none;width:10px;height:10px;border-radius:50%;
+  background:#b89fff;cursor:pointer;
+}
+#mp-vol::-moz-range-thumb{
+  width:10px;height:10px;border-radius:50%;border:none;
+  background:#b89fff;cursor:pointer;
+}
+/* 閉じるボタン */
+#mp-close{
+  width:36px;height:56px;display:flex;align-items:center;justify-content:center;
+  background:none;border:none;cursor:pointer;
+  color:rgba(221,217,231,0.3);font-size:0.75rem;
+  transition:color 0.2s;flex-shrink:0;border-left:1px solid rgba(184,159,255,0.08);
+}
+#mp-close:hover{color:rgba(221,217,231,0.8);}
+@media(max-width:700px){
+  #mini-player{bottom:32px;height:50px;}
+  .mp-thumb{width:72px;height:50px;}
+  .mp-title{font-size:0.65rem;}
+  #mp-vol{width:44px;}
+  .mp-vol-wrap{padding:0 0.2rem;}
+}
+
 </style>
+<!-- Google Analytics (GA4) - IDをG-RVNXNJB2Q1に置き換えてください -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RVNXNJB2Q1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-RVNXNJB2Q1');
+</script>
 </head>
 <body>
 <a href="#main" class="skip-link">コンテンツへスキップ</a>
@@ -655,7 +848,6 @@ body{ padding-bottom:36px; }
     <option value="dynamix">Dynamix</option>
     <option value="takumi3">TAKUMI³</option>
     <option value="orzmic">Orzmic</option>
-    <option value="taiko">太鼓の達人</option>
     <option value="lanota">Lanota</option>
     <option value="osu">osu!</option>
     <option value="musynx">MUSYNX</option>
@@ -669,613 +861,660 @@ body{ padding-bottom:36px; }
 <div class="dc-main">
   <div id="dcGrid">
 <div class="dc-card" data-date="2026/06/06" data-title="subjugator" data-year="2026" data-genre="dubstep" data-game="">
-    <div class="dc-media"><a href="https://www.youtube.com/watch?v=W9nS0Wf_PlQ" target="_blank" class="dc-thumb" title="Subjugator">
+    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('W9nS0Wf_PlQ','Subjugator','')" style="cursor:pointer" title="Subjugator">
         <img src="https://img.youtube.com/vi/W9nS0Wf_PlQ/mqdefault.jpg" alt="Subjugator" loading="lazy">
         <div class="dc-play"><span>▶</span></div>
-      </a></div>
+      </div></div>
     <div class="dc-info">
       <div class="dc-meta-row">
         <span class="dc-date">2026/06/06</span>
       </div>
       <h3 class="dc-title" title="Subjugator">Subjugator</h3>
+      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('Subjugator','W9nS0Wf_PlQ')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="subjugator" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
       
     </div>
   </div>
 <div class="dc-card" data-date="2026/05/25" data-title="collapse (new)" data-year="2026" data-genre="midtempo" data-game="">
-    <div class="dc-media"><a href="https://www.youtube.com/watch?v=yRK1A5yOMJ0" target="_blank" class="dc-thumb" title="Collapse (new)">
+    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('yRK1A5yOMJ0','Collapse (new)','')" style="cursor:pointer" title="Collapse (new)">
         <img src="https://img.youtube.com/vi/yRK1A5yOMJ0/mqdefault.jpg" alt="Collapse (new)" loading="lazy">
         <div class="dc-play"><span>▶</span></div>
-      </a></div>
+      </div></div>
     <div class="dc-info">
       <div class="dc-meta-row">
         <span class="dc-date">2026/05/25</span>
       </div>
       <h3 class="dc-title" title="Collapse (new)">Collapse (new)</h3>
+      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('Collapse (new)','yRK1A5yOMJ0')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="collapsenew" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
       
     </div>
   </div>
 <div class="dc-card" data-date="2026/04/26" data-title="aether portal" data-year="2026" data-genre="gothic-hardcore" data-game="">
-    <div class="dc-media"><a href="https://www.youtube.com/watch?v=92ZV24CXfWo" target="_blank" class="dc-thumb" title="Aether Portal">
+    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('92ZV24CXfWo','Aether Portal','')" style="cursor:pointer" title="Aether Portal">
         <img src="https://img.youtube.com/vi/92ZV24CXfWo/mqdefault.jpg" alt="Aether Portal" loading="lazy">
         <div class="dc-play"><span>▶</span></div>
-      </a></div>
+      </div></div>
     <div class="dc-info">
       <div class="dc-meta-row">
         <span class="dc-date">2026/04/26</span>
       </div>
       <h3 class="dc-title" title="Aether Portal">Aether Portal</h3>
       <p class="dc-platform">Myth://2.0</p>
+      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('Aether Portal','92ZV24CXfWo')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="aetherportal" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
     </div>
   </div>
 <div class="dc-card" data-date="2026/04/26" data-title="backalley" data-year="2026" data-genre="bass-house" data-game="">
-    <div class="dc-media"><a href="https://www.youtube.com/watch?v=GIUuHVgcSjw" target="_blank" class="dc-thumb" title="BACKALLEY">
+    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('GIUuHVgcSjw','BACKALLEY','')" style="cursor:pointer" title="BACKALLEY">
         <img src="https://img.youtube.com/vi/GIUuHVgcSjw/mqdefault.jpg" alt="BACKALLEY" loading="lazy">
         <div class="dc-play"><span>▶</span></div>
-      </a></div>
+      </div></div>
     <div class="dc-info">
       <div class="dc-meta-row">
         <span class="dc-date">2026/04/26</span>
       </div>
       <h3 class="dc-title" title="BACKALLEY">BACKALLEY</h3>
       <p class="dc-platform">Myth://2.0</p>
+      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('BACKALLEY','GIUuHVgcSjw')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="backalley" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
     </div>
   </div>
 <div class="dc-card" data-date="2026/04/26" data-title="synthesized moon-ray" data-year="2026" data-genre="artcore" data-game="">
-    <div class="dc-media"><a href="https://www.youtube.com/watch?v=RgydPti-jLY" target="_blank" class="dc-thumb" title="Synthesized Moon-ray">
+    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('RgydPti-jLY','Synthesized Moon-ray','')" style="cursor:pointer" title="Synthesized Moon-ray">
         <img src="https://img.youtube.com/vi/RgydPti-jLY/mqdefault.jpg" alt="Synthesized Moon-ray" loading="lazy">
         <div class="dc-play"><span>▶</span></div>
-      </a></div>
+      </div></div>
     <div class="dc-info">
       <div class="dc-meta-row">
         <span class="dc-date">2026/04/26</span>
       </div>
       <h3 class="dc-title" title="Synthesized Moon-ray">Synthesized Moon-ray</h3>
       <p class="dc-platform">Myth://2.0</p>
+      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('Synthesized Moon-ray','RgydPti-jLY')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="synthesizedmoonray" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
     </div>
   </div>
 <div class="dc-card" data-date="2026/04/26" data-title="sacrifice feat. つぐ" data-year="2026" data-genre="gothic" data-game="">
-    <div class="dc-media"><a href="https://www.youtube.com/watch?v=PqvP8a4ytC4" target="_blank" class="dc-thumb" title="Sacrifice feat. つぐ">
+    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('PqvP8a4ytC4','Sacrifice feat. つぐ','')" style="cursor:pointer" title="Sacrifice feat. つぐ">
         <img src="https://img.youtube.com/vi/PqvP8a4ytC4/mqdefault.jpg" alt="Sacrifice feat. つぐ" loading="lazy">
         <div class="dc-play"><span>▶</span></div>
-      </a></div>
+      </div></div>
     <div class="dc-info">
       <div class="dc-meta-row">
         <span class="dc-date">2026/04/26</span>
       </div>
       <h3 class="dc-title" title="Sacrifice feat. つぐ">Sacrifice feat. つぐ</h3>
       <p class="dc-platform">Myth://2.0</p>
+      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('Sacrifice feat. つぐ','PqvP8a4ytC4')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="sacrificefeat" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
     </div>
   </div>
 <div class="dc-card" data-date="2026/04/03" data-title="risanautr" data-year="2026" data-genre="artcore" data-game="musynx">
-    <div class="dc-media"><a href="https://www.youtube.com/watch?v=uKN_9m-7Y4o" target="_blank" class="dc-thumb" title="Risanautr">
+    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('uKN_9m-7Y4o','Risanautr','')" style="cursor:pointer" title="Risanautr">
         <img src="https://img.youtube.com/vi/uKN_9m-7Y4o/mqdefault.jpg" alt="Risanautr" loading="lazy">
         <div class="dc-play"><span>▶</span></div>
-      </a></div>
+      </div></div>
     <div class="dc-info">
       <div class="dc-meta-row">
         <span class="dc-date">2026/04/03</span>
       </div>
       <h3 class="dc-title" title="Risanautr">Risanautr</h3>
       <p class="dc-platform">MUSYNX:RETURN</p>
+      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('Risanautr','uKN_9m-7Y4o')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="risanautr" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
     </div>
   </div>
 <div class="dc-card" data-date="2025/11/15" data-title="ground zero" data-year="2025" data-genre="dubstep" data-game="">
-    <div class="dc-media"><a href="https://www.youtube.com/watch?v=Cq4d5yBCDP4" target="_blank" class="dc-thumb" title="Ground Zero">
+    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('Cq4d5yBCDP4','Ground Zero','')" style="cursor:pointer" title="Ground Zero">
         <img src="https://img.youtube.com/vi/Cq4d5yBCDP4/mqdefault.jpg" alt="Ground Zero" loading="lazy">
         <div class="dc-play"><span>▶</span></div>
-      </a></div>
+      </div></div>
     <div class="dc-info">
       <div class="dc-meta-row">
         <span class="dc-date">2025/11/15</span>
       </div>
       <h3 class="dc-title" title="Ground Zero">Ground Zero</h3>
       <p class="dc-collab">CS4W & Aut0</p><p class="dc-platform">Stream Palette 6 -RANKED-</p>
+      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('Ground Zero','Cq4d5yBCDP4')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="groundzero" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
     </div>
   </div>
 <div class="dc-card" data-date="2025/08/03" data-title="auric ink talisman" data-year="2025" data-genre="bass-house" data-game="">
-    <div class="dc-media"><a href="https://www.youtube.com/watch?v=0goAvo9qKFw" target="_blank" class="dc-thumb" title="AURIC INK TALISMAN">
+    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('0goAvo9qKFw','AURIC INK TALISMAN','')" style="cursor:pointer" title="AURIC INK TALISMAN">
         <img src="https://img.youtube.com/vi/0goAvo9qKFw/mqdefault.jpg" alt="AURIC INK TALISMAN" loading="lazy">
         <div class="dc-play"><span>▶</span></div>
-      </a></div>
+      </div></div>
     <div class="dc-info">
       <div class="dc-meta-row">
         <span class="dc-date">2025/08/03</span>
       </div>
       <h3 class="dc-title" title="AURIC INK TALISMAN">AURIC INK TALISMAN</h3>
       <p class="dc-collab">Sylphix & CS4W</p><p class="dc-platform">ZZZero Dripfest 2025</p>
+      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('AURIC INK TALISMAN','0goAvo9qKFw')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="auricinktalisman" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
     </div>
   </div>
 <div class="dc-card" data-date="2025/07/11" data-title="we know" data-year="2025" data-genre="bass-house" data-game="">
-    <div class="dc-media"><a href="https://www.youtube.com/watch?v=96SqTO76_t4" target="_blank" class="dc-thumb" title="WE KNOW">
+    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('96SqTO76_t4','WE KNOW','')" style="cursor:pointer" title="WE KNOW">
         <img src="https://img.youtube.com/vi/96SqTO76_t4/mqdefault.jpg" alt="WE KNOW" loading="lazy">
         <div class="dc-play"><span>▶</span></div>
-      </a></div>
+      </div></div>
     <div class="dc-info">
       <div class="dc-meta-row">
         <span class="dc-date">2025/07/11</span>
       </div>
       <h3 class="dc-title" title="WE KNOW">WE KNOW</h3>
       <p class="dc-collab">feat. 冬街 緑</p><p class="dc-platform">DTM甲子園</p>
+      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('WE KNOW','96SqTO76_t4')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="weknow" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
     </div>
   </div>
 <div class="dc-card" data-date="2025/07/11" data-title="strange dominator" data-year="2025" data-genre="gothic-hardcore" data-game="">
-    <div class="dc-media"><a href="https://www.youtube.com/watch?v=y0MBn5Pm-jQ" target="_blank" class="dc-thumb" title="Strange Dominator">
+    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('y0MBn5Pm-jQ','Strange Dominator','')" style="cursor:pointer" title="Strange Dominator">
         <img src="https://img.youtube.com/vi/y0MBn5Pm-jQ/mqdefault.jpg" alt="Strange Dominator" loading="lazy">
         <div class="dc-play"><span>▶</span></div>
-      </a></div>
+      </div></div>
     <div class="dc-info">
       <div class="dc-meta-row">
         <span class="dc-date">2025/07/11</span>
       </div>
       <h3 class="dc-title" title="Strange Dominator">Strange Dominator</h3>
       <p class="dc-platform">COLLECTIONS 401</p>
+      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('Strange Dominator','y0MBn5Pm-jQ')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="strangedominator" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
     </div>
   </div>
 <div class="dc-card" data-date="2025/07/11" data-title="ding dong" data-year="2025" data-genre="artcore" data-game="">
-    <div class="dc-media"><a href="https://www.youtube.com/watch?v=_arSudgBlpY" target="_blank" class="dc-thumb" title="Ding Dong">
+    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('_arSudgBlpY','Ding Dong','')" style="cursor:pointer" title="Ding Dong">
         <img src="https://img.youtube.com/vi/_arSudgBlpY/mqdefault.jpg" alt="Ding Dong" loading="lazy">
         <div class="dc-play"><span>▶</span></div>
-      </a></div>
+      </div></div>
     <div class="dc-info">
       <div class="dc-meta-row">
         <span class="dc-date">2025/07/11</span>
       </div>
       <h3 class="dc-title" title="Ding Dong">Ding Dong</h3>
       <p class="dc-collab">feat. 冬街 緑</p><p class="dc-platform">COLLECTIONS 401</p>
+      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('Ding Dong','_arSudgBlpY')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="dingdong" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
     </div>
   </div>
 <div class="dc-card" data-date="2025/03/05" data-title="atomic disassembler" data-year="2025" data-genre="dubstep" data-game="osu">
-    <div class="dc-media"><a href="https://www.youtube.com/watch?v=R2lh5Lyz888" target="_blank" class="dc-thumb" title="Atomic Disassembler">
+    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('R2lh5Lyz888','Atomic Disassembler','')" style="cursor:pointer" title="Atomic Disassembler">
         <img src="https://img.youtube.com/vi/R2lh5Lyz888/mqdefault.jpg" alt="Atomic Disassembler" loading="lazy">
         <div class="dc-play"><span>▶</span></div>
-      </a></div>
+      </div></div>
     <div class="dc-info">
       <div class="dc-meta-row">
         <span class="dc-date">2025/03/05</span>
       </div>
       <h3 class="dc-title" title="Atomic Disassembler">Atomic Disassembler</h3>
       <p class="dc-platform">EGTS2025</p>
+      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('Atomic Disassembler','R2lh5Lyz888')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="atomicdisassembler" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
     </div>
   </div>
 <div class="dc-card" data-date="2025/02/28" data-title="stellar pulse" data-year="2025" data-genre="midtempo" data-game="">
-    <div class="dc-media"><a href="https://www.youtube.com/watch?v=tPJd98NynHA" target="_blank" class="dc-thumb" title="Stellar Pulse">
+    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('tPJd98NynHA','Stellar Pulse','')" style="cursor:pointer" title="Stellar Pulse">
         <img src="https://img.youtube.com/vi/tPJd98NynHA/mqdefault.jpg" alt="Stellar Pulse" loading="lazy">
         <div class="dc-play"><span>▶</span></div>
-      </a></div>
+      </div></div>
     <div class="dc-info">
       <div class="dc-meta-row">
         <span class="dc-date">2025/02/28</span>
       </div>
       <h3 class="dc-title" title="Stellar Pulse">Stellar Pulse</h3>
       <p class="dc-collab">VIZZEN & CS4W</p><p class="dc-platform">CHOMPO III</p>
+      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('Stellar Pulse','tPJd98NynHA')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="stellarpulse" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
     </div>
   </div>
-<div class="dc-card" data-date="2025/02/23" data-title="sphalerite" data-year="2025" data-genre="artcore" data-game="orzmic taiko">
-    <div class="dc-media"><a href="https://www.youtube.com/watch?v=6m7wq0mdBL0" target="_blank" class="dc-thumb" title="Sphalerite">
+<div class="dc-card" data-date="2025/02/23" data-title="sphalerite" data-year="2025" data-genre="artcore" data-game="orzmic">
+    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('6m7wq0mdBL0','Sphalerite','')" style="cursor:pointer" title="Sphalerite">
         <img src="https://img.youtube.com/vi/6m7wq0mdBL0/mqdefault.jpg" alt="Sphalerite" loading="lazy">
         <div class="dc-play"><span>▶</span></div>
-      </a></div>
+      </div></div>
     <div class="dc-info">
       <div class="dc-meta-row">
         <span class="dc-date">2025/02/23</span>
       </div>
       <h3 class="dc-title" title="Sphalerite">Sphalerite</h3>
       <p class="dc-collab">RYOQUCHA & CS4W</p><p class="dc-platform">Orzmic / 太鼓の達人</p>
+      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('Sphalerite','6m7wq0mdBL0')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="sphalerite" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
     </div>
   </div>
 <div class="dc-card" data-date="2024/11/17" data-title="v:valküre" data-year="2024" data-genre="gothic-hardcore" data-game="">
-    <div class="dc-media"><a href="https://www.youtube.com/watch?v=TWenDqSDPy0" target="_blank" class="dc-thumb" title="V:Valküre">
+    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('TWenDqSDPy0','V:Valküre','')" style="cursor:pointer" title="V:Valküre">
         <img src="https://img.youtube.com/vi/TWenDqSDPy0/mqdefault.jpg" alt="V:Valküre" loading="lazy">
         <div class="dc-play"><span>▶</span></div>
-      </a></div>
+      </div></div>
     <div class="dc-info">
       <div class="dc-meta-row">
         <span class="dc-date">2024/11/17</span>
       </div>
       <h3 class="dc-title" title="V:Valküre">V:Valküre</h3>
+      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('V:Valküre','TWenDqSDPy0')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="vvalkre" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
       
     </div>
   </div>
 <div class="dc-card" data-date="2024/10/29" data-title="complementary contrast" data-year="2024" data-genre="artcore" data-game="">
-    <div class="dc-media"><a href="https://www.youtube.com/watch?v=b-eIFTy8DcM" target="_blank" class="dc-thumb" title="Complementary Contrast">
+    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('b-eIFTy8DcM','Complementary Contrast','')" style="cursor:pointer" title="Complementary Contrast">
         <img src="https://img.youtube.com/vi/b-eIFTy8DcM/mqdefault.jpg" alt="Complementary Contrast" loading="lazy">
         <div class="dc-play"><span>▶</span></div>
-      </a></div>
+      </div></div>
     <div class="dc-info">
       <div class="dc-meta-row">
         <span class="dc-date">2024/10/29</span>
       </div>
       <h3 class="dc-title" title="Complementary Contrast">Complementary Contrast</h3>
       <p class="dc-platform">Coloration</p>
+      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('Complementary Contrast','b-eIFTy8DcM')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="complementarycontras" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
     </div>
   </div>
 <div class="dc-card" data-date="2024/10/25" data-title="happy halloween cs4w remix" data-year="2024" data-genre="gothic-hardcore" data-game="">
-    <div class="dc-media"><a href="https://www.youtube.com/watch?v=WkZ8SS1Hb5Q" target="_blank" class="dc-thumb" title="Happy Halloween CS4W Remix">
+    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('WkZ8SS1Hb5Q','Happy Halloween CS4W Remix','')" style="cursor:pointer" title="Happy Halloween CS4W Remix">
         <img src="https://img.youtube.com/vi/WkZ8SS1Hb5Q/mqdefault.jpg" alt="Happy Halloween CS4W Remix" loading="lazy">
         <div class="dc-play"><span>▶</span></div>
-      </a></div>
+      </div></div>
     <div class="dc-info">
       <div class="dc-meta-row">
         <span class="dc-date">2024/10/25</span>
       </div>
       <h3 class="dc-title" title="Happy Halloween CS4W Remix">Happy Halloween CS4W Remix</h3>
       <p class="dc-platform">Happy Halloween Remix!</p>
+      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('Happy Halloween CS4W Remix','WkZ8SS1Hb5Q')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="happyhalloweencs4wre" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
     </div>
   </div>
 <div class="dc-card" data-date="2024/09/09" data-title="traxxendenza" data-year="2024" data-genre="gothic" data-game="takumi3">
-    <div class="dc-media"><a href="https://www.youtube.com/watch?v=do-69S1inFM" target="_blank" class="dc-thumb" title="Traxxendenza">
+    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('do-69S1inFM','Traxxendenza','')" style="cursor:pointer" title="Traxxendenza">
         <img src="https://img.youtube.com/vi/do-69S1inFM/mqdefault.jpg" alt="Traxxendenza" loading="lazy">
         <div class="dc-play"><span>▶</span></div>
-      </a></div>
+      </div></div>
     <div class="dc-info">
       <div class="dc-meta-row">
         <span class="dc-date">2024/09/09</span><span class="dc-note">最優秀賞受賞</span>
       </div>
       <h3 class="dc-title" title="Traxxendenza">Traxxendenza</h3>
       <p class="dc-platform">TAKUMI³ / Paradigm: Reboot</p>
+      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('Traxxendenza','do-69S1inFM')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="traxxendenza" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
     </div>
   </div>
 <div class="dc-card" data-date="2024/06/15" data-title="collapse" data-year="2024" data-genre="midtempo" data-game="orzmic">
-    <div class="dc-media"><a href="https://www.youtube.com/watch?v=yRK1A5yOMJ0" target="_blank" class="dc-thumb" title="Collapse">
+    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('yRK1A5yOMJ0','Collapse','')" style="cursor:pointer" title="Collapse">
         <img src="https://img.youtube.com/vi/yRK1A5yOMJ0/mqdefault.jpg" alt="Collapse" loading="lazy">
         <div class="dc-play"><span>▶</span></div>
-      </a></div>
+      </div></div>
     <div class="dc-info">
       <div class="dc-meta-row">
         <span class="dc-date">2024/06/15</span>
       </div>
       <h3 class="dc-title" title="Collapse">Collapse</h3>
       <p class="dc-platform">Immaculée Sekai / Orzmic</p>
+      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('Collapse','yRK1A5yOMJ0')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="collapse" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
     </div>
   </div>
 <div class="dc-card" data-date="2024/06/01" data-title="neo sakura" data-year="2024" data-genre="artcore" data-game="">
-    <div class="dc-media"><a href="https://www.youtube.com/watch?v=dfdlU7-LxI0" target="_blank" class="dc-thumb" title="NEO SAKURA">
+    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('dfdlU7-LxI0','NEO SAKURA','')" style="cursor:pointer" title="NEO SAKURA">
         <img src="https://img.youtube.com/vi/dfdlU7-LxI0/mqdefault.jpg" alt="NEO SAKURA" loading="lazy">
         <div class="dc-play"><span>▶</span></div>
-      </a></div>
+      </div></div>
     <div class="dc-info">
       <div class="dc-meta-row">
         <span class="dc-date">2024/06/01</span>
       </div>
       <h3 class="dc-title" title="NEO SAKURA">NEO SAKURA</h3>
       <p class="dc-collab">RYOQUCHA & CS4W</p><p class="dc-platform">NEURO NATION 02</p>
+      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('NEO SAKURA','dfdlU7-LxI0')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="neosakura" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
     </div>
   </div>
 <div class="dc-card" data-date="2024/01/26" data-title="メイガスナイト cs4w remix" data-year="2024" data-genre="gothic" data-game="">
-    <div class="dc-media"><a href="https://www.youtube.com/watch?v=hnla4xK2djE" target="_blank" class="dc-thumb" title="メイガスナイト CS4W REMIX">
+    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('hnla4xK2djE','メイガスナイト CS4W REMIX','')" style="cursor:pointer" title="メイガスナイト CS4W REMIX">
         <img src="https://img.youtube.com/vi/hnla4xK2djE/mqdefault.jpg" alt="メイガスナイト CS4W REMIX" loading="lazy">
         <div class="dc-play"><span>▶</span></div>
-      </a></div>
+      </div></div>
     <div class="dc-info">
       <div class="dc-meta-row">
         <span class="dc-date">2024/01/26</span>
       </div>
       <h3 class="dc-title" title="メイガスナイト CS4W REMIX">メイガスナイト CS4W REMIX</h3>
+      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('メイガスナイト CS4W REMIX','hnla4xK2djE')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="cs4wremix" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
       
     </div>
   </div>
 <div class="dc-card" data-date="2023/12/25" data-title="evolve from desol4tion" data-year="2023" data-genre="dubstep" data-game="">
-    <div class="dc-media"><a href="https://www.youtube.com/watch?v=uxLKfquCxco" target="_blank" class="dc-thumb" title="Evolve From Desol4tion">
+    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('uxLKfquCxco','Evolve From Desol4tion','')" style="cursor:pointer" title="Evolve From Desol4tion">
         <img src="https://img.youtube.com/vi/uxLKfquCxco/mqdefault.jpg" alt="Evolve From Desol4tion" loading="lazy">
         <div class="dc-play"><span>▶</span></div>
-      </a></div>
+      </div></div>
     <div class="dc-info">
       <div class="dc-meta-row">
         <span class="dc-date">2023/12/25</span>
       </div>
       <h3 class="dc-title" title="Evolve From Desol4tion">Evolve From Desol4tion</h3>
       <p class="dc-collab">CS4W vs KONPEKi</p>
+      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('Evolve From Desol4tion','uxLKfquCxco')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="evolvefromdesol4tion" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
     </div>
   </div>
 <div class="dc-card" data-date="2023/11/12" data-title="artemizija irreversibility" data-year="2023" data-genre="artcore" data-game="">
-    <div class="dc-media"><a href="https://www.youtube.com/watch?v=iHgUoohbm5k" target="_blank" class="dc-thumb" title="Artemizija Irreversibility">
+    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('iHgUoohbm5k','Artemizija Irreversibility','')" style="cursor:pointer" title="Artemizija Irreversibility">
         <img src="https://img.youtube.com/vi/iHgUoohbm5k/mqdefault.jpg" alt="Artemizija Irreversibility" loading="lazy">
         <div class="dc-play"><span>▶</span></div>
-      </a></div>
+      </div></div>
     <div class="dc-info">
       <div class="dc-meta-row">
         <span class="dc-date">2023/11/12</span>
       </div>
       <h3 class="dc-title" title="Artemizija Irreversibility">Artemizija Irreversibility</h3>
       <p class="dc-platform">ARTIFACTS:ASCENSIØN</p>
+      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('Artemizija Irreversibility','iHgUoohbm5k')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="artemizijairreversib" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
     </div>
   </div>
 <div class="dc-card" data-date="2023/08/27" data-title="ex-ris" data-year="2023" data-genre="gothic-hardcore" data-game="osu">
-    <div class="dc-media"><a href="https://www.youtube.com/watch?v=kkE1z76fgFs" target="_blank" class="dc-thumb" title="EX-ris">
+    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('kkE1z76fgFs','EX-ris','')" style="cursor:pointer" title="EX-ris">
         <img src="https://img.youtube.com/vi/kkE1z76fgFs/mqdefault.jpg" alt="EX-ris" loading="lazy">
         <div class="dc-play"><span>▶</span></div>
-      </a></div>
+      </div></div>
     <div class="dc-info">
       <div class="dc-meta-row">
         <span class="dc-date">2023/08/27</span>
       </div>
       <h3 class="dc-title" title="EX-ris">EX-ris</h3>
       <p class="dc-platform">Corsace Open 2023</p>
+      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('EX-ris','kkE1z76fgFs')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="exris" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
     </div>
   </div>
 <div class="dc-card" data-date="2023/07/03" data-title="hauynite" data-year="2023" data-genre="artcore" data-game="dynamix lanota orzmic">
-    <div class="dc-media"><a href="https://www.youtube.com/watch?v=s39x7fSSY1I" target="_blank" class="dc-thumb" title="Hauynite">
+    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('s39x7fSSY1I','Hauynite','')" style="cursor:pointer" title="Hauynite">
         <img src="https://img.youtube.com/vi/s39x7fSSY1I/mqdefault.jpg" alt="Hauynite" loading="lazy">
         <div class="dc-play"><span>▶</span></div>
-      </a></div>
+      </div></div>
     <div class="dc-info">
       <div class="dc-meta-row">
         <span class="dc-date">2023/07/03</span>
       </div>
       <h3 class="dc-title" title="Hauynite">Hauynite</h3>
       <p class="dc-collab">RYOQUCHA & CS4W</p><p class="dc-platform">Dynamix / Lanota / Orzmic</p>
+      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('Hauynite','s39x7fSSY1I')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="hauynite" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
     </div>
   </div>
 <div class="dc-card" data-date="2023/04/30" data-title="phoenixismia ~hallucination of eternity in a timeless realm~" data-year="2023" data-genre="artcore" data-game="dynamix takumi3">
-    <div class="dc-media"><a href="https://www.youtube.com/watch?v=9RHykY_xA4s" target="_blank" class="dc-thumb" title="Phoenixismia ~Hallucination of Eternity in a Timeless Realm~">
+    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('9RHykY_xA4s','Phoenixismia ~Hallucination of Eternity in a Timeless Realm~','')" style="cursor:pointer" title="Phoenixismia ~Hallucination of Eternity in a Timeless Realm~">
         <img src="https://img.youtube.com/vi/9RHykY_xA4s/mqdefault.jpg" alt="Phoenixismia ~Hallucination of Eternity in a Timeless Realm~" loading="lazy">
         <div class="dc-play"><span>▶</span></div>
-      </a></div>
+      </div></div>
     <div class="dc-info">
       <div class="dc-meta-row">
         <span class="dc-date">2023/04/30</span>
       </div>
       <h3 class="dc-title dc-title-long" title="Phoenixismia ~Hallucination of Eternity in a Timeless Realm~">Phoenixismia ~Hallucination of Eternity in a Timeless Realm~</h3>
       <p class="dc-collab">C4ydora (CS4W+Pirendora)</p><p class="dc-platform">evordeation / Dynamix</p>
+      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('Phoenixismia ~Hallucination of Eternity in a Timeless Realm~','9RHykY_xA4s')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="phoenixismiahallucin" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
     </div>
   </div>
 <div class="dc-card" data-date="2023/04/24" data-title="phatchiiq" data-year="2023" data-genre="bass-house" data-game="">
-    <div class="dc-media"><a href="https://www.youtube.com/watch?v=6tL1VwTiupc" target="_blank" class="dc-thumb" title="Phatchiiq">
+    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('6tL1VwTiupc','Phatchiiq','')" style="cursor:pointer" title="Phatchiiq">
         <img src="https://img.youtube.com/vi/6tL1VwTiupc/mqdefault.jpg" alt="Phatchiiq" loading="lazy">
         <div class="dc-play"><span>▶</span></div>
-      </a></div>
+      </div></div>
     <div class="dc-info">
       <div class="dc-meta-row">
         <span class="dc-date">2023/04/24</span>
       </div>
       <h3 class="dc-title" title="Phatchiiq">Phatchiiq</h3>
       <p class="dc-platform">PSYALUME</p>
+      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('Phatchiiq','6tL1VwTiupc')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="phatchiiq" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
     </div>
   </div>
 <div class="dc-card" data-date="2022/12/19" data-title="nf:argonaut" data-year="2022" data-genre="artcore" data-game="lanota">
-    <div class="dc-media"><a href="https://www.youtube.com/watch?v=74J58Lv9zno" target="_blank" class="dc-thumb" title="NF:Argonaut">
+    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('74J58Lv9zno','NF:Argonaut','')" style="cursor:pointer" title="NF:Argonaut">
         <img src="https://img.youtube.com/vi/74J58Lv9zno/mqdefault.jpg" alt="NF:Argonaut" loading="lazy">
         <div class="dc-play"><span>▶</span></div>
-      </a></div>
+      </div></div>
     <div class="dc-info">
       <div class="dc-meta-row">
         <span class="dc-date">2022/12/19</span>
       </div>
       <h3 class="dc-title" title="NF:Argonaut">NF:Argonaut</h3>
       <p class="dc-collab">Connexio & CS4W</p><p class="dc-platform">Significatio Vitae / Lanota</p>
+      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('NF:Argonaut','74J58Lv9zno')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="nfargonaut" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
     </div>
   </div>
 <div class="dc-card" data-date="2022/11/20" data-title="ignominiously" data-year="2022" data-genre="gothic-hardcore" data-game="">
-    <div class="dc-media"><a href="https://www.youtube.com/watch?v=acqe50irjeg" target="_blank" class="dc-thumb" title="Ignominiously">
+    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('acqe50irjeg','Ignominiously','')" style="cursor:pointer" title="Ignominiously">
         <img src="https://img.youtube.com/vi/acqe50irjeg/mqdefault.jpg" alt="Ignominiously" loading="lazy">
         <div class="dc-play"><span>▶</span></div>
-      </a></div>
+      </div></div>
     <div class="dc-info">
       <div class="dc-meta-row">
         <span class="dc-date">2022/11/20</span>
       </div>
       <h3 class="dc-title" title="Ignominiously">Ignominiously</h3>
       <p class="dc-platform">Dystopian Arsenal</p>
+      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('Ignominiously','acqe50irjeg')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="ignominiously" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
     </div>
   </div>
 <div class="dc-card" data-date="2022/11/13" data-title="artemizija transfiguration" data-year="2022" data-genre="artcore" data-game="">
-    <div class="dc-media"><a href="https://www.youtube.com/watch?v=_a32LGzqMek" target="_blank" class="dc-thumb" title="Artemizija Transfiguration">
+    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('_a32LGzqMek','Artemizija Transfiguration','')" style="cursor:pointer" title="Artemizija Transfiguration">
         <img src="https://img.youtube.com/vi/_a32LGzqMek/mqdefault.jpg" alt="Artemizija Transfiguration" loading="lazy">
         <div class="dc-play"><span>▶</span></div>
-      </a></div>
+      </div></div>
     <div class="dc-info">
       <div class="dc-meta-row">
         <span class="dc-date">2022/11/13</span>
       </div>
       <h3 class="dc-title" title="Artemizija Transfiguration">Artemizija Transfiguration</h3>
       <p class="dc-platform">ARTIFACTS:ZERØ</p>
+      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('Artemizija Transfiguration','_a32LGzqMek')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="artemizijatransfigur" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
     </div>
   </div>
 <div class="dc-card" data-date="2022/08/12" data-title="circumscription" data-year="2022" data-genre="gothic-hardcore" data-game="dynamix">
-    <div class="dc-media"><a href="https://www.youtube.com/watch?v=B_BbiIyXGNg" target="_blank" class="dc-thumb" title="Circumscription">
+    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('B_BbiIyXGNg','Circumscription','')" style="cursor:pointer" title="Circumscription">
         <img src="https://img.youtube.com/vi/B_BbiIyXGNg/mqdefault.jpg" alt="Circumscription" loading="lazy">
         <div class="dc-play"><span>▶</span></div>
-      </a></div>
+      </div></div>
     <div class="dc-info">
       <div class="dc-meta-row">
         <span class="dc-date">2022/08/12</span>
       </div>
       <h3 class="dc-title" title="Circumscription">Circumscription</h3>
       <p class="dc-platform">Dynamix</p>
+      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('Circumscription','B_BbiIyXGNg')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="circumscription" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
     </div>
   </div>
 <div class="dc-card" data-date="2022/07/30" data-title="vintage light" data-year="2022" data-genre="midtempo" data-game="">
-    <div class="dc-media"><a href="https://www.youtube.com/watch?v=wYfdL2-52TY" target="_blank" class="dc-thumb" title="Vintage Light">
+    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('wYfdL2-52TY','Vintage Light','')" style="cursor:pointer" title="Vintage Light">
         <img src="https://img.youtube.com/vi/wYfdL2-52TY/mqdefault.jpg" alt="Vintage Light" loading="lazy">
         <div class="dc-play"><span>▶</span></div>
-      </a></div>
+      </div></div>
     <div class="dc-info">
       <div class="dc-meta-row">
         <span class="dc-date">2022/07/30</span>
       </div>
       <h3 class="dc-title" title="Vintage Light">Vintage Light</h3>
+      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('Vintage Light','wYfdL2-52TY')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="vintagelight" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
       
     </div>
   </div>
 <div class="dc-card" data-date="2022/05/17" data-title="v:vallenstein" data-year="2022" data-genre="gothic-hardcore" data-game="dynamix">
-    <div class="dc-media"><a href="https://www.youtube.com/watch?v=flYWBgoP9fo" target="_blank" class="dc-thumb" title="V:Vallenstein">
+    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('flYWBgoP9fo','V:Vallenstein','')" style="cursor:pointer" title="V:Vallenstein">
         <img src="https://img.youtube.com/vi/flYWBgoP9fo/mqdefault.jpg" alt="V:Vallenstein" loading="lazy">
         <div class="dc-play"><span>▶</span></div>
-      </a></div>
+      </div></div>
     <div class="dc-info">
       <div class="dc-meta-row">
         <span class="dc-date">2022/05/17</span>
       </div>
       <h3 class="dc-title" title="V:Vallenstein">V:Vallenstein</h3>
       <p class="dc-platform">Dynamix</p>
+      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('V:Vallenstein','flYWBgoP9fo')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="vvallenstein" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
     </div>
   </div>
 <div class="dc-card" data-date="2022/04/24" data-title="back side of the abyss" data-year="2022" data-genre="gothic-hardcore" data-game="">
-    <div class="dc-media"><a href="https://www.youtube.com/watch?v=M00BzU8N2qY" target="_blank" class="dc-thumb" title="Back side of the abyss">
+    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('M00BzU8N2qY','Back side of the abyss','')" style="cursor:pointer" title="Back side of the abyss">
         <img src="https://img.youtube.com/vi/M00BzU8N2qY/mqdefault.jpg" alt="Back side of the abyss" loading="lazy">
         <div class="dc-play"><span>▶</span></div>
-      </a></div>
+      </div></div>
     <div class="dc-info">
       <div class="dc-meta-row">
         <span class="dc-date">2022/04/24</span>
       </div>
       <h3 class="dc-title" title="Back side of the abyss">Back side of the abyss</h3>
       <p class="dc-platform">THE DARKEST HOUR</p>
+      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('Back side of the abyss','M00BzU8N2qY')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="backsideoftheabyss" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
     </div>
   </div>
 <div class="dc-card" data-date="2022/03/18" data-title="cx-ronos" data-year="2022" data-genre="bass-house" data-game="dancerai13 berry-melody">
-    <div class="dc-media"><a href="https://www.youtube.com/watch?v=GeL8P1m5m1w" target="_blank" class="dc-thumb" title="CX-ronos">
+    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('GeL8P1m5m1w','CX-ronos','')" style="cursor:pointer" title="CX-ronos">
         <img src="https://img.youtube.com/vi/GeL8P1m5m1w/mqdefault.jpg" alt="CX-ronos" loading="lazy">
         <div class="dc-play"><span>▶</span></div>
-      </a></div>
+      </div></div>
     <div class="dc-info">
       <div class="dc-meta-row">
         <span class="dc-date">2022/03/18</span>
       </div>
       <h3 class="dc-title" title="CX-ronos">CX-ronos</h3>
       <p class="dc-platform">DanceRail3 / Berry Melody</p>
+      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('CX-ronos','GeL8P1m5m1w')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="cxronos" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
     </div>
   </div>
 <div class="dc-card" data-date="2021/11/28" data-title="asmodeus ~be loyal to your desires~" data-year="2021" data-genre="gothic" data-game="">
-    <div class="dc-media"><a href="https://www.youtube.com/watch?v=E_23LzoCLeY" target="_blank" class="dc-thumb" title="Asmodeus ~Be loyal to your desires~">
+    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('E_23LzoCLeY','Asmodeus ~Be loyal to your desires~','')" style="cursor:pointer" title="Asmodeus ~Be loyal to your desires~">
         <img src="https://img.youtube.com/vi/E_23LzoCLeY/mqdefault.jpg" alt="Asmodeus ~Be loyal to your desires~" loading="lazy">
         <div class="dc-play"><span>▶</span></div>
-      </a></div>
+      </div></div>
     <div class="dc-info">
       <div class="dc-meta-row">
         <span class="dc-date">2021/11/28</span>
       </div>
       <h3 class="dc-title dc-title-long" title="Asmodeus ~Be loyal to your desires~">Asmodeus ~Be loyal to your desires~</h3>
       <p class="dc-collab">Garbagecan vs. CS4W</p><p class="dc-platform">Gloomy Goth Project</p>
+      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('Asmodeus ~Be loyal to your desires~','E_23LzoCLeY')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="asmodeusbeloyaltoyou" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
     </div>
   </div>
 <div class="dc-card" data-date="2021/11/01" data-title="such a sense" data-year="2021" data-genre="artcore" data-game="">
-    <div class="dc-media"><a href="https://www.youtube.com/watch?v=HM_ClPyGFuk" target="_blank" class="dc-thumb" title="Such a Sense">
+    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('HM_ClPyGFuk','Such a Sense','')" style="cursor:pointer" title="Such a Sense">
         <img src="https://img.youtube.com/vi/HM_ClPyGFuk/mqdefault.jpg" alt="Such a Sense" loading="lazy">
         <div class="dc-play"><span>▶</span></div>
-      </a></div>
+      </div></div>
     <div class="dc-info">
       <div class="dc-meta-row">
         <span class="dc-date">2021/11/01</span>
       </div>
       <h3 class="dc-title" title="Such a Sense">Such a Sense</h3>
       <p class="dc-platform">LIBEREX 002</p>
+      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('Such a Sense','HM_ClPyGFuk')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="suchasense" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
     </div>
   </div>
 <div class="dc-card" data-date="2021/08/15" data-title="absolute disintegration" data-year="2021" data-genre="gothic-hardcore" data-game="takumi3">
-    <div class="dc-media"><a href="https://www.youtube.com/watch?v=9LoUBqDDYN8" target="_blank" class="dc-thumb" title="Absolute Disintegration">
+    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('9LoUBqDDYN8','Absolute Disintegration','')" style="cursor:pointer" title="Absolute Disintegration">
         <img src="https://img.youtube.com/vi/9LoUBqDDYN8/mqdefault.jpg" alt="Absolute Disintegration" loading="lazy">
         <div class="dc-play"><span>▶</span></div>
-      </a></div>
+      </div></div>
     <div class="dc-info">
       <div class="dc-meta-row">
         <span class="dc-date">2021/08/15</span>
       </div>
       <h3 class="dc-title" title="Absolute Disintegration">Absolute Disintegration</h3>
       <p class="dc-platform">TAKUMI³</p>
+      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('Absolute Disintegration','9LoUBqDDYN8')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="absolutedisintegrati" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
     </div>
   </div>
 <div class="dc-card" data-date="2021/08/13" data-title="all" data-year="2021" data-genre="gothic" data-game="">
-    <div class="dc-media"><a href="https://www.youtube.com/watch?v=9qrSMRc96DY" target="_blank" class="dc-thumb" title="ALL">
+    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('9qrSMRc96DY','ALL','')" style="cursor:pointer" title="ALL">
         <img src="https://img.youtube.com/vi/9qrSMRc96DY/mqdefault.jpg" alt="ALL" loading="lazy">
         <div class="dc-play"><span>▶</span></div>
-      </a></div>
+      </div></div>
     <div class="dc-info">
       <div class="dc-meta-row">
         <span class="dc-date">2021/08/13</span>
       </div>
       <h3 class="dc-title" title="ALL">ALL</h3>
       <p class="dc-platform">デカくなりたいコンピ</p>
+      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('ALL','9qrSMRc96DY')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="all" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
     </div>
   </div>
 <div class="dc-card" data-date="2021/04/09" data-title="vesper" data-year="2021" data-genre="frenchcore" data-game="">
-    <div class="dc-media"><a href="https://www.youtube.com/watch?v=fmor-YxZB_U" target="_blank" class="dc-thumb" title="Vesper">
+    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('fmor-YxZB_U','Vesper','')" style="cursor:pointer" title="Vesper">
         <img src="https://img.youtube.com/vi/fmor-YxZB_U/mqdefault.jpg" alt="Vesper" loading="lazy">
         <div class="dc-play"><span>▶</span></div>
-      </a></div>
+      </div></div>
     <div class="dc-info">
       <div class="dc-meta-row">
         <span class="dc-date">2021/04/09</span>
       </div>
       <h3 class="dc-title" title="Vesper">Vesper</h3>
+      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('Vesper','fmor-YxZB_U')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="vesper" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
       
     </div>
   </div>
 <div class="dc-card" data-date="2021/03/31" data-title="guilty hostage" data-year="2021" data-genre="gothic-hitech" data-game="dynamix">
-    <div class="dc-media"><a href="https://www.youtube.com/watch?v=yVQcZ_GgSqU" target="_blank" class="dc-thumb" title="Guilty Hostage">
+    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('yVQcZ_GgSqU','Guilty Hostage','')" style="cursor:pointer" title="Guilty Hostage">
         <img src="https://img.youtube.com/vi/yVQcZ_GgSqU/mqdefault.jpg" alt="Guilty Hostage" loading="lazy">
         <div class="dc-play"><span>▶</span></div>
-      </a></div>
+      </div></div>
     <div class="dc-info">
       <div class="dc-meta-row">
         <span class="dc-date">2021/03/31</span>
       </div>
       <h3 class="dc-title" title="Guilty Hostage">Guilty Hostage</h3>
       <p class="dc-platform">Dynamix</p>
+      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('Guilty Hostage','yVQcZ_GgSqU')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="guiltyhostage" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
     </div>
   </div>
 <div class="dc-card" data-date="2020/12/29" data-title="花は溺れて欣喜雀躍と" data-year="2020" data-genre="piano" data-game="">
-    <div class="dc-media"><a href="https://www.youtube.com/watch?v=iH3aWhMpi6Q" target="_blank" class="dc-thumb" title="花は溺れて欣喜雀躍と">
+    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('iH3aWhMpi6Q','花は溺れて欣喜雀躍と','')" style="cursor:pointer" title="花は溺れて欣喜雀躍と">
         <img src="https://img.youtube.com/vi/iH3aWhMpi6Q/mqdefault.jpg" alt="花は溺れて欣喜雀躍と" loading="lazy">
         <div class="dc-play"><span>▶</span></div>
-      </a></div>
+      </div></div>
     <div class="dc-info">
       <div class="dc-meta-row">
         <span class="dc-date">2020/12/29</span>
       </div>
       <h3 class="dc-title" title="花は溺れて欣喜雀躍と">花は溺れて欣喜雀躍と</h3>
+      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('花は溺れて欣喜雀躍と','iH3aWhMpi6Q')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
       
     </div>
   </div>
 <div class="dc-card" data-date="2020/12/26" data-title="dainsleiv" data-year="2020" data-genre="gothic" data-game="">
-    <div class="dc-media"><a href="https://www.youtube.com/watch?v=QK1ebO9L9OA" target="_blank" class="dc-thumb" title="DainsleIV">
+    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('QK1ebO9L9OA','DainsleIV','')" style="cursor:pointer" title="DainsleIV">
         <img src="https://img.youtube.com/vi/QK1ebO9L9OA/mqdefault.jpg" alt="DainsleIV" loading="lazy">
         <div class="dc-play"><span>▶</span></div>
-      </a></div>
+      </div></div>
     <div class="dc-info">
       <div class="dc-meta-row">
         <span class="dc-date">2020/12/26</span>
       </div>
       <h3 class="dc-title" title="DainsleIV">DainsleIV</h3>
+      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('DainsleIV','QK1ebO9L9OA')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="dainsleiv" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
       
     </div>
   </div>
 <div class="dc-card" data-date="2020/09/07" data-title="nothingnesses" data-year="2020" data-genre="ambient" data-game="">
-    <div class="dc-media"><a href="https://www.youtube.com/watch?v=Hc3_-If0raw" target="_blank" class="dc-thumb" title="Nothingnesses">
+    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('Hc3_-If0raw','Nothingnesses','')" style="cursor:pointer" title="Nothingnesses">
         <img src="https://img.youtube.com/vi/Hc3_-If0raw/mqdefault.jpg" alt="Nothingnesses" loading="lazy">
         <div class="dc-play"><span>▶</span></div>
-      </a></div>
+      </div></div>
     <div class="dc-info">
       <div class="dc-meta-row">
         <span class="dc-date">2020/09/07</span>
       </div>
       <h3 class="dc-title" title="Nothingnesses">Nothingnesses</h3>
+      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('Nothingnesses','Hc3_-If0raw')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="nothingnesses" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
       
     </div>
   </div>
 <div class="dc-card" data-date="2020/07/25" data-title="vallemaison" data-year="2020" data-genre="gothic" data-game="">
-    <div class="dc-media"><a href="https://www.youtube.com/watch?v=AZVkz-KfhJ8" target="_blank" class="dc-thumb" title="VALLEMAISON">
+    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('AZVkz-KfhJ8','VALLEMAISON','')" style="cursor:pointer" title="VALLEMAISON">
         <img src="https://img.youtube.com/vi/AZVkz-KfhJ8/mqdefault.jpg" alt="VALLEMAISON" loading="lazy">
         <div class="dc-play"><span>▶</span></div>
-      </a></div>
+      </div></div>
     <div class="dc-info">
       <div class="dc-meta-row">
         <span class="dc-date">2020/07/25</span>
       </div>
       <h3 class="dc-title" title="VALLEMAISON">VALLEMAISON</h3>
+      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('VALLEMAISON','AZVkz-KfhJ8')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="vallemaison" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
       
     </div>
   </div>
 <div class="dc-card" data-date="2020/03/31" data-title="stay ch4nged" data-year="2020" data-genre="frenchcore" data-game="">
-    <div class="dc-media"><a href="https://www.youtube.com/watch?v=LjMXYiG2jLM" target="_blank" class="dc-thumb" title="Stay Ch4nged">
+    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('LjMXYiG2jLM','Stay Ch4nged','')" style="cursor:pointer" title="Stay Ch4nged">
         <img src="https://img.youtube.com/vi/LjMXYiG2jLM/mqdefault.jpg" alt="Stay Ch4nged" loading="lazy">
         <div class="dc-play"><span>▶</span></div>
-      </a></div>
+      </div></div>
     <div class="dc-info">
       <div class="dc-meta-row">
         <span class="dc-date">2020/03/31</span>
       </div>
       <h3 class="dc-title" title="Stay Ch4nged">Stay Ch4nged</h3>
+      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('Stay Ch4nged','LjMXYiG2jLM')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="staych4nged" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
       
     </div>
   </div>
@@ -1453,10 +1692,196 @@ rerender();
   }, {passive:true});
 })();
 
+
+/* ── PWA Service Worker ── */
+if('serviceWorker' in navigator){
+  window.addEventListener('load',function(){
+    navigator.serviceWorker.register('/sw.js').catch(function(){});
+  });
+}
+
+
+/* ── Like (localStorage) ── */
+var LIKES = JSON.parse(localStorage.getItem('cs4w_likes') || '{}');
+function saveLikes(){ localStorage.setItem('cs4w_likes', JSON.stringify(LIKES)); }
+function initLikes(){
+  document.querySelectorAll('.like-btn').forEach(function(btn){
+    var id = btn.dataset.id;
+    var cnt = LIKES[id] || 0;
+    btn.querySelector('.lcnt').textContent = cnt;
+    if(LIKES[id+'_voted']) btn.classList.add('liked');
+  });
+}
+function toggleLike(btn){
+  var id = btn.dataset.id;
+  if(LIKES[id+'_voted']){
+    LIKES[id] = Math.max(0,(LIKES[id]||1)-1);
+    delete LIKES[id+'_voted'];
+    btn.classList.remove('liked');
+  } else {
+    LIKES[id] = (LIKES[id]||0)+1;
+    LIKES[id+'_voted'] = true;
+    btn.classList.add('liked');
+  }
+  btn.querySelector('.lcnt').textContent = LIKES[id]||0;
+  saveLikes();
+}
+window.addEventListener('load', initLikes);
+
+
+/* ── Mini Player ── */
+var MP = { ytId:null, title:'', plat:'', playing:false, inited:false, muted:false, vol:70, iframe:null };
+
+function mpOpen(ytId, title, plat) {
+  MP.ytId=ytId; MP.title=title; MP.plat=plat||'';
+  MP.playing=false; MP.inited=false; MP.iframe=null;
+  var p=document.getElementById('mini-player');
+  var thumb=document.getElementById('mp-thumb');
+  document.getElementById('mp-title').textContent=title;
+  document.getElementById('mp-plat').textContent=plat||'';
+  document.getElementById('mp-play-btn').textContent='▶';
+  thumb.innerHTML='<img src="https://img.youtube.com/vi/'+ytId+'/mqdefault.jpg" alt="'+title+'">';
+  p.classList.add('mp-active');
+}
+
+function mpTogglePlay() {
+  if (!MP.ytId) return;
+  var thumb=document.getElementById('mp-thumb');
+  var btn=document.getElementById('mp-play-btn');
+  if (!MP.inited) {
+    var vol=MP.muted?0:MP.vol;
+    var iframe=document.createElement('iframe');
+    iframe.src='https://www.youtube.com/embed/'+MP.ytId+'?autoplay=1&rel=0&modestbranding=1&enablejsapi=1&volume='+vol;
+    iframe.allow='accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture';
+    iframe.allowFullscreen=true;
+    iframe.style.cssText='position:absolute;inset:0;width:100%;height:100%;border:none;pointer-events:none;';
+    thumb.innerHTML=''; thumb.appendChild(iframe);
+    MP.iframe=iframe; MP.playing=true; MP.inited=true;
+    btn.textContent='⏸';
+  } else {
+    var cmd=MP.playing?'pauseVideo':'playVideo';
+    if(MP.iframe&&MP.iframe.contentWindow)
+      MP.iframe.contentWindow.postMessage(JSON.stringify({event:'command',func:cmd,args:''}),'*');
+    MP.playing=!MP.playing;
+    btn.textContent=MP.playing?'⏸':'▶';
+  }
+}
+
+function mpSetVolume(val) {
+  MP.vol=parseInt(val);
+  var icon=document.getElementById('mp-vol-icon');
+  icon.textContent=MP.vol===0?'🔇':MP.vol<40?'🔉':'🔊';
+  var el=document.getElementById('mp-vol');
+  if(el) el.style.setProperty('--v', MP.vol+'%');
+  if(MP.iframe&&MP.iframe.contentWindow)
+    MP.iframe.contentWindow.postMessage(JSON.stringify({event:'command',func:'setVolume',args:[MP.vol]}),'*');
+}
+
+function mpToggleMute() {
+  MP.muted=!MP.muted;
+  var icon=document.getElementById('mp-vol-icon');
+  var el=document.getElementById('mp-vol');
+  if(MP.muted){
+    icon.textContent='🔇';
+    if(MP.iframe&&MP.iframe.contentWindow)
+      MP.iframe.contentWindow.postMessage(JSON.stringify({event:'command',func:'mute',args:''}),'*');
+  } else {
+    icon.textContent=MP.vol<40?'🔉':'🔊';
+    if(MP.iframe&&MP.iframe.contentWindow)
+      MP.iframe.contentWindow.postMessage(JSON.stringify({event:'command',func:'unMute',args:''}),'*');
+  }
+}
+
+function mpOpenYT() {
+  if(MP.ytId) window.open('https://www.youtube.com/watch?v='+MP.ytId,'_blank');
+}
+
+function mpClose() {
+  var p=document.getElementById('mini-player');
+  var thumb=document.getElementById('mp-thumb');
+  /* iframeを完全に破棄してから非表示 */
+  if(thumb){ thumb.innerHTML=''; }
+  if(MP.iframe){ try{ MP.iframe.src='about:blank'; }catch(e){} MP.iframe=null; }
+  MP.ytId=null; MP.playing=false; MP.inited=false;
+  if(p){ p.classList.remove('mp-active'); }
+}
+
+/* ── Like (localStorage) ── */
+var LIKES = (function(){ try{ return JSON.parse(localStorage.getItem('cs4w_likes')||'{}'); }catch(e){ return {}; } })();
+function saveLikes(){ try{ localStorage.setItem('cs4w_likes',JSON.stringify(LIKES)); }catch(e){} }
+function initLikes(){
+  document.querySelectorAll('.like-btn').forEach(function(btn){
+    var id=btn.dataset.id;
+    var cnt=LIKES[id]||0;
+    btn.querySelector('.lcnt').textContent=cnt>0?cnt:'';
+    if(LIKES[id+'_v']) btn.classList.add('liked');
+    btn.querySelector('.lheart').textContent=LIKES[id+'_v']?'♥':'♡';
+  });
+}
+function toggleLike(btn){
+  var id=btn.dataset.id;
+  if(LIKES[id+'_v']){
+    LIKES[id]=Math.max(0,(LIKES[id]||1)-1);
+    delete LIKES[id+'_v'];
+    btn.classList.remove('liked');
+    btn.querySelector('.lheart').textContent='♡';
+  } else {
+    LIKES[id]=(LIKES[id]||0)+1;
+    LIKES[id+'_v']=true;
+    btn.classList.add('liked');
+    btn.querySelector('.lheart').textContent='♥';
+  }
+  var cnt=LIKES[id]||0;
+  btn.querySelector('.lcnt').textContent=cnt>0?cnt:'';
+  saveLikes();
+}
+window.addEventListener('load',initLikes);
+
+/* ── Share ── */
+function shareTrack(title, ytId){
+  var url='https://www.youtube.com/watch?v='+ytId;
+  var tw='https://twitter.com/intent/tweet?text='+encodeURIComponent('CS4W - '+title)+'&url='+encodeURIComponent(url)+'&hashtags=CS4W';
+  window.open(tw,'_blank','width=550,height=420');
+}
+
 </script>
 <button class="sf-trigger" id="sf-trigger-btn" aria-label="SNSリンク">
     <span class="sf-trigger-icon">✦</span>
   </button>
+</div>
+
+
+  <div class="mp-info">
+    <div class="mp-title" id="mp-title">—</div>
+    <div class="mp-platform" id="mp-platform"></div>
+  </div>
+  <div class="mp-controls">
+    <button class="mp-btn play-btn" id="mp-play-btn" onclick="mpTogglePlay()" aria-label="再生/停止">▶</button>
+    <button class="mp-btn" onclick="mpOpenYT()" aria-label="YouTubeで開く" title="YouTubeで開く">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="rgba(221,217,231,0.5)"><path d="M10 6v2H5v11h11v-5h2v7H3V6h7zm11-3v8h-2V6.413l-7.793 7.794-1.414-1.414L17.585 5H13V3h8z"/></svg>
+    </button>
+  </div>
+  <button class="mp-close" onclick="mpClose()" aria-label="閉じる">✕</button>
+</div>
+
+<!-- ── Mini Player ── -->
+<div id="mini-player">
+  <div class="mp-thumb" id="mp-thumb" onclick="mpTogglePlay()"></div>
+  <div class="mp-info">
+    <div class="mp-title" id="mp-title">—</div>
+    <div class="mp-plat"  id="mp-plat"></div>
+  </div>
+  <div class="mp-controls">
+    <button class="mp-btn" id="mp-play-btn" onclick="mpTogglePlay()" aria-label="再生/停止">▶</button>
+    <button class="mp-btn" onclick="mpOpenYT()" aria-label="YouTubeで開く" title="YouTubeで開く">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="rgba(221,217,231,0.45)"><path d="M10 6v2H5v11h11v-5h2v7H3V6h7zm11-3v8h-2V6.413l-7.793 7.794-1.414-1.414L17.585 5H13V3h8z"/></svg>
+    </button>
+  </div>
+  <div class="mp-vol-wrap">
+    <span class="mp-vol-icon" id="mp-vol-icon" onclick="mpToggleMute()">🔊</span>
+    <input type="range" id="mp-vol" min="0" max="100" value="70" oninput="mpSetVolume(this.value)" aria-label="音量">
+  </div>
+  <button id="mp-close" onclick="mpClose()" aria-label="閉じる">✕</button>
 </div>
 
 <button id="scroll-top" aria-label="ページトップへ"><svg viewBox="0 0 14 14"><polyline points="2,10 7,4 12,10"/></svg></button>

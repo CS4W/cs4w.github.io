@@ -2,7 +2,12 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="CS4W">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CS4W — About</title>
   <meta name="description" content="CS4W（しーそー）のプロフィールと活動経歴。2020年から活動開始、TAKUMI³最優秀賞・CosmicRadio2024最優秀賞受賞。">
 
@@ -10,7 +15,7 @@
   <meta property="og:type"        content="profile">
   <meta property="og:title"       content="About — CS4W | プロフィール・活動経歴">
   <meta property="og:description" content="CS4W（しーそー）のプロフィールと活動経歴。2020年から活動開始、TAKUMI³最優秀賞・CosmicRadio2024最優秀賞受賞。">
-  <meta property="og:url"         content="https://cs4w.net/cs4w-about.html">
+  <meta property="og:url"         content="https://cs4w.net/about/">
   <meta property="og:image"       content="https://cs4w.net/ogp.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height"content="630">
@@ -427,7 +432,64 @@ body{ padding-bottom:36px; }
 
 }
 
+
+/* ── Mini Player ── */
+#mini-player{
+  position:fixed;bottom:36px;left:0;right:0;z-index:400;
+  background:rgba(10,10,20,0.97);
+  backdrop-filter:blur(20px);
+  border-top:1px solid rgba(184,159,255,0.15);
+  display:flex;align-items:center;gap:0;
+  height:52px;
+  transform:translateY(100%);
+  transition:transform 0.35s cubic-bezier(.4,0,.2,1);
+}
+#mini-player.active{transform:translateY(0);}
+.mp-thumb{
+  width:80px;height:52px;flex-shrink:0;overflow:hidden;position:relative;cursor:pointer;
+}
+.mp-thumb img{width:100%;height:100%;object-fit:cover;opacity:0.85;}
+.mp-thumb iframe{position:absolute;inset:0;width:100%;height:100%;border:none;}
+.mp-info{flex:1;min-width:0;padding:0 0.8rem;}
+.mp-title{
+  font-family:"Cinzel",serif;font-weight:400;font-size:0.72rem;
+  color:#ddd9e7;letter-spacing:0.05em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.mp-platform{
+  font-family:"Raleway",sans-serif;font-weight:300;font-style:italic;
+  font-size:0.56rem;letter-spacing:0.18em;color:rgba(221,217,231,0.45);margin-top:0.1rem;
+}
+.mp-controls{display:flex;align-items:center;gap:0;padding-right:0.6rem;}
+.mp-btn{
+  width:40px;height:52px;display:flex;align-items:center;justify-content:center;
+  background:none;border:none;cursor:pointer;color:rgba(221,217,231,0.55);
+  font-size:0.9rem;transition:color 0.2s;
+}
+.mp-btn:hover{color:#ddd9e7;}
+.mp-btn.play-btn{font-size:1rem;color:rgba(184,159,255,0.8);}
+.mp-btn.play-btn:hover{color:#b89fff;}
+.mp-close{
+  width:36px;height:52px;display:flex;align-items:center;justify-content:center;
+  background:none;border:none;cursor:pointer;
+  color:rgba(221,217,231,0.3);font-size:0.7rem;transition:color 0.2s;
+}
+.mp-close:hover{color:rgba(221,217,231,0.7);}
+@media(max-width:700px){
+  #mini-player{bottom:32px;height:46px;}
+  .mp-thumb{width:64px;height:46px;}
+  .mp-title{font-size:0.65rem;}
+}
+
 </style>
+<!-- Google Analytics (GA4) - IDをG-RVNXNJB2Q1に置き換えてください -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RVNXNJB2Q1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-RVNXNJB2Q1');
+</script>
 </head>
 <body>
 <a href="#main" class="skip-link">コンテンツへスキップ</a>
@@ -713,10 +775,93 @@ const _ro=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.ta
   }, {passive:true});
 })();
 
+
+/* ── PWA Service Worker ── */
+if('serviceWorker' in navigator){
+  window.addEventListener('load',function(){
+    navigator.serviceWorker.register('/sw.js').catch(function(){});
+  });
+}
+
+/* ── Mini Player ── */
+var MP = {
+  ytId: null, title: '', platform: '',
+  playing: false, initialized: false
+};
+
+function mpOpen(ytId, title, platform) {
+  MP.ytId = ytId; MP.title = title; MP.platform = platform || '';
+  var p = document.getElementById('mini-player');
+  var thumb = document.getElementById('mp-thumb');
+  var titleEl = document.getElementById('mp-title');
+  var platEl  = document.getElementById('mp-platform');
+  var playBtn = document.getElementById('mp-play-btn');
+  if (!p) return;
+  titleEl.textContent = title;
+  platEl.textContent  = platform;
+  // サムネイル表示
+  thumb.innerHTML = '<img src="https://img.youtube.com/vi/'+ytId+'/mqdefault.jpg" alt="'+title+'">';
+  playBtn.textContent = '▶';
+  MP.playing = false; MP.initialized = false;
+  p.classList.add('active');
+}
+
+function mpTogglePlay() {
+  if (!MP.ytId) return;
+  var thumb = document.getElementById('mp-thumb');
+  var playBtn = document.getElementById('mp-play-btn');
+  if (!MP.initialized) {
+    thumb.innerHTML = '<iframe src="https://www.youtube.com/embed/'+MP.ytId+'?autoplay=1&rel=0&modestbranding=1" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen></iframe>';
+    MP.playing = true; MP.initialized = true;
+    playBtn.textContent = '⏸';
+  } else {
+    // iframeの再生/停止
+    var iframe = thumb.querySelector('iframe');
+    if (iframe) {
+      if (MP.playing) {
+        iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}','*');
+        playBtn.textContent = '▶'; MP.playing = false;
+      } else {
+        iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}','*');
+        playBtn.textContent = '⏸'; MP.playing = true;
+      }
+    }
+  }
+}
+
+function mpOpenYT() {
+  if (MP.ytId) window.open('https://www.youtube.com/watch?v='+MP.ytId,'_blank');
+}
+
+function mpClose() {
+  var p = document.getElementById('mini-player');
+  if (p) { p.classList.remove('active'); }
+  var thumb = document.getElementById('mp-thumb');
+  if (thumb) { thumb.innerHTML = ''; }
+  MP.ytId = null; MP.playing = false; MP.initialized = false;
+}
+
 </script>
 <button class="sf-trigger" id="sf-trigger-btn" aria-label="SNSリンク">
     <span class="sf-trigger-icon">✦</span>
   </button>
+</div>
+
+
+<!-- ── Mini Player ── -->
+<div id="mini-player">
+  <div class="mp-thumb" id="mp-thumb" onclick="mpTogglePlay()"></div>
+  <div class="mp-info">
+    <div class="mp-title" id="mp-title">—</div>
+    <div class="mp-platform" id="mp-platform"></div>
+  </div>
+  <div class="mp-controls">
+    <button class="mp-btn play-btn" id="mp-play-btn" onclick="mpTogglePlay()" aria-label="再生/停止">▶</button>
+    <button class="mp-btn" onclick="mpOpenYT()" aria-label="YouTubeで開く" title="YouTubeで開く">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="rgba(221,217,231,0.5)"><path d="M10 6v2H5v11h11v-5h2v7H3V6h7zm11-3v8h-2V6.413l-7.793 7.794-1.414-1.414L17.585 5H13V3h8z"/></svg>
+    </button>
+  </div>
+  <button class="mp-close" onclick="mpClose()" aria-label="閉じる">✕</button>
 </div>
 
 <button id="scroll-top" aria-label="ページトップへ"><svg viewBox="0 0 14 14"><polyline points="2,10 7,4 12,10"/></svg></button>
