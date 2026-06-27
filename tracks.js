@@ -1,6 +1,6 @@
 /* Discography data: add, remove, or edit tracks here. */
 window.CS4W_TRACKS = [
-  {date:'2026/06/07',name:'Subjugator',ytId:'W9nS0Wf_PlQ',genre:'gothic-hardcore'likeId:'subjugator'},
+  {date:'2026/06/07',name:'Subjugator',ytId:'W9nS0Wf_PlQ',genre:'gothic-hardcore',likeId:'subjugator'},
   {date:'2026/05/25',name:'Collapse',ytId:'yRK1A5yOMJ0',genre:'midtempo',likeId:'collapse'},
   {date:'2026/04/26',name:'Aether Portal',ytId:'92ZV24CXfWo',genre:'gothic-hardcore',platform:'Myth://2.0',likeId:'aetherportal'},
   {date:'2026/04/26',name:'BACKALLEY',ytId:'GIUuHVgcSjw',genre:'bass-house',platform:'Myth://2.0',likeId:'backalley'},
