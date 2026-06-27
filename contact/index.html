@@ -470,6 +470,7 @@ body{ padding-bottom:36px; }
   gtag('js', new Date());
   gtag('config', 'G-RVNXNJB2Q1');
 </script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 <body>
 <a href="#main" class="skip-link">コンテンツへスキップ</a>
@@ -689,7 +690,8 @@ body{ padding-bottom:36px; }
         <input type="text" placeholder="件名をご記入ください">
         <label>詳細 / Message</label>
         <textarea placeholder="ご依頼の詳細・納期・予算などをご記入ください..." required></textarea>
-        <button type="submit" class="ct-submit">Send Message →</button>
+        <div class="cf-turnstile" data-sitekey="0x4AAAAAADr_nTTOeMytijOV" data-callback="onTurnstileSuccess" data-theme="dark" style="margin-bottom:0.8rem;"></div>
+          <button type="submit" class="ct-submit">Send Message →</button>
       </form>
       <p id="formMsg" style="margin-top:1rem;font-family:'Raleway',sans-serif;font-size:0.72rem;letter-spacing:0.2em;color:var(--teal);display:none;">送信されました。ありがとうございます ✦</p>
     </div>
@@ -699,6 +701,8 @@ body{ padding-bottom:36px; }
 <footer><div class="footer-l"><span style="color:var(--violet);margin-right:0.45rem;font-family:'Raleway',sans-serif;font-weight:300;font-size:0.75rem;">✛</span>CS4W</div><div class="footer-r">© 2026 CS4W / しーそー · All rights reserved.</div></footer>
 <script>
 const _ro=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');_ro.unobserve(e.target);}});},{threshold:0.08,rootMargin:'0px 0px -30px 0px'});document.querySelectorAll('.reveal').forEach(el=>_ro.observe(el));
+window._turnstileToken = "";
+function onTurnstileSuccess(token){ window._turnstileToken = token; }
 function handleSubmit(e){
   e.preventDefault();
   var btn = document.querySelector('.ct-submit');
@@ -710,6 +714,7 @@ function handleSubmit(e){
   var category = form.querySelector('select').value;
   var subject  = form.querySelectorAll('input[type="text"]')[1].value;
   var message  = form.querySelector('textarea').value;
+  var turnstileToken = window._turnstileToken || '';
 
   btn.textContent = 'Sending...';
   btn.disabled = true;
@@ -717,13 +722,15 @@ function handleSubmit(e){
   fetch('https://cs4w-rss-proxy.yusuke-7328.workers.dev/contact', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name, email, category, subject, message })
+    body: JSON.stringify({ name, email, category, subject, message, turnstileToken })
   })
   .then(function(r){ return r.text(); })
   .then(function(text){
     var data;
     try { data = JSON.parse(text); } catch(e) { throw new Error(text.slice(0, 100)); }
     if (data.ok) {
+      window._turnstileToken = '';
+      if(window.turnstile) turnstile.reset();
       btn.style.display = 'none';
       msg.textContent = '送信されました。ありがとうございます ✦';
       msg.style.color = 'var(--teal)';
