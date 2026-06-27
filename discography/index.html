@@ -50,7 +50,7 @@ nav::after{content:"";position:absolute;bottom:-3px;left:3.5rem;right:3.5rem;hei
 .logo{align-self:center;font-family:"Cinzel",serif;font-weight:600;font-size:1.25rem;letter-spacing:0.2em;color:var(--ghost);text-decoration:none;display:flex;align-items:center;gap:0.4rem;}
 .logo-cross{color:var(--violet);font-size:0.8rem;font-family:"Raleway",sans-serif;font-weight:300;}
 .nav-links{display:flex;gap:2rem;list-style:none;align-self:stretch;align-items:stretch;}
-.nav-links a{font-family:"Raleway",sans-serif;font-weight:300;font-size:0.7rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.3s;position:relative;display:flex;align-items:center;padding:1.1rem 0.5rem;}
+.nav-links a{font-family:"Raleway",sans-serif;font-weight:300;font-size:0.7rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.3s,padding 0.3s ease;position:relative;display:flex;align-items:center;padding:1.1rem 0.5rem;}
 .nav-links a::after{content:"";position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--teal);transition:width 0.35s;}
 .nav-links a:hover,.nav-active{color:var(--ghost)!important;}
 .nav-links a.nav-active::after,.nav-links a:hover::after{width:100%;}
@@ -250,8 +250,10 @@ footer{position:relative;z-index:1;padding-bottom:calc(1.5rem + 36px);padding:1.
 
 /* ナビシュリンク */
 nav{transition:padding 0.3s ease,background 0.3s ease,box-shadow 0.3s ease;}
-nav.scrolled{padding-top:0.7rem;padding-bottom:0.7rem;background:rgba(10,10,20,0.97);box-shadow:0 2px 20px rgba(0,0,0,0.45);}
-body:has(nav.scrolled) .ctrl-bar{top:50px;}
+nav.scrolled{background:rgba(10,10,20,0.97);box-shadow:0 2px 20px rgba(0,0,0,0.45);}
+nav.scrolled .nav-links a{padding-top:0.7rem;padding-bottom:0.7rem;}
+body:has(nav.scrolled) .ctrl-bar{top:35px;}
+
 
 /* ナビアクティブ */
 .nav-links a.section-active{color:var(--ghost)!important;}
