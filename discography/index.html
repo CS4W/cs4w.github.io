@@ -569,52 +569,7 @@ body{ padding-bottom:36px; }
 
 
 
-#mini-player{
-  position:fixed;bottom:36px;left:0;right:0;z-index:400;
-  background:rgba(10,10,20,0.97);
-  backdrop-filter:blur(20px);
-  border-top:1px solid rgba(184,159,255,0.15);
-  display:flex;align-items:center;gap:0;
-  height:52px;
-  transform:translateY(100%);
-  transition:transform 0.35s cubic-bezier(.4,0,.2,1);
-}
-#mini-player.active{transform:translateY(0);}
-.mp-thumb{
-  width:80px;height:52px;flex-shrink:0;overflow:hidden;position:relative;cursor:pointer;
-}
-.mp-thumb img{width:100%;height:100%;object-fit:cover;opacity:0.85;}
-.mp-thumb iframe{position:absolute;inset:0;width:100%;height:100%;border:none;}
-.mp-info{flex:1;min-width:0;padding:0 0.8rem;}
-.mp-title{
-  font-family:"Cinzel",serif;font-weight:400;font-size:0.72rem;
-  color:#ddd9e7;letter-spacing:0.05em;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-}
-.mp-platform{
-  font-family:"Raleway",sans-serif;font-weight:300;font-style:italic;
-  font-size:0.56rem;letter-spacing:0.18em;color:rgba(221,217,231,0.45);margin-top:0.1rem;
-}
-.mp-controls{display:flex;align-items:center;gap:0;padding-right:0.6rem;}
-.mp-btn{
-  width:40px;height:52px;display:flex;align-items:center;justify-content:center;
-  background:none;border:none;cursor:pointer;color:rgba(221,217,231,0.55);
-  font-size:0.9rem;transition:color 0.2s;
-}
-.mp-btn:hover{color:#ddd9e7;}
-.mp-btn.play-btn{font-size:1rem;color:rgba(184,159,255,0.8);}
-.mp-btn.play-btn:hover{color:#b89fff;}
-.mp-close{
-  width:36px;height:52px;display:flex;align-items:center;justify-content:center;
-  background:none;border:none;cursor:pointer;
-  color:rgba(221,217,231,0.3);font-size:0.7rem;transition:color 0.2s;
-}
-.mp-close:hover{color:rgba(221,217,231,0.7);}
-@media(max-width:700px){
-  #mini-player{bottom:32px;height:46px;}
-  .mp-thumb{width:64px;height:46px;}
-  .mp-title{font-size:0.65rem;}
-}
+
 
 
 
@@ -674,49 +629,9 @@ body{ padding-bottom:36px; }
 
 
 /* ── Mini Player ── */
-#mini-player{
-  position:fixed;bottom:36px;left:0;right:0;z-index:400;
-  background:rgba(10,10,20,0.97);
-  backdrop-filter:blur(20px);
-  border-top:1px solid rgba(184,159,255,0.15);
-  display:none;align-items:center;height:56px;
-}
-#mini-player.mp-active{display:flex;}
-.mp-thumb{
-  width:88px;height:56px;flex-shrink:0;overflow:hidden;
-  position:relative;cursor:pointer;background:var(--bg2);
-}
-.mp-thumb img{width:100%;height:100%;object-fit:cover;opacity:0.85;}
-.mp-thumb iframe{position:absolute;inset:0;width:100%;height:100%;border:none;pointer-events:none;}
-.mp-info{flex:1;min-width:0;padding:0 0.7rem;}
-.mp-title{
-  font-family:"Cinzel",serif;font-weight:400;font-size:0.72rem;
-  color:#ddd9e7;letter-spacing:0.05em;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-}
-.mp-plat{
-  font-family:"Raleway",sans-serif;font-weight:300;font-style:italic;
-  font-size:0.55rem;letter-spacing:0.16em;color:rgba(221,217,231,0.4);margin-top:0.1rem;
-}
-.mp-controls{display:flex;align-items:center;gap:2px;padding-right:0.3rem;flex-shrink:0;}
-.mp-btn{
-  width:36px;height:56px;display:flex;align-items:center;justify-content:center;
-  background:none;border:none;cursor:pointer;
-  color:rgba(221,217,231,0.5);font-size:0.85rem;transition:color 0.2s;flex-shrink:0;
-}
-.mp-btn:hover{color:#ddd9e7;}
 #mp-play-btn{color:rgba(184,159,255,0.85);font-size:1rem;}
 #mp-play-btn:hover{color:#b89fff;}
 /* 音量 */
-.mp-vol-wrap{
-  display:flex;align-items:center;gap:0.3rem;
-  padding:0 0.4rem;flex-shrink:0;
-}
-.mp-vol-icon{
-  font-size:0.7rem;color:rgba(221,217,231,0.4);cursor:pointer;
-  transition:color 0.2s;flex-shrink:0;line-height:1;
-}
-.mp-vol-icon:hover{color:#ddd9e7;}
 #mp-vol{
   -webkit-appearance:none;appearance:none;
   width:60px;height:2px;
@@ -739,52 +654,143 @@ body{ padding-bottom:36px; }
   transition:color 0.2s;flex-shrink:0;border-left:1px solid rgba(184,159,255,0.08);
 }
 #mp-close:hover{color:rgba(221,217,231,0.8);}
-@media(max-width:700px){
-  #mini-player{bottom:32px;height:50px;}
-  .mp-thumb{width:72px;height:50px;}
-  .mp-title{font-size:0.65rem;}
-  #mp-vol{width:44px;}
-  .mp-vol-wrap{padding:0 0.2rem;}
-}
+
 
 /* ── Mini Player ── */
-#mini-player{
-  position:fixed;bottom:36px;left:0;right:0;z-index:400;
-  background:rgba(10,10,20,0.97);backdrop-filter:blur(20px);
-  border-top:1px solid rgba(184,159,255,0.18);
-  display:none;flex-direction:column;
-}
-#mini-player.mp-active{display:flex;}
-.mp-main-row{display:flex;align-items:center;height:52px;}
-.mp-art{width:52px;height:52px;flex-shrink:0;background:var(--bg2,#13132a);overflow:hidden;}
-.mp-art img{width:100%;height:100%;object-fit:cover;opacity:0.85;}
-.mp-info{flex:1;min-width:0;padding:0 0.7rem;}
-.mp-title{font-family:"Cinzel",serif;font-weight:400;font-size:0.72rem;color:#ddd9e7;letter-spacing:0.05em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.mp-plat{font-family:"Raleway",sans-serif;font-weight:300;font-style:italic;font-size:0.55rem;letter-spacing:0.16em;color:rgba(221,217,231,0.4);margin-top:0.1rem;}
-.mp-controls{display:flex;align-items:center;gap:0;padding-right:0.3rem;flex-shrink:0;}
-.mp-btn{width:36px;height:52px;display:flex;align-items:center;justify-content:center;background:none;border:none;cursor:pointer;color:rgba(221,217,231,0.5);font-size:0.85rem;transition:color 0.2s;flex-shrink:0;}
-.mp-btn:hover{color:#ddd9e7;}
 #mp-play-btn{color:rgba(184,159,255,0.9);font-size:1.05rem;}
 #mp-play-btn:hover{color:#b89fff;}
-.mp-vol-wrap{display:flex;align-items:center;gap:0.25rem;padding:0 0.35rem;flex-shrink:0;}
-.mp-vol-icon{font-size:0.72rem;color:rgba(221,217,231,0.4);cursor:pointer;transition:color 0.2s;line-height:1;}
-.mp-vol-icon:hover{color:#ddd9e7;}
 #mp-vol{-webkit-appearance:none;appearance:none;width:56px;height:2px;background-image:linear-gradient(90deg,rgba(184,159,255,0.75) var(--v,70%),rgba(221,217,231,0.15) var(--v,70%));border:none;outline:none;cursor:pointer;}
 #mp-vol::-webkit-slider-thumb{-webkit-appearance:none;width:10px;height:10px;border-radius:50%;background:#b89fff;cursor:pointer;}
 #mp-vol::-moz-range-thumb{width:10px;height:10px;border-radius:50%;border:none;background:#b89fff;cursor:pointer;}
 #mp-close{width:36px;height:52px;display:flex;align-items:center;justify-content:center;background:none;border:none;cursor:pointer;color:rgba(221,217,231,0.28);font-size:0.75rem;transition:color 0.2s;flex-shrink:0;border-left:1px solid rgba(184,159,255,0.08);}
 #mp-close:hover{color:rgba(221,217,231,0.75);}
 /* シークバー */
-.mp-seek-row{display:flex;align-items:center;gap:0.5rem;padding:0 0.6rem 4px;height:18px;}
-.mp-time{font-family:"Raleway",sans-serif;font-weight:300;font-size:0.5rem;letter-spacing:0.08em;color:rgba(221,217,231,0.35);flex-shrink:0;width:28px;text-align:center;}
 #mp-seek{-webkit-appearance:none;appearance:none;flex:1;height:2px;background-image:linear-gradient(90deg,rgba(184,159,255,0.7) var(--s,0%),rgba(221,217,231,0.15) var(--s,0%));border:none;outline:none;cursor:pointer;}
 #mp-seek::-webkit-slider-thumb{-webkit-appearance:none;width:10px;height:10px;border-radius:50%;background:#b89fff;cursor:pointer;opacity:0;transition:opacity 0.2s;}
 #mp-seek:hover::-webkit-slider-thumb{opacity:1;}
 #mp-seek::-moz-range-thumb{width:10px;height:10px;border-radius:50%;border:none;background:#b89fff;cursor:pointer;}
 /* 隠しiframe */
 #mp-iframe-wrap{position:fixed;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden;pointer-events:none;}
-@media(max-width:700px){#mini-player{bottom:32px;}.mp-art{width:46px;height:46px;}.mp-main-row{height:46px;}.mp-title{font-size:0.65rem;}#mp-vol{width:42px;}}
 
+
+
+/* ── Mini Player ── */
+#mini-player{
+  position:fixed;
+  bottom:36px;         /* = social-bar height (PC) */
+  left:0;right:0;
+  z-index:400;
+  background:rgba(10,10,20,0.97);
+  backdrop-filter:blur(20px);
+  border-top:1px solid rgba(184,159,255,0.18);
+  display:none;
+  flex-direction:column;
+}
+#mini-player.mp-active{display:flex;}
+.mp-main-row{
+  display:flex;align-items:center;height:52px;
+}
+.mp-art{
+  width:52px;height:52px;flex-shrink:0;
+  background:#13132a;overflow:hidden;
+}
+.mp-art img{width:100%;height:100%;object-fit:cover;opacity:0.85;}
+.mp-info{
+  flex:1;min-width:0;padding:0 0.7rem;
+}
+.mp-title{
+  font-family:"Cinzel",serif;font-weight:400;font-size:0.72rem;
+  color:#ddd9e7;letter-spacing:0.05em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.mp-plat{
+  font-family:"Raleway",sans-serif;font-weight:300;font-style:italic;
+  font-size:0.55rem;letter-spacing:0.16em;color:rgba(221,217,231,0.4);
+  margin-top:0.1rem;
+}
+.mp-controls{
+  display:flex;align-items:center;padding-right:0.25rem;flex-shrink:0;
+}
+.mp-btn{
+  width:36px;height:52px;display:flex;align-items:center;justify-content:center;
+  background:none;border:none;cursor:pointer;
+  color:rgba(221,217,231,0.45);transition:color 0.2s;flex-shrink:0;
+}
+.mp-btn:hover{color:#ddd9e7;}
+.mp-btn svg{width:15px;height:15px;fill:currentColor;}
+#mp-play-btn{color:rgba(184,159,255,0.85);}
+#mp-play-btn:hover{color:#b89fff;}
+#mp-play-btn svg{width:18px;height:18px;}
+.mp-vol-wrap{
+  display:flex;align-items:center;gap:0.25rem;
+  padding:0 0.3rem;flex-shrink:0;
+}
+.mp-vol-icon{
+  font-size:0.72rem;color:rgba(221,217,231,0.4);
+  cursor:pointer;transition:color 0.2s;line-height:1;user-select:none;
+}
+.mp-vol-icon:hover{color:#ddd9e7;}
+#mp-vol{
+  -webkit-appearance:none;appearance:none;
+  width:54px;height:2px;
+  background-image:linear-gradient(90deg,rgba(184,159,255,0.75) var(--v,70%),rgba(221,217,231,0.15) var(--v,70%));
+  border:none;outline:none;cursor:pointer;
+}
+#mp-vol::-webkit-slider-thumb{
+  -webkit-appearance:none;width:10px;height:10px;
+  border-radius:50%;background:#b89fff;cursor:pointer;
+}
+#mp-vol::-moz-range-thumb{
+  width:10px;height:10px;border-radius:50%;
+  border:none;background:#b89fff;cursor:pointer;
+}
+#mp-close{
+  width:34px;height:52px;display:flex;align-items:center;justify-content:center;
+  background:none;border:none;cursor:pointer;
+  color:rgba(221,217,231,0.28);font-size:0.75rem;
+  transition:color 0.2s;flex-shrink:0;
+  border-left:1px solid rgba(184,159,255,0.08);
+}
+#mp-close:hover{color:rgba(221,217,231,0.75);}
+/* シークバー */
+.mp-seek-row{
+  display:flex;align-items:center;gap:0.45rem;
+  padding:0 0.55rem 5px;height:20px;
+}
+.mp-time{
+  font-family:"Raleway",sans-serif;font-weight:300;
+  font-size:0.5rem;letter-spacing:0.06em;
+  color:rgba(221,217,231,0.35);flex-shrink:0;
+  width:28px;text-align:center;
+}
+#mp-seek{
+  -webkit-appearance:none;appearance:none;
+  flex:1;height:3px;
+  background-image:linear-gradient(90deg,rgba(184,159,255,0.75) var(--s,0%),rgba(221,217,231,0.15) var(--s,0%));
+  border:none;outline:none;cursor:pointer;border-radius:2px;
+}
+#mp-seek::-webkit-slider-thumb{
+  -webkit-appearance:none;width:12px;height:12px;
+  border-radius:50%;background:#b89fff;cursor:pointer;
+  box-shadow:0 0 4px rgba(184,159,255,0.5);
+}
+#mp-seek::-moz-range-thumb{
+  width:12px;height:12px;border-radius:50%;
+  border:none;background:#b89fff;cursor:pointer;
+}
+/* 隠しiframe */
+#mp-iframe-wrap{
+  position:fixed;left:-9999px;top:-9999px;
+  width:1px;height:1px;overflow:hidden;pointer-events:none;
+}
+@media(max-width:700px){
+    /* = social-bar height (mobile) */
+  .mp-art{width:46px;height:46px;}
+  .mp-main-row{height:46px;}
+  .mp-title{font-size:0.65rem;}
+  #mp-vol{width:40px;}
+  .mp-seek-row{padding:0 0.4rem 4px;}
+}
 </style>
 <!-- Google Analytics (GA4) - IDをG-RVNXNJB2Q1に置き換えてください -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-RVNXNJB2Q1"></script>
@@ -913,20 +919,6 @@ body{ padding-bottom:36px; }
   LIKE_ID    : 英数字のみ（例: mysong）
   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-<div class="dc-card" data-date="YYYY/MM/DD" data-title="曲名(小文字)" data-year="YYYY" data-genre="GENRE" data-game="GAME">
-    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('YT_ID','DISPLAY','')" style="cursor:pointer" title="DISPLAY">
-        <img src="https://img.youtube.com/vi/YT_ID/mqdefault.jpg" alt="DISPLAY" loading="lazy">
-        <div class="dc-play"><span>▶</span></div>
-      </div></div>
-    <div class="dc-info">
-      <div class="dc-meta-row"><span class="dc-date">YYYY/MM/DD</span></div>
-      <h3 class="dc-title" title="DISPLAY">DISPLAY</h3>
-      <p class="dc-platform">PLATFORM</p>
-      <p class="dc-collab">COLLAB</p>
-      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('DISPLAY','YT_ID')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="LIKE_ID" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt"></span></button></div>
-    </div>
-  </div>
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
 <div class="dc-card" data-date="2026/06/06" data-title="subjugator" data-year="2026" data-genre="dubstep" data-game="">
     <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('W9nS0Wf_PlQ','Subjugator','')" style="cursor:pointer" title="Subjugator">
         <img src="https://img.youtube.com/vi/W9nS0Wf_PlQ/mqdefault.jpg" alt="Subjugator" loading="lazy">
@@ -1810,100 +1802,6 @@ window.addEventListener('load', initLikes);
 
 
 
-function mpTogglePlay() {
-  if (!MP.ytId) return;
-  var thumb=document.getElementById('mp-thumb');
-  var btn=document.getElementById('mp-play-btn');
-  if (!MP.inited) {
-    var vol=MP.muted?0:MP.vol;
-    var iframe=document.createElement('iframe');
-    iframe.src='https://www.youtube.com/embed/'+MP.ytId+'?autoplay=1&rel=0&modestbranding=1&enablejsapi=1&volume='+vol;
-    iframe.allow='accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture';
-    iframe.allowFullscreen=true;
-    iframe.style.cssText='position:absolute;inset:0;width:100%;height:100%;border:none;pointer-events:none;';
-    thumb.innerHTML=''; thumb.appendChild(iframe);
-    MP.iframe=iframe; MP.playing=true; MP.inited=true;
-    btn.textContent='⏸';
-  } else {
-    var cmd=MP.playing?'pauseVideo':'playVideo';
-    if(MP.iframe&&MP.iframe.contentWindow)
-      MP.iframe.contentWindow.postMessage(JSON.stringify({event:'command',func:cmd,args:''}),'*');
-    MP.playing=!MP.playing;
-    btn.textContent=MP.playing?'⏸':'▶';
-  }
-}
-
-function mpSetVolume(val) {
-  MP.vol=parseInt(val);
-  var icon=document.getElementById('mp-vol-icon');
-  icon.textContent=MP.vol===0?'🔇':MP.vol<40?'🔉':'🔊';
-  var el=document.getElementById('mp-vol');
-  if(el) el.style.setProperty('--v', MP.vol+'%');
-  if(MP.iframe&&MP.iframe.contentWindow)
-    MP.iframe.contentWindow.postMessage(JSON.stringify({event:'command',func:'setVolume',args:[MP.vol]}),'*');
-}
-
-function mpToggleMute() {
-  MP.muted=!MP.muted;
-  var icon=document.getElementById('mp-vol-icon');
-  var el=document.getElementById('mp-vol');
-  if(MP.muted){
-    icon.textContent='🔇';
-    if(MP.iframe&&MP.iframe.contentWindow)
-      MP.iframe.contentWindow.postMessage(JSON.stringify({event:'command',func:'mute',args:''}),'*');
-  } else {
-    icon.textContent=MP.vol<40?'🔉':'🔊';
-    if(MP.iframe&&MP.iframe.contentWindow)
-      MP.iframe.contentWindow.postMessage(JSON.stringify({event:'command',func:'unMute',args:''}),'*');
-  }
-}
-
-function mpOpenYT() {
-  if(MP.ytId) window.open('https://www.youtube.com/watch?v='+MP.ytId,'_blank');
-}
-
-function mpClose() {
-  var p=document.getElementById('mini-player');
-  var thumb=document.getElementById('mp-thumb');
-  /* iframeを完全に破棄してから非表示 */
-  if(thumb){ thumb.innerHTML=''; }
-  if(MP.iframe){ try{ MP.iframe.src='about:blank'; }catch(e){} MP.iframe=null; }
-  MP.ytId=null; MP.playing=false; MP.inited=false;
-  if(p){ p.classList.remove('mp-active'); }
-}
-
-/* ── Like (localStorage) ── */
-var LIKES = (function(){ try{ return JSON.parse(localStorage.getItem('cs4w_likes')||'{}'); }catch(e){ return {}; } })();
-function saveLikes(){ try{ localStorage.setItem('cs4w_likes',JSON.stringify(LIKES)); }catch(e){} }
-function initLikes(){
-  document.querySelectorAll('.like-btn').forEach(function(btn){
-    var id=btn.dataset.id;
-    var cnt=LIKES[id]||0;
-    btn.querySelector('.lcnt').textContent=cnt>0?cnt:'';
-    if(LIKES[id+'_v']) btn.classList.add('liked');
-    btn.querySelector('.lheart').textContent=LIKES[id+'_v']?'♥':'♡';
-  });
-}
-function toggleLike(btn){
-  var id=btn.dataset.id;
-  if(LIKES[id+'_v']){
-    LIKES[id]=Math.max(0,(LIKES[id]||1)-1);
-    delete LIKES[id+'_v'];
-    btn.classList.remove('liked');
-    btn.querySelector('.lheart').textContent='♡';
-  } else {
-    LIKES[id]=(LIKES[id]||0)+1;
-    LIKES[id+'_v']=true;
-    btn.classList.add('liked');
-    btn.querySelector('.lheart').textContent='♥';
-  }
-  var cnt=LIKES[id]||0;
-  btn.querySelector('.lcnt').textContent=cnt>0?cnt:'';
-  saveLikes();
-}
-window.addEventListener('load',initLikes);
-
-/* ── Share ── */
 function shareTrack(title, ytId){
   var url='https://www.youtube.com/watch?v='+ytId;
   var tw='https://twitter.com/intent/tweet?text='+encodeURIComponent('CS4W - '+title)+'&url='+encodeURIComponent(url)+'&hashtags=CS4W';
@@ -1912,21 +1810,27 @@ function shareTrack(title, ytId){
 
 /* ── Mini Player ── */
 var MP={ytId:null,title:'',plat:'',playing:false,inited:false,muted:false,vol:70,iframe:null,dur:0,seekTimer:null};
+
+var MP_PLAY_SVG  = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+var MP_PAUSE_SVG = '<svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
+
 function mpFmt(s){s=Math.floor(s||0);return Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60;}
-function mpPostMsg(fn,args){if(MP.iframe&&MP.iframe.contentWindow)MP.iframe.contentWindow.postMessage(JSON.stringify({event:'command',func:fn,args:args||''}),'*');}
+
 function mpOpen(ytId,title,plat){
   MP.ytId=ytId;MP.title=title;MP.plat=plat||'';
   MP.playing=false;MP.inited=false;MP.dur=0;
   clearInterval(MP.seekTimer);
   document.getElementById('mp-title').textContent=title;
   document.getElementById('mp-plat').textContent=plat||'';
-  document.getElementById('mp-play-btn').textContent='▶';
+  document.getElementById('mp-play-btn').innerHTML=MP_PLAY_SVG;
   document.getElementById('mp-cur').textContent='0:00';
   document.getElementById('mp-dur').textContent='0:00';
-  var sk=document.getElementById('mp-seek');sk.value=0;sk.style.setProperty('--s','0%');
-  document.getElementById('mp-art').innerHTML='<img src="https://img.youtube.com/vi/'+ytId+'/mqdefault.jpg" alt="'+title+'">';
+  var sk=document.getElementById('mp-seek');
+  sk.value=0;sk.style.setProperty('--s','0%');
+  document.getElementById('mp-art').innerHTML='<img src="https://img.youtube.com/vi/'+ytId+'/mqdefault.jpg" alt="'+title.replace(/"/g,\'\')+'"> ';
   document.getElementById('mini-player').classList.add('mp-active');
 }
+
 function mpTogglePlay(){
   if(!MP.ytId)return;
   var btn=document.getElementById('mp-play-btn');
@@ -1934,58 +1838,143 @@ function mpTogglePlay(){
     var slot=document.getElementById('mp-iframe-slot');
     slot.innerHTML='';
     var iframe=document.createElement('iframe');
-    iframe.src='https://www.youtube.com/embed/'+MP.ytId+'?autoplay=1&rel=0&enablejsapi=1&origin='+encodeURIComponent(location.origin);
+    // enablejsapi=1 でIFrame APIを有効化
+    // origin を設定してpostMessageを許可
+    iframe.src='https://www.youtube.com/embed/'+MP.ytId+
+      '?autoplay=1&rel=0&enablejsapi=1&origin='+encodeURIComponent(location.origin||'https://cs4w.net');
     iframe.allow='accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture';
-    iframe.width='1';iframe.height='1';iframe.style.border='none';
+    iframe.width='1';iframe.height='1';iframe.style.cssText='border:none;';
     slot.appendChild(iframe);
-    MP.iframe=iframe;MP.playing=true;MP.inited=true;btn.textContent='⏸';
-    MP.seekTimer=setInterval(function(){mpPostMsg('getDuration',[]);mpPostMsg('getCurrentTime',[]);},800);
-  }else{
-    mpPostMsg(MP.playing?'pauseVideo':'playVideo');
-    MP.playing=!MP.playing;btn.textContent=MP.playing?'⏸':'▶';
+    MP.iframe=iframe;MP.playing=true;MP.inited=true;
+    btn.innerHTML=MP_PAUSE_SVG;
+    // YT IFrame APIのonReadyを待ってから定期取得
+    setTimeout(function(){
+      MP.seekTimer=setInterval(mpPollTime, 500);
+    }, 2000);
+  } else {
+    if(MP.playing){
+      mpSendCmd('pauseVideo');
+      MP.playing=false;
+      btn.innerHTML=MP_PLAY_SVG;
+    } else {
+      mpSendCmd('playVideo');
+      MP.playing=true;
+      btn.innerHTML=MP_PAUSE_SVG;
+    }
   }
 }
-window.addEventListener('message',function(e){
-  if(!e.data)return;
-  var data;try{data=JSON.parse(e.data);}catch(err){return;}
-  if(data.event==='infoDelivery'&&data.info){
+
+function mpSendCmd(func, args){
+  if(MP.iframe&&MP.iframe.contentWindow){
+    MP.iframe.contentWindow.postMessage(
+      JSON.stringify({event:'command',func:func,args:args||[]}),
+      '*'
+    );
+  }
+}
+
+function mpPollTime(){
+  // YouTube IFrame API の時間取得は postMessage ではなく
+  // iframe.contentWindow.YT経由が理想だが
+  // クロスオリジンのためYT.Player オブジェクトを使う
+  if(!MP.iframe) return;
+  // YT Player API経由で時間取得
+  try{
+    var win = MP.iframe.contentWindow;
+    // getCurrentTime / getDuration をpostMessageで要求
+    win.postMessage(JSON.stringify({event:'listening'}),'*');
+    win.postMessage(JSON.stringify({event:'command',func:'getCurrentTime',args:[]}),'*');
+  }catch(e){}
+}
+
+// YouTube IFrame からの応答を受信
+window.addEventListener('message', function(e){
+  if(!e.data) return;
+  var data;
+  try{ data = typeof e.data==='string' ? JSON.parse(e.data) : e.data; }
+  catch(err){ return; }
+
+  // YT IFrame API の応答形式
+  if(data.event === 'onStateChange'){
+    if(data.info === 0){ // ended
+      MP.playing=false;
+      var btn=document.getElementById('mp-play-btn');
+      if(btn) btn.innerHTML=MP_PLAY_SVG;
+    }
+    if(data.info === 1){ // playing
+      MP.playing=true;
+      var btn=document.getElementById('mp-play-btn');
+      if(btn) btn.innerHTML=MP_PAUSE_SVG;
+    }
+    if(data.info === 2){ // paused
+      MP.playing=false;
+      var btn=document.getElementById('mp-play-btn');
+      if(btn) btn.innerHTML=MP_PLAY_SVG;
+    }
+  }
+  if(data.event === 'infoDelivery' && data.info){
     var info=data.info;
-    if(info.duration)MP.dur=info.duration;
-    if(info.currentTime!=null&&MP.dur>0){
+    if(info.duration && info.duration > 0) MP.dur=info.duration;
+    if(info.currentTime != null && MP.dur > 0){
       var pct=(info.currentTime/MP.dur)*100;
       var sk=document.getElementById('mp-seek');
-      if(sk&&!sk.matches(':active')){sk.value=pct;sk.style.setProperty('--s',pct.toFixed(1)+'%');}
+      if(sk && !mpSeekDragging){
+        sk.value=pct;
+        sk.style.setProperty('--s',pct.toFixed(1)+'%');
+      }
       document.getElementById('mp-cur').textContent=mpFmt(info.currentTime);
       document.getElementById('mp-dur').textContent=mpFmt(MP.dur);
     }
-    if(info.playerState===0){MP.playing=false;document.getElementById('mp-play-btn').textContent='▶';}
-    if(info.playerState===1)MP.playing=true;
   }
 });
+
+// シークバーのドラッグ中は更新しない
+var mpSeekDragging = false;
+(function(){
+  var sk = document.getElementById('mp-seek');
+  if(!sk) return;
+  sk.addEventListener('mousedown', function(){ mpSeekDragging=true; });
+  sk.addEventListener('touchstart', function(){ mpSeekDragging=true; },{passive:true});
+  sk.addEventListener('mouseup', function(){ mpSeekDragging=false; });
+  sk.addEventListener('touchend', function(){ mpSeekDragging=false; },{passive:true});
+})();
+
 function mpSeek(val){
   var pct=parseFloat(val);
   document.getElementById('mp-seek').style.setProperty('--s',pct.toFixed(1)+'%');
-  if(MP.iframe&&MP.dur>0)mpPostMsg('seekTo',[(pct/100)*MP.dur,true]);
+  if(MP.dur>0){
+    var sec=(pct/100)*MP.dur;
+    mpSendCmd('seekTo',[sec,true]);
+  }
 }
+
 function mpSetVolume(val){
   MP.vol=parseInt(val);
-  document.getElementById('mp-vol-icon').textContent=MP.vol===0?'🔇':MP.vol<40?'🔉':'🔊';
+  var icon=document.getElementById('mp-vol-icon');
+  if(icon) icon.textContent=MP.vol===0?'🔇':MP.vol<40?'🔉':'🔊';
   document.getElementById('mp-vol').style.setProperty('--v',MP.vol+'%');
-  mpPostMsg('setVolume',[MP.vol]);
+  mpSendCmd('setVolume',[MP.vol]);
 }
+
 function mpToggleMute(){
   MP.muted=!MP.muted;
-  document.getElementById('mp-vol-icon').textContent=MP.muted?'🔇':MP.vol<40?'🔉':'🔊';
-  mpPostMsg(MP.muted?'mute':'unMute');
+  var icon=document.getElementById('mp-vol-icon');
+  if(icon) icon.textContent=MP.muted?'🔇':MP.vol<40?'🔉':'🔊';
+  mpSendCmd(MP.muted?'mute':'unMute',[]);
 }
-function mpOpenYT(){if(MP.ytId)window.open('https://www.youtube.com/watch?v='+MP.ytId,'_blank');}
+
+function mpOpenYT(){
+  if(MP.ytId) window.open('https://www.youtube.com/watch?v='+MP.ytId,'_blank');
+}
+
 function mpClose(){
-  clearInterval(MP.seekTimer);
+  clearInterval(MP.seekTimer);MP.seekTimer=null;
   var slot=document.getElementById('mp-iframe-slot');
-  if(slot)slot.innerHTML='';
-  if(MP.iframe){try{MP.iframe.src='about:blank';}catch(e){}MP.iframe=null;}
+  if(slot) slot.innerHTML='';
+  if(MP.iframe){ try{MP.iframe.src='about:blank';}catch(ex){} MP.iframe=null; }
   MP.ytId=null;MP.playing=false;MP.inited=false;MP.dur=0;
-  document.getElementById('mini-player').classList.remove('mp-active');
+  var p=document.getElementById('mini-player');
+  if(p) p.classList.remove('mp-active');
 }
 
 </script>
@@ -2030,6 +2019,32 @@ function mpClose(){
 <div id="mini-player">
   <div class="mp-main-row">
     <div class="mp-art" id="mp-art"></div>
+    <div class="mp-info">
+      <div class="mp-title" id="mp-title">—</div>
+      <div class="mp-plat"  id="mp-plat"></div>
+    </div>
+    <div class="mp-controls">
+      <button class="mp-btn" id="mp-play-btn" onclick="mpTogglePlay()" aria-label="再生/停止">
+        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      </button>
+      <button class="mp-btn" onclick="mpOpenYT()" aria-label="YouTubeで開く" title="YouTubeで開く">
+        <svg viewBox="0 0 24 24"><path d="M10 6v2H5v11h11v-5h2v7H3V6h7zm11-3v8h-2V6.413l-7.793 7.794-1.414-1.414L17.585 5H13V3h8z"/></svg>
+      </button>
+    </div>
+    <div class="mp-vol-wrap">
+      <span class="mp-vol-icon" id="mp-vol-icon" onclick="mpToggleMute()">🔊</span>
+      <input type="range" id="mp-vol" min="0" max="100" value="70"
+             oninput="mpSetVolume(this.value)" aria-label="音量">
+    </div>
+    <button id="mp-close" onclick="mpClose()" aria-label="閉じる">✕</button>
+  </div>
+  <div class="mp-seek-row">
+    <span class="mp-time" id="mp-cur">0:00</span>
+    <input type="range" id="mp-seek" min="0" max="100" value="0" step="0.1"
+           oninput="mpSeek(this.value)" aria-label="シーク">
+    <span class="mp-time" id="mp-dur">0:00</span>
+  </div>
+</div>
     <div class="mp-info">
       <div class="mp-title" id="mp-title">—</div>
       <div class="mp-plat"  id="mp-plat"></div>
