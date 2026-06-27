@@ -1285,10 +1285,6 @@ function toggleLike(btn){
   });
 }
 
-window.addEventListener('load', initLikes);
-
-
-
 function trackURL(ytId){
   var url=new URL(location.href);
   url.searchParams.set('track',ytId);
@@ -1309,7 +1305,7 @@ function mpOpenTrack(ytId){
 }
 
 /* ── Mini Player ── */
-var MP={ytId:null,title:'',plat:'',playing:false,inited:false,muted:false,vol:70,iframe:null,player:null,playerReady:false,pendingStart:false,dur:0,seekTimer:null,mode:localStorage.getItem('cs4w_play_mode')==='shuffle'?'shuffle':'sequence',endedHandled:false};
+var MP={ytId:null,title:'',plat:'',playing:false,inited:false,muted:false,vol:70,iframe:null,player:null,playerReady:false,pendingStart:false,dur:0,seekTimer:null,mode:localStorage.getItem('cs4w_play_mode')==='shuffle'?'shuffle':'sequence',endedHandled:false,history:[],historyIndex:-1,historyNavigating:false};
 
 var MP_PLAY_SVG  = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
 var MP_PAUSE_SVG = '<svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
@@ -1377,8 +1373,35 @@ function mpMove(direction){
   mpOpenTrack(nextId);
 }
 
-function mpNext(){mpMove(1);}
-function mpPrevious(){mpMove(-1);}
+function mpRecordHistory(ytId){
+  if(MP.history[MP.historyIndex]===ytId)return;
+  MP.history=MP.history.slice(0,MP.historyIndex+1);
+  MP.history.push(ytId);
+  if(MP.history.length>100)MP.history.shift();
+  MP.historyIndex=MP.history.length-1;
+}
+
+function mpOpenHistory(index){
+  if(index<0||index>=MP.history.length)return false;
+  MP.historyIndex=index;
+  MP.historyNavigating=true;
+  mpOpenTrack(MP.history[index]);
+  return true;
+}
+
+function mpNext(){
+  if(MP.mode==='shuffle'&&MP.historyIndex<MP.history.length-1&&mpOpenHistory(MP.historyIndex+1))return;
+  mpMove(1);
+}
+
+function mpPrevious(){
+  if(MP.mode==='shuffle'){
+    if(MP.historyIndex>0)mpOpenHistory(MP.historyIndex-1);
+    else if(MP.playerReady){MP.player.seekTo(0,true);MP.player.playVideo();}
+    return;
+  }
+  mpMove(-1);
+}
 
 function mpHandleEnded(){
   if(MP.endedHandled)return;
@@ -1388,6 +1411,8 @@ function mpHandleEnded(){
 
 function mpOpen(ytId,title,plat){
   if(!MP||!ytId)return;
+  if(MP.historyNavigating)MP.historyNavigating=false;
+  else mpRecordHistory(ytId);
   MP.ytId=ytId;MP.title=title;MP.plat=plat||'';
   MP.playing=false;MP.inited=false;MP.dur=0;MP.endedHandled=false;
   clearInterval(MP.seekTimer);MP.seekTimer=null;
@@ -1648,6 +1673,7 @@ function mpClose(){
   MP.pendingStart=false;
   if(MP.playerReady){ try{MP.player.stopVideo();}catch(ex){} }
   MP.ytId=null;MP.playing=false;MP.inited=false;MP.dur=0;
+  MP.history=[];MP.historyIndex=-1;MP.historyNavigating=false;
   mpUpdateCardState();
   var p=document.getElementById('mini-player');
   if(p) p.classList.remove('mp-active');
@@ -1662,12 +1688,13 @@ function openTrackFromURL(){
   if(!track)return;
   var card=mpTrackCard(ytId);
   if(card&&card.style.display==='none'){
-    document.getElementById('searchBox').value='';
-    document.getElementById('genreFilter').value='';
-    document.getElementById('gameFilter').value='';
-    favoriteOnly=false;
-    updateFavoriteFilterButton();
-    rerender();
+    card.style.display='';
+    card.dataset.directVisible='true';
+    var noResults=document.getElementById('noResults');
+    if(noResults&&noResults.parentNode)noResults.parentNode.removeChild(noResults);
+    var visibleCount=Array.from(document.querySelectorAll('#dcGrid > .dc-card')).filter(function(item){return item.style.display!=='none';}).length;
+    var badge=document.getElementById('countBadge');
+    if(badge)badge.innerHTML='<em>'+visibleCount+'</em> / '+TRACKS.length+' 曲';
   }
   mpOpenTrack(ytId);
   card=mpTrackCard(ytId);
