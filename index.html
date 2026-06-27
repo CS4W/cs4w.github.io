@@ -2232,11 +2232,9 @@ function nrPlay(ytId) {
   // ── フォールバック用既知動画（全プロキシ失敗時に表示）
   var FALLBACK = [{"id": "W9nS0Wf_PlQ", "title": "CS4W - Subjugator", "date": "2026/06/06"}, {"id": "yRK1A5yOMJ0", "title": "CS4W - Collapse", "date": "2026/05/25"}, {"id": "RgydPti-jLY", "title": "CS4W - Synthesized Moon-ray", "date": "2026/04/26"}, {"id": "GIUuHVgcSjw", "title": "CS4W - BACKALLEY", "date": "2026/04/26"}];
 
-  // ── CORSプロキシリスト（速い順）
+  // ── 自前Cloudflare Worker（安定版）
   var PROXIES = [
-    { url: 'https://api.allorigins.win/get?url=',       json: true  },
-    { url: 'https://corsproxy.io/?',                    json: false },
-    { url: 'https://api.codetabs.com/v1/proxy?quest=', json: false },
+    { url: 'https://cs4w-rss-proxy.yusuke-7328.workers.dev/', json: false, direct: true },
   ];
 
   var player = document.getElementById('nr-player');
@@ -2276,8 +2274,8 @@ function nrPlay(ytId) {
 
   // ── 1プロキシから XML文字列を取得
   function fetchProxy(proxy, targetUrl){
-    var url = proxy.url + encodeURIComponent(targetUrl);
-    return fetchT(url, 4000)
+    var url = proxy.direct ? proxy.url : proxy.url + encodeURIComponent(targetUrl);
+    return fetchT(url, 6000)
       .then(function(r){ return r.text(); })
       .then(function(text){
         if(proxy.json){
