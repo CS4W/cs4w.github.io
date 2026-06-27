@@ -45,12 +45,12 @@ body{background:var(--bg);color:var(--ghost);font-family:"Shippori Mincho",serif
 .bg-video-wrap::after{content:"";position:absolute;inset:0;background:rgba(15,15,28,0.65);}
 
 /* ── NAV ── */
-nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;align-items:center;justify-content:space-between;padding:1.1rem 3.5rem;background:rgba(15,15,28,0.88);backdrop-filter:blur(24px);border-bottom:1px solid var(--line);}
+nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;align-items:stretch;justify-content:space-between;padding:0 3.5rem;background:rgba(15,15,28,0.88);backdrop-filter:blur(24px);border-bottom:1px solid var(--line);}
 nav::after{content:"";position:absolute;bottom:-3px;left:3.5rem;right:3.5rem;height:1px;background:linear-gradient(90deg,transparent,rgba(77,232,194,0.2) 40%,rgba(184,159,255,0.16) 60%,transparent);}
-.logo{font-family:"Cinzel",serif;font-weight:600;font-size:1.25rem;letter-spacing:0.2em;color:var(--ghost);text-decoration:none;display:flex;align-items:center;gap:0.4rem;}
+.logo{align-self:center;font-family:"Cinzel",serif;font-weight:600;font-size:1.25rem;letter-spacing:0.2em;color:var(--ghost);text-decoration:none;display:flex;align-items:center;gap:0.4rem;}
 .logo-cross{color:var(--violet);font-size:0.8rem;font-family:"Raleway",sans-serif;font-weight:300;}
-.nav-links{display:flex;gap:2rem;list-style:none;}
-.nav-links a{font-family:"Raleway",sans-serif;font-weight:300;font-size:0.7rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.3s;position:relative;}
+.nav-links{display:flex;gap:2rem;list-style:none;align-self:stretch;align-items:stretch;}
+.nav-links a{font-family:"Raleway",sans-serif;font-weight:300;font-size:0.7rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.3s;position:relative;display:flex;align-items:center;padding:1.1rem 0.5rem;}
 .nav-links a::after{content:"";position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--teal);transition:width 0.35s;}
 .nav-links a:hover,.nav-active{color:var(--ghost)!important;}
 .nav-links a.nav-active::after,.nav-links a:hover::after{width:100%;}
@@ -60,16 +60,16 @@ nav::after{content:"";position:absolute;bottom:-3px;left:3.5rem;right:3.5rem;hei
 .reveal.visible{opacity:1;transform:translateY(0);}
 
 /* ── PAGE HEADER ── */
-.page-header{position:relative;z-index:1;padding:100px 3.5rem 32px;max-width:1300px;margin:0 auto;}
-.ph-eyebrow{font-family:"Raleway",sans-serif;font-weight:300;font-style:italic;font-size:0.64rem;letter-spacing:0.52em;color:var(--violet);text-transform:uppercase;display:flex;align-items:center;gap:0.55rem;margin-bottom:0.5rem;}
+.page-header{position:relative;z-index:1;padding:80px 3.5rem 1rem;max-width:1300px;margin:0 auto;}
+.ph-eyebrow{font-family:"Raleway",sans-serif;font-weight:300;font-style:italic;font-size:0.64rem;letter-spacing:0.52em;color:var(--violet);text-transform:uppercase;display:flex;align-items:center;gap:0.55rem;margin-bottom:0.3rem;}
 .ph-eyebrow::before{content:"✦";font-size:0.5rem;}
-.ph-h1{font-family:"Cinzel",serif;font-weight:600;font-size:clamp(1.8rem,3.5vw,3.2rem);letter-spacing:0.1em;color:var(--ghost);margin-bottom:0.35rem;}
-.ph-sub{font-family:"Shippori Mincho",serif;font-size:0.8rem;letter-spacing:0.42em;color:var(--muted);margin-bottom:1.2rem;}
-.ph-count{font-family:"Raleway",sans-serif;font-weight:300;font-size:0.66rem;letter-spacing:0.2em;color:var(--muted);}
+.ph-h1{font-family:"Cinzel",serif;font-weight:600;font-size:clamp(1.8rem,3.5vw,3.2rem);letter-spacing:0.1em;color:var(--ghost);margin-bottom:0.2rem;}
+.ph-sub{font-family:"Shippori Mincho",serif;font-size:0.8rem;letter-spacing:0.42em;color:var(--muted);margin:0;}
+.ph-count{font-family:"Raleway",sans-serif;font-weight:300;font-size:0.66rem;letter-spacing:0.2em;color:var(--muted);margin-bottom:0;}
 .ph-count em{color:var(--violet);font-style:normal;}
 
 /* ── CTRL BAR ── */
-.ctrl-bar{position:sticky;top:62px;z-index:200;background:rgba(15,15,28,0.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:0.7rem 3.5rem;display:flex;align-items:center;gap:0.7rem;flex-wrap:wrap;}
+.ctrl-bar{position:sticky;top:62px;z-index:200;transition:top 0.3s ease;background:rgba(15,15,28,0.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:0.7rem 3.5rem;display:flex;align-items:center;gap:0.7rem;flex-wrap:wrap;}
 .sort-btn{font-family:"Raleway",sans-serif;font-weight:300;font-style:italic;font-size:0.64rem;letter-spacing:0.18em;text-transform:uppercase;padding:0.3rem 0.85rem;border:1px solid var(--line);color:var(--muted);background:transparent;cursor:pointer;transition:all 0.25s;white-space:nowrap;}
 .sort-btn:hover,.sort-btn.active{border-color:var(--violet);color:var(--violet);background:rgba(184,159,255,0.06);}
 .favorite-filter-btn{display:flex;align-items:center;gap:0.35rem;}
@@ -251,6 +251,7 @@ footer{position:relative;z-index:1;padding-bottom:calc(1.5rem + 36px);padding:1.
 /* ナビシュリンク */
 nav{transition:padding 0.3s ease,background 0.3s ease,box-shadow 0.3s ease;}
 nav.scrolled{padding-top:0.7rem;padding-bottom:0.7rem;background:rgba(10,10,20,0.97);box-shadow:0 2px 20px rgba(0,0,0,0.45);}
+body:has(nav.scrolled) .ctrl-bar{top:50px;}
 
 /* ナビアクティブ */
 .nav-links a.section-active{color:var(--ghost)!important;}
@@ -313,7 +314,7 @@ img{background:rgba(184,159,255,0.05);}
   body{font-size:16px;-webkit-text-size-adjust:100%;}
   /* セクションパディング縮小 */
   .sec-pad{padding:72px 1.2rem 60px!important;}
-  .page-header{padding:84px 1.2rem 24px!important;}
+  .page-header{padding:70px 1.2rem 0!important;}
   .ab-wrap{padding:84px 1.2rem 60px!important;}
   .ct-wrap{padding:84px 1.2rem 60px!important;}
   /* ヒーローパディング */
@@ -1019,13 +1020,12 @@ body{ padding-bottom:36px; }
   </a>
 </div>
 
+
 <div class="page-header">
   <p class="ph-eyebrow reveal">Discography</p>
-  <h1 class="ph-h1 reveal" style="--delay:70ms">全楽曲リスト</h1>
-  <p class="ph-sub reveal" style="--delay:120ms">Complete Works — 2020–2026</p>
-  <p class="ph-count reveal" style="--delay:160ms">Total <em>47</em> tracks</p>
+  <h1 class="ph-h1 reveal" style="--delay:70ms">楽曲一覧</h1>
+  <p class="ph-sub reveal" style="--delay:120ms">All Tracks</p>
 </div>
-
 <div class="ctrl-bar">
   <button class="sort-btn active" data-sort="desc" onclick="setSort('desc',this)">新しい順</button>
   <button class="sort-btn" data-sort="asc" onclick="setSort('asc',this)">古い順</button>
