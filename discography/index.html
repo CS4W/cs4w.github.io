@@ -975,7 +975,8 @@ document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
 /* ── Track data / Sort / Search ── */
 var TRACKS=Array.isArray(window.CS4W_TRACKS)?window.CS4W_TRACKS:[];
 TRACKS.forEach(function(track,index){track.sourceIndex=index;});
-var LIKES=JSON.parse(localStorage.getItem('cs4w_likes')||'{}');
+var LIKES=JSON.parse(localStorage.getItem('cs4w_likes')||'{}'); // ローカル（自分がいいねしたか判定用）
+var LIKES_COUNTS={}; // サーバー側の合計いいね数
 var UI_STATE_KEY='cs4w_discography_state';
 var savedUIState={};
 try{savedUIState=JSON.parse(localStorage.getItem(UI_STATE_KEY)||'{}');}catch(ex){}
@@ -1217,31 +1218,74 @@ if('serviceWorker' in navigator){
 }
 
 
-/* ── Like (localStorage) ── */
+/* ── Like (共有いいね: Cloudflare KV) ── */
+var WORKER_LIKES_URL = 'https://cs4w-rss-proxy.yusuke-7328.workers.dev/likes';
+
 function saveLikes(){ localStorage.setItem('cs4w_likes', JSON.stringify(LIKES)); }
+
+// サーバーからいいね数を取得してボタンに反映
 function initLikes(){
+  // まず手元のlocalStorageで「自分がいいねしたか」だけ反映
   document.querySelectorAll('.like-btn').forEach(function(btn){
     var id = btn.dataset.id;
-    var cnt = LIKES[id] || 0;
-    btn.querySelector('.lcnt').textContent = cnt;
     if(LIKES[id+'_voted']) btn.classList.add('liked');
+    btn.querySelector('.lcnt').textContent = '…';
   });
+  // サーバーから合計数を取得
+  fetch(WORKER_LIKES_URL + '/get')
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      LIKES_COUNTS = data;
+      document.querySelectorAll('.like-btn').forEach(function(btn){
+        var id = btn.dataset.id;
+        btn.querySelector('.lcnt').textContent = data[id] || 0;
+      });
+    })
+    .catch(function(){
+      // 失敗時はローカルの数を表示
+      document.querySelectorAll('.like-btn').forEach(function(btn){
+        var id = btn.dataset.id;
+        btn.querySelector('.lcnt').textContent = LIKES[id] || 0;
+      });
+    });
 }
+
 function toggleLike(btn){
   var id = btn.dataset.id;
-  if(LIKES[id+'_voted']){
-    LIKES[id] = Math.max(0,(LIKES[id]||1)-1);
+  var voted = !!LIKES[id+'_voted'];
+  var action = voted ? 'remove' : 'add';
+
+  // UIを即反映（楽観的更新）
+  if(voted){
     delete LIKES[id+'_voted'];
     btn.classList.remove('liked');
+    LIKES_COUNTS[id] = Math.max(0, (LIKES_COUNTS[id]||1) - 1);
   } else {
-    LIKES[id] = (LIKES[id]||0)+1;
     LIKES[id+'_voted'] = true;
     btn.classList.add('liked');
+    LIKES_COUNTS[id] = (LIKES_COUNTS[id]||0) + 1;
   }
-  btn.querySelector('.lcnt').textContent = LIKES[id]||0;
+  btn.querySelector('.lcnt').textContent = LIKES_COUNTS[id] || 0;
   saveLikes();
-  if(favoriteOnly)rerender();
+  if(favoriteOnly) rerender();
+
+  // サーバーに送信
+  fetch(WORKER_LIKES_URL + '/toggle', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ id: id, action: action })
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(data){
+    // サーバーの正確な数で上書き
+    LIKES_COUNTS[id] = data.count;
+    btn.querySelector('.lcnt').textContent = data.count;
+  })
+  .catch(function(){
+    // 通信失敗してもUIはそのまま
+  });
 }
+
 window.addEventListener('load', initLikes);
 
 
