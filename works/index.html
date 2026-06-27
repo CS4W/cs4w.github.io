@@ -39,25 +39,25 @@ body{background:var(--bg);color:var(--ghost);font-family:"Shippori Mincho",serif
 .bg-video-wrap{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
 .bg-video-wrap video{width:100%;height:100%;object-fit:cover;opacity:0.15;filter:brightness(0.5) saturate(0.6);}
 .bg-video-wrap::after{content:"";position:absolute;inset:0;background:rgba(15,15,28,0.65);}
-nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;align-items:center;justify-content:space-between;padding:1.1rem 3.5rem;background:rgba(15,15,28,0.88);backdrop-filter:blur(24px);border-bottom:1px solid var(--line);}
+nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;align-items:stretch;justify-content:space-between;padding:0 3.5rem;background:rgba(15,15,28,0.88);backdrop-filter:blur(24px);border-bottom:1px solid var(--line);}
 nav::after{content:"";position:absolute;bottom:-3px;left:3.5rem;right:3.5rem;height:1px;background:linear-gradient(90deg,transparent,rgba(77,232,194,0.2) 40%,rgba(184,159,255,0.16) 60%,transparent);}
-.logo{font-family:"Cinzel",serif;font-weight:600;font-size:1.25rem;letter-spacing:0.2em;color:var(--ghost);text-decoration:none;display:flex;align-items:center;gap:0.4rem;}
+.logo{align-self:center;font-family:"Cinzel",serif;font-weight:600;font-size:1.25rem;letter-spacing:0.2em;color:var(--ghost);text-decoration:none;display:flex;align-items:center;gap:0.4rem;}
 .logo-cross{color:var(--violet);font-size:0.8rem;font-family:"Raleway",sans-serif;font-weight:300;}
-.nav-links{display:flex;gap:2rem;list-style:none;}
-.nav-links a{font-family:"Raleway",sans-serif;font-weight:300;font-size:0.7rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.3s;position:relative;}
+.nav-links{display:flex;gap:2rem;list-style:none;align-self:stretch;align-items:stretch;}
+.nav-links a{font-family:"Raleway",sans-serif;font-weight:300;font-size:0.7rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.3s;position:relative;display:flex;align-items:center;padding:1.1rem 0.5rem;}
 .nav-links a::after{content:"";position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--teal);transition:width 0.35s;}
 .nav-links a:hover,.nav-active{color:var(--ghost)!important;}
 .nav-links a.nav-active::after,.nav-links a:hover::after{width:100%;}
 .reveal{opacity:0;transform:translateY(20px);transition:opacity 0.8s cubic-bezier(.22,1,.36,1),transform 0.8s cubic-bezier(.22,1,.36,1);transition-delay:var(--delay,0ms);}
 .reveal.visible{opacity:1;transform:translateY(0);}
-.page-header{position:relative;z-index:1;padding:100px 3.5rem 32px;max-width:1300px;margin:0 auto;}
-.ph-eyebrow{font-family:"Raleway",sans-serif;font-weight:300;font-style:italic;font-size:0.64rem;letter-spacing:0.52em;color:var(--violet);text-transform:uppercase;display:flex;align-items:center;gap:0.55rem;margin-bottom:0.5rem;}
+.page-header{position:relative;z-index:1;padding:80px 3.5rem 1rem;max-width:1300px;margin:0 auto;}
+.ph-eyebrow{font-family:"Raleway",sans-serif;font-weight:300;font-style:italic;font-size:0.64rem;letter-spacing:0.52em;color:var(--violet);text-transform:uppercase;display:flex;align-items:center;gap:0.55rem;margin-bottom:0.3rem;}
 .ph-eyebrow::before{content:"✦";font-size:0.5rem;}
-.ph-h1{font-family:"Cinzel",serif;font-weight:600;font-size:clamp(1.8rem,3.5vw,3.2rem);letter-spacing:0.1em;color:var(--ghost);margin-bottom:0.35rem;}
-.ph-sub{font-family:"Shippori Mincho",serif;font-size:0.8rem;letter-spacing:0.42em;color:var(--muted);margin-bottom:1rem;}
-.ph-count{font-family:"Raleway",sans-serif;font-weight:300;font-size:0.66rem;letter-spacing:0.2em;color:var(--muted);}
+.ph-h1{font-family:"Cinzel",serif;font-weight:600;font-size:clamp(1.8rem,3.5vw,3.2rem);letter-spacing:0.1em;color:var(--ghost);margin-bottom:0.2rem;}
+.ph-sub{font-family:"Shippori Mincho",serif;font-size:0.8rem;letter-spacing:0.42em;color:var(--muted);margin:0;}
+.ph-count{font-family:"Raleway",sans-serif;font-weight:300;font-size:0.66rem;letter-spacing:0.2em;color:var(--muted);margin-bottom:0;}
 .ph-count em{color:var(--violet);font-style:normal;}
-.filter-bar{position:sticky;top:62px;z-index:200;background:rgba(15,15,28,0.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:0.65rem 3.5rem;display:flex;align-items:center;gap:0.6rem;flex-wrap:wrap;}
+.filter-bar{position:sticky;top:62px;z-index:200;transition:top 0.3s ease;background:rgba(15,15,28,0.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:0.65rem 3.5rem;display:flex;align-items:center;gap:0.6rem;flex-wrap:wrap;}
 .filter-btn{font-family:"Raleway",sans-serif;font-weight:300;font-style:italic;font-size:0.64rem;letter-spacing:0.18em;text-transform:uppercase;padding:0.28rem 0.85rem;border:1px solid var(--line);color:var(--muted);background:transparent;cursor:pointer;transition:all 0.25s;}
 .filter-btn:hover,.filter-btn.active{border-color:var(--violet);color:var(--violet);background:rgba(184,159,255,0.06);}
 .filter-count{font-family:"Raleway",sans-serif;font-weight:300;font-size:0.6rem;letter-spacing:0.15em;color:var(--muted);margin-left:auto;}
@@ -135,6 +135,7 @@ footer{position:relative;z-index:1;padding-bottom:calc(1.5rem + 36px);padding:1.
 /* ナビシュリンク */
 nav{transition:padding 0.3s ease,background 0.3s ease,box-shadow 0.3s ease;}
 nav.scrolled{padding-top:0.7rem;padding-bottom:0.7rem;background:rgba(10,10,20,0.97);box-shadow:0 2px 20px rgba(0,0,0,0.45);}
+body:has(nav.scrolled) .filter-bar{top:50px;}
 
 /* ナビアクティブ */
 .nav-links a.section-active{color:var(--ghost)!important;}
@@ -197,7 +198,7 @@ img{background:rgba(184,159,255,0.05);}
   body{font-size:16px;-webkit-text-size-adjust:100%;}
   /* セクションパディング縮小 */
   .sec-pad{padding:72px 1.2rem 60px!important;}
-  .page-header{padding:84px 1.2rem 24px!important;}
+  .page-header{padding:70px 1.2rem 0!important;}
   .ab-wrap{padding:84px 1.2rem 60px!important;}
   .ct-wrap{padding:84px 1.2rem 60px!important;}
   /* ヒーローパディング */
@@ -696,6 +697,7 @@ body{ padding-bottom:36px; }
     <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm-1.5 5h3c1.38 0 2.5 1.12 2.5 2.5 0 .8-.38 1.5-.96 1.96A2.5 2.5 0 0 1 13.5 16h-3V7zm1.5 1.5v2h1.5a1 1 0 0 0 0-2H12zm0 3.5v2h1.5a1 1 0 0 0 0-2H12z"/></svg>
   </a>
 </div>
+
 
 <div class="page-header">
   <p class="ph-eyebrow reveal">Works</p>
