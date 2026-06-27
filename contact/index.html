@@ -719,11 +719,10 @@ function handleSubmit(e){
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ name, email, category, subject, message })
   })
-  .then(function(r){ 
-    if (!r.ok) return r.json().then(function(d){ throw new Error(JSON.stringify(d)); });
-    return r.json(); 
-  })
-  .then(function(data){
+  .then(function(r){ return r.text(); })
+  .then(function(text){
+    var data;
+    try { data = JSON.parse(text); } catch(e) { throw new Error(text.slice(0, 100)); }
     if (data.ok) {
       btn.style.display = 'none';
       msg.textContent = '送信されました。ありがとうございます ✦';
