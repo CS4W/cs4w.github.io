@@ -716,6 +716,39 @@ function handleSubmit(e){
   var message  = form.querySelector('textarea').value;
   var turnstileToken = window._turnstileToken || '';
 
+  // バリデーション
+  msg.style.display = 'none';
+  if (!name.trim()) {
+    msg.textContent = 'お名前を入力してください。';
+    msg.style.color = '#f87171';
+    msg.style.display = 'block';
+    return;
+  }
+  if (!email.trim()) {
+    msg.textContent = 'メールアドレスを入力してください。';
+    msg.style.color = '#f87171';
+    msg.style.display = 'block';
+    return;
+  }
+  if (!category) {
+    msg.textContent = 'ご依頼の種類を選択してください。';
+    msg.style.color = '#f87171';
+    msg.style.display = 'block';
+    return;
+  }
+  if (!subject.trim()) {
+    msg.textContent = '件名を入力してください。';
+    msg.style.color = '#f87171';
+    msg.style.display = 'block';
+    return;
+  }
+  if (!message.trim()) {
+    msg.textContent = 'メッセージを入力してください。';
+    msg.style.color = '#f87171';
+    msg.style.display = 'block';
+    return;
+  }
+
   btn.textContent = 'Sending...';
   btn.disabled = true;
 
