@@ -1184,7 +1184,7 @@ function mpOpen(ytId, title, platform) {
   titleEl.textContent = title;
   platEl.textContent  = platform;
   // サムネイル表示
-  thumb.innerHTML = '<img src="https://img.youtube.com/vi/'+ytId+'/mqdefault.jpg" alt="'+title+'">';
+  thumb.innerHTML = '<img loading="lazy" src="https://img.youtube.com/vi/'+ytId+'/mqdefault.jpg" alt="'+title+'">';
   playBtn.textContent = '▶';
   MP.playing = false; MP.initialized = false;
   p.classList.add('active');
@@ -1232,21 +1232,7 @@ function mpClose() {
 </div>
 
 
-<!-- ── Mini Player ── -->
-<div id="mini-player">
-  <div class="mp-thumb" id="mp-thumb" onclick="mpTogglePlay()"></div>
-  <div class="mp-info">
-    <div class="mp-title" id="mp-title">—</div>
-    <div class="mp-platform" id="mp-platform"></div>
-  </div>
-  <div class="mp-controls">
-    <button class="mp-btn play-btn" id="mp-play-btn" onclick="mpTogglePlay()" aria-label="再生/停止">▶</button>
-    <button class="mp-btn" onclick="mpOpenYT()" aria-label="YouTubeで開く" title="YouTubeで開く">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="rgba(221,217,231,0.5)"><path d="M10 6v2H5v11h11v-5h2v7H3V6h7zm11-3v8h-2V6.413l-7.793 7.794-1.414-1.414L17.585 5H13V3h8z"/></svg>
-    </button>
-  </div>
-  <button class="mp-close" onclick="mpClose()" aria-label="閉じる">✕</button>
-</div>
+
 
 <button id="scroll-top" aria-label="ページトップへ"><svg viewBox="0 0 14 14"><polyline points="2,10 7,4 12,10"/></svg></button>
 <div id="swipe-indicator">swipe</div>
