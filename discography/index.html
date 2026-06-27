@@ -1076,7 +1076,7 @@ function rerender(){
   var badge=document.getElementById('countBadge');
   if(badge)badge.innerHTML=(!q&&!genre&&!game&&!favoriteOnly)?'全 <em>'+all.length+'</em> 曲':'<em>'+shown+'</em> / '+all.length+' 曲';
   saveUIState();
-  if(typeof mpUpdateCardState==='function')mpUpdateCardState();
+  if(typeof mpUpdateCardState==="function"&&typeof MP!=="undefined")mpUpdateCardState();
 }
 
 renderTrackCards();
