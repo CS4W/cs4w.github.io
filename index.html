@@ -1894,6 +1894,14 @@ body{ padding-bottom:36px; }
         <div class="nr-player" id="nr-sp-player" style="display:none;">
         </div>
         <div id="nr-sp-info"></div>
+        <div id="nr-booth-btn" style="display:none;margin-top:0.8rem;">
+          <a id="nr-booth-link" href="https://cs4w.booth.pm/" target="_blank" rel="noopener"
+            style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.6rem 1.4rem;border:1px solid rgba(184,159,255,0.4);color:var(--ghost);font-family:'Raleway',sans-serif;font-size:0.72rem;letter-spacing:0.18em;text-decoration:none;transition:all 0.3s;background:transparent;"
+            onmouseover="this.style.background='rgba(184,159,255,0.08)';this.style.borderColor='var(--violet)'"
+            onmouseout="this.style.background='transparent';this.style.borderColor='rgba(184,159,255,0.4)'">
+            🛒 BOOTHで購入する
+          </a>
+        </div>
       </div>
       <div class="nr-right">
         <p class="nr-col-label sp">Streaming</p>
@@ -2374,6 +2382,8 @@ function nrPlay(ytId) {
       return;
     }
     spPlayer.style.display = '';
+    var boothBtn = document.getElementById('nr-booth-btn');
+    if (boothBtn) boothBtn.style.display = 'block';
     spPlayer.innerHTML =
       '<div class="nr-thumb" onclick="nrPlaySP(\'' + v.id + '\')">' +
         '<img src="' + ytThumb(v.id,'hqdefault') + '" alt="' + v.title.replace(/"/g,'') + '" loading="lazy">' +
@@ -2509,6 +2519,32 @@ function nrPlaySP(ytId){
     });
 })();
 
+
+/* ━━━ Booth 最新サンプルパック ━━━ */
+(function(){
+  var btnWrap = document.getElementById('nr-booth-btn');
+  var btnLink = document.getElementById('nr-booth-link');
+  if (!btnWrap || !btnLink) return;
+
+  fetch('https://cs4w-rss-proxy.yusuke-7328.workers.dev/booth')
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if (data.url) {
+        btnLink.href = data.url;
+        if (data.price) {
+          btnLink.textContent = '🛒 BOOTHで購入する (' + data.price + ')';
+        }
+      }
+    })
+    .catch(function(){})
+    .finally(function(){
+      // SAMPLEPACKの動画が表示されている時だけボタンを表示
+      var spPlayer = document.getElementById('nr-sp-player');
+      if (spPlayer && spPlayer.style.display !== 'none') {
+        btnWrap.style.display = 'block';
+      }
+    });
+})();
 
 /* ━━━ Bandcamp 最新リリース 自動取得 ━━━ */
 (function(){
