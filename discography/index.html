@@ -977,6 +977,7 @@ var TRACKS=Array.isArray(window.CS4W_TRACKS)?window.CS4W_TRACKS:[];
 TRACKS.forEach(function(track,index){track.sourceIndex=index;});
 var LIKES=JSON.parse(localStorage.getItem('cs4w_likes')||'{}'); // ローカル（自分がいいねしたか判定用）
 var LIKES_COUNTS={}; // サーバー側の合計いいね数
+var WORKER_LIKES_URL = 'https://cs4w-rss-proxy.yusuke-7328.workers.dev/likes';
 var UI_STATE_KEY='cs4w_discography_state';
 var savedUIState={};
 try{savedUIState=JSON.parse(localStorage.getItem(UI_STATE_KEY)||'{}');}catch(ex){}
@@ -1219,8 +1220,6 @@ if('serviceWorker' in navigator){
 
 
 /* ── Like (共有いいね: Cloudflare KV) ── */
-var WORKER_LIKES_URL = 'https://cs4w-rss-proxy.yusuke-7328.workers.dev/likes';
-
 function saveLikes(){ localStorage.setItem('cs4w_likes', JSON.stringify(LIKES)); }
 
 // サーバーからいいね数を取得してボタンに反映
