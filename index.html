@@ -2414,9 +2414,8 @@ function nrPlaySP(ytId){
   var el = document.getElementById('nr-spotify-player');
   if (!el) return;
 
-  function embed(type, id) {
-    var height = (type === 'single' || type === 'track') ? 80 : 352;
-    var embedType = (type === 'single') ? 'track' : 'album';
+  function embed(embedType, id) {
+    var height = embedType === 'album' ? 352 : 80;
     var iframe = document.createElement('iframe');
     iframe.style.cssText = 'border-radius:0;display:block;';
     iframe.src = 'https://open.spotify.com/embed/' + embedType + '/' + id +
@@ -2435,7 +2434,7 @@ function nrPlaySP(ytId){
     .then(function(r){ return r.json(); })
     .then(function(data){
       if (!data.embedId) throw new Error('no data');
-      embed(data.type, data.embedId);
+      embed(data.embedType, data.embedId);
     })
     .catch(function(){
       // フォールバック: COLLECTIONS 401
