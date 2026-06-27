@@ -964,7 +964,7 @@ body{ padding-bottom:36px; }
   <div class="footer-r">© 2026 CS4W / しーそー · All rights reserved.</div>
 </footer>
 
-<script src="../tracks.js"></script>
+<script src="tracks.js"></script>
 <script>
 /* ── Reveal ── */
 const ro=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');ro.unobserve(e.target);}});},{threshold:0.06,rootMargin:'0px 0px -20px 0px'});
@@ -1064,7 +1064,7 @@ function rerender(){
     var track=getTrackById(card.dataset.ytId);
     var text=[card.dataset.title,card.dataset.year,track&&track.platform,track&&track.collab,track&&track.note].join(' ').toLowerCase();
     var match=(!q||text.includes(q))&&(!genre||(card.dataset.genre||'').includes(genre))&&(!game||(card.dataset.game||'').includes(game));
-    if(favoriteOnly)match=match&&!!LIKES[(track.likeId||track.ytId)+'_voted'];
+    if(favoriteOnly)match=match&&!!(track&&LIKES[(track.likeId||track.ytId)+'_voted']);
     card.style.display=match?'':'none';
     if(match)shown++;
   });
@@ -1291,7 +1291,8 @@ function mpUpdateCardState(){
     wave.className='dc-now-playing';
     wave.setAttribute('aria-hidden','true');
     wave.innerHTML='<span></span><span></span><span></span><span></span><span></span>';
-    card.querySelector('.dc-media').appendChild(wave);
+    var media=card.querySelector('.dc-media');
+    if(media)media.appendChild(wave);
   }
 }
 
@@ -1343,6 +1344,7 @@ function mpHandleEnded(){
 }
 
 function mpOpen(ytId,title,plat){
+  if(!MP||!ytId)return;
   MP.ytId=ytId;MP.title=title;MP.plat=plat||'';
   MP.playing=false;MP.inited=false;MP.dur=0;MP.endedHandled=false;
   clearInterval(MP.seekTimer);MP.seekTimer=null;
