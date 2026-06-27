@@ -1,6 +1,6 @@
 /* Discography data: add, remove, or edit tracks here. */
 window.CS4W_TRACKS = [
-  {date:'2026/06/07',name:'Subjugator',ytId:'W9nS0Wf_PlQ',likeId:'subjugator'},
+  {date:'2026/06/07',name:'Subjugator',ytId:'W9nS0Wf_PlQ',genre:'gothic-hardcore'likeId:'subjugator'},
   {date:'2026/05/25',name:'Collapse',ytId:'yRK1A5yOMJ0',genre:'midtempo',likeId:'collapse'},
   {date:'2026/04/26',name:'Aether Portal',ytId:'92ZV24CXfWo',genre:'gothic-hardcore',platform:'Myth://2.0',likeId:'aetherportal'},
   {date:'2026/04/26',name:'BACKALLEY',ytId:'GIUuHVgcSjw',genre:'bass-house',platform:'Myth://2.0',likeId:'backalley'},
@@ -28,7 +28,7 @@ window.CS4W_TRACKS = [
   {date:'2023/07/03',name:'Hauynite',ytId:'s39x7fSSY1I',genre:'artcore',game:'dynamix lanota orzmic',collab:'RYOQUCHA & CS4W',platform:'Dynamix / Lanota / Orzmic',likeId:'hauynite'},
   {date:'2023/04/30',name:'Phoenixismia ~Hallucination of Eternity in a Timeless Realm~',ytId:'9RHykY_xA4s',genre:'artcore',game:'dynamix takumi3',collab:'C4ydora (CS4W+Pirendora)',platform:'evordeation / Dynamix',longTitle:true,likeId:'phoenixismiahallucin'},
   {date:'2023/04/24',name:'Phatchiiq',ytId:'6tL1VwTiupc',genre:'bass-house',platform:'PSYALUME',likeId:'phatchiiq'},
-  {date:'2022/12/19',name:'NF:Argonaut',ytId:'74J58Lv9zno',genre:'artcore',game:'lanota',collab:'Connexio & CS4W',platform:'Significatio Vitae / Lanota',likeId:'nfargonaut'},
+  {date:'2022/12/19',name:'NF:Argonaut',ytId:'74J58Lv9zno',genre:'artcore',game:'lanota',collab:'Connexio vs. CS4W',platform:'Significatio Vitae / Lanota',likeId:'nfargonaut'},
   {date:'2022/11/20',name:'Ignominiously',ytId:'acqe50irjeg',genre:'gothic-hardcore',platform:'Dystopian Arsenal',likeId:'ignominiously'},
   {date:'2022/11/13',name:'Artemizija Transfiguration',ytId:'_a32LGzqMek',genre:'artcore',platform:'ARTIFACTS:ZERØ',likeId:'artemizijatransfigur'},
   {date:'2022/08/12',name:'Circumscription',ytId:'B_BbiIyXGNg',genre:'gothic-hardcore',game:'dynamix',platform:'Dynamix',likeId:'circumscription'},
@@ -46,5 +46,5 @@ window.CS4W_TRACKS = [
   {date:'2020/12/26',name:'DainsleIV',ytId:'QK1ebO9L9OA',genre:'gothic',likeId:'dainsleiv'},
   {date:'2020/09/07',name:'Nothingnesses',ytId:'Hc3_-If0raw',genre:'ambient',likeId:'nothingnesses'},
   {date:'2020/07/25',name:'VALLEMAISON',ytId:'AZVkz-KfhJ8',genre:'gothic',likeId:'vallemaison'},
-  {date:'2020/03/31',name:'Stay Ch4nged',ytId:'LjMXYiG2jLM',genre:'frenchcore',likeId:'staych4nged'}
+  {date:'2020/03/31',name:'Stay Ch4ngeD',ytId:'LjMXYiG2jLM',genre:'frenchcore',likeId:'staych4nged'}
 ];
