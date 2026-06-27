@@ -1827,6 +1827,10 @@ body{ padding-bottom:36px; }
           <div class="nr-loading"><div class="nr-spinner"></div>Loading...</div>
         </div>
         <div id="nr-info"></div>
+        <p class="nr-col-label sp" style="margin-top:1.4rem;">Sample Pack</p>
+        <div class="nr-player" id="nr-sp-player" style="display:none;">
+        </div>
+        <div id="nr-sp-info"></div>
       </div>
       <div class="nr-right">
         <p class="nr-col-label sp">Streaming</p>
@@ -2224,84 +2228,46 @@ function nrPlay(ytId) {
 
 /* ── New Release: YouTube RSS Auto-fetch ── */
 (function(){
-  var CHANNEL_ID = 'UCRh8owDtQAUKvRfwnagz84g';
-  var RSS_URL    = 'https://www.youtube.com/feeds/videos.xml?channel_id=' + CHANNEL_ID;
-  var CACHE_KEY  = 'nr_rss_v2';
+  var WORKER_URL = 'https://cs4w-rss-proxy.yusuke-7328.workers.dev/';
+  var CACHE_KEY  = 'nr_rss_v3';
   var CACHE_TTL  = 5 * 60 * 1000; // 5分
 
-  // ── フォールバック用既知動画（全プロキシ失敗時に表示）
-  var FALLBACK = [{"id": "W9nS0Wf_PlQ", "title": "CS4W - Subjugator", "date": "2026/06/06"}, {"id": "yRK1A5yOMJ0", "title": "CS4W - Collapse", "date": "2026/05/25"}, {"id": "RgydPti-jLY", "title": "CS4W - Synthesized Moon-ray", "date": "2026/04/26"}, {"id": "GIUuHVgcSjw", "title": "CS4W - BACKALLEY", "date": "2026/04/26"}];
-
-  // ── 自前Cloudflare Worker（安定版）
-  var PROXIES = [
-    { url: 'https://cs4w-rss-proxy.yusuke-7328.workers.dev/', json: false, direct: true },
+  // フォールバック（Worker完全失敗時）
+  var FALLBACK = [
+    {"id": "W9nS0Wf_PlQ", "title": "CS4W - Subjugator",          "date": "2026-06-06"},
+    {"id": "yRK1A5yOMJ0", "title": "CS4W - Collapse",             "date": "2026-05-25"},
+    {"id": "RgydPti-jLY", "title": "CS4W - Synthesized Moon-ray", "date": "2026-04-26"},
+    {"id": "GIUuHVgcSjw", "title": "CS4W - BACKALLEY",            "date": "2026-04-26"},
   ];
 
-  var player = document.getElementById('nr-player');
-  var info   = document.getElementById('nr-info');
-  var listEl = document.getElementById('nr-list');
+  var player   = document.getElementById('nr-player');
+  var info     = document.getElementById('nr-info');
+  var listEl   = document.getElementById('nr-list');
+  var spPlayer = document.getElementById('nr-sp-player');
+  var spInfo   = document.getElementById('nr-sp-info');
 
   function ytThumb(id, q){ return 'https://img.youtube.com/vi/' + id + '/' + (q||'mqdefault') + '.jpg'; }
   function ytUrl(id){ return 'https://www.youtube.com/watch?v=' + id; }
 
-  // ── パルスローディングをプレイヤーに表示
+  // ── 「CS4W -」で始まる動画か
+  function isCS4W(title){
+    return /^CS4W\s*[-‐–—]/i.test(title.trim());
+  }
+  // ── タイトルに「SAMPLEPACK」が含まれるか
+  function isSamplePack(title){
+    return /SAMPLEPACK/i.test(title);
+  }
+
   function showLoading(){
-    if(player) player.innerHTML =
-      '<div class="nr-loading">' +
-        '<div class="nr-spinner"></div>' +
-        '<span style="margin-top:0.6rem;display:block;">Loading...</span>' +
-      '</div>';
-    if(listEl) listEl.innerHTML =
-      [1,2,3].map(function(){
-        return '<div class="nr-item nr-item-skeleton">' +
-          '<div class="nr-item-thumb nr-skel"></div>' +
-          '<div class="nr-item-info">' +
-            '<div class="nr-skel" style="height:0.7rem;width:80%;margin-bottom:0.4rem;"></div>' +
-            '<div class="nr-skel" style="height:0.55rem;width:40%;"></div>' +
-          '</div>' +
-        '</div>';
-      }).join('');
-  }
-
-  // ── タイムアウト付き fetch（ms）
-  function fetchT(url, ms){
-    var ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
-    var tid  = ctrl ? setTimeout(function(){ ctrl.abort(); }, ms) : null;
-    return fetch(url, ctrl ? {signal:ctrl.signal} : {})
-      .then(function(r){ if(tid) clearTimeout(tid); if(!r.ok) throw new Error(r.status); return r; })
-      .catch(function(e){ if(tid) clearTimeout(tid); throw e; });
-  }
-
-  // ── 1プロキシから XML文字列を取得
-  function fetchProxy(proxy, targetUrl){
-    var url = proxy.direct ? proxy.url : proxy.url + encodeURIComponent(targetUrl);
-    return fetchT(url, 6000)
-      .then(function(r){ return r.text(); })
-      .then(function(text){
-        if(proxy.json){
-          try{ return JSON.parse(text).contents || text; }catch(e){ return text; }
-        }
-        return text;
-      });
-  }
-
-  // ── 全プロキシを並列で投げて最速を採用（Promise.any相当）
-  function fetchParallel(targetUrl){
-    var settled = false;
-    return new Promise(function(resolve, reject){
-      var errors = [];
-      var total  = PROXIES.length;
-      PROXIES.forEach(function(proxy){
-        fetchProxy(proxy, targetUrl)
-          .then(function(xml){
-            if(!settled){ settled = true; resolve(xml); }
-          })
-          .catch(function(e){
-            errors.push(e);
-            if(errors.length === total && !settled) reject(new Error('all failed'));
-          });
-      });
-    });
+    if(player) player.innerHTML = '<div class="nr-loading"><div class="nr-spinner"></div>Loading...</div>';
+    if(listEl) listEl.innerHTML = [1,2,3].map(function(){
+      return '<div class="nr-item nr-item-skeleton">' +
+        '<div class="nr-item-thumb nr-skel"></div>' +
+        '<div class="nr-item-info">' +
+          '<div class="nr-skel" style="height:0.7rem;width:80%;margin-bottom:0.4rem;"></div>' +
+          '<div class="nr-skel" style="height:0.55rem;width:40%;"></div>' +
+        '</div></div>';
+    }).join('');
   }
 
   // ── RSS XML をパース
@@ -2318,7 +2284,7 @@ function nrPlay(ytId) {
     }).filter(function(v){ return v.id && v.id.length > 5; });
   }
 
-  // ── 描画
+  // ── Latest Video（CS4W - で始まるもの最新1件）
   function renderMain(v){
     if(!player) return;
     player.innerHTML =
@@ -2327,14 +2293,37 @@ function nrPlay(ytId) {
         '<div class="nr-thumb-play"><span>▶</span></div>' +
       '</div>';
     if(info) info.innerHTML =
-      '<p class="nr-vid-title">'  + v.title + '</p>' +
-      '<p class="nr-vid-date">'   + v.date  + '</p>' +
+      '<p class="nr-vid-title">' + v.title + '</p>' +
+      '<p class="nr-vid-date">'  + v.date  + '</p>' +
       '<a class="nr-vid-link" href="' + ytUrl(v.id) + '" target="_blank" rel="noopener">YouTube で見る →</a>';
   }
 
-  function renderList(videos){
+  // ── Sample Pack（SAMPLEPACKを含む最新1件）
+  function renderSamplePack(v){
+    if(!spPlayer || !spInfo) return;
+    if(!v){
+      spPlayer.style.display = 'none';
+      spInfo.innerHTML = '';
+      return;
+    }
+    spPlayer.style.display = '';
+    spPlayer.innerHTML =
+      '<div class="nr-thumb" onclick="nrPlaySP(\'' + v.id + '\')">' +
+        '<img src="' + ytThumb(v.id,'hqdefault') + '" alt="' + v.title.replace(/"/g,'') + '" loading="lazy">' +
+        '<div class="nr-thumb-play"><span>▶</span></div>' +
+      '</div>';
+    spInfo.innerHTML =
+      '<p class="nr-vid-title">' + v.title + '</p>' +
+      '<p class="nr-vid-date">'  + v.date  + '</p>' +
+      '<a class="nr-vid-link" href="' + ytUrl(v.id) + '" target="_blank" rel="noopener">YouTube で見る →</a>';
+  }
+
+  // ── Recent Videos（CS4W - で始まる、メイン除いた最新4件）
+  function renderList(mainId, cs4wVideos){
     if(!listEl) return;
-    listEl.innerHTML = videos.slice(1,5).map(function(v){
+    var items = cs4wVideos.filter(function(v){ return v.id !== mainId; }).slice(0,4);
+    if(!items.length){ listEl.innerHTML = ''; return; }
+    listEl.innerHTML = items.map(function(v){
       return '<a class="nr-item" href="' + ytUrl(v.id) + '" target="_blank" rel="noopener">' +
         '<div class="nr-item-thumb"><img src="' + ytThumb(v.id,'default') + '" alt="" loading="lazy"></div>' +
         '<div class="nr-item-info"><h4>' + v.title + '</h4><p>' + v.date + '</p></div>' +
@@ -2342,15 +2331,22 @@ function nrPlay(ytId) {
     }).join('');
   }
 
+  function applyVideos(allVideos){
+    // CS4W - で始まるもの
+    var cs4wVideos = allVideos.filter(function(v){ return isCS4W(v.title); });
+    // SAMPLEPACKを含むもの
+    var spVideo    = allVideos.filter(function(v){ return isSamplePack(v.title); })[0] || null;
+
+    var mainVideo  = cs4wVideos[0] || allVideos[0];
+    if(mainVideo)  renderMain(mainVideo);
+    renderSamplePack(spVideo);
+    renderList(mainVideo ? mainVideo.id : '', cs4wVideos);
+  }
+
   function onError(){
-    // フォールバック動画を表示（エラー表示ではなく既知データで補完）
-    renderMain(FALLBACK[0]);
-    renderList(FALLBACK);
-    // 右下に小さなバッジで「オフライン表示」を示す
+    applyVideos(FALLBACK);
     if(info){
-      var existing = info.innerHTML;
-      info.innerHTML = existing +
-        '<p class="nr-offline-badge">※ オフラインデータ表示中</p>';
+      info.innerHTML += '<p class="nr-offline-badge">※ オフラインデータ表示中</p>';
     }
   }
 
@@ -2365,19 +2361,19 @@ function nrPlay(ytId) {
     }catch(e){ return null; }
   }
   function saveCache(videos){
-    try{ sessionStorage.setItem(CACHE_KEY, JSON.stringify({ts:Date.now(),videos:videos})); }catch(e){}
+    try{ sessionStorage.setItem(CACHE_KEY, JSON.stringify({ts:Date.now(), videos:videos})); }catch(e){}
   }
 
   // ── メイン処理
   function doFetch(silent){
     if(!silent) showLoading();
-    return fetchParallel(RSS_URL)
+    return fetch(WORKER_URL)
+      .then(function(r){ if(!r.ok) throw new Error(r.status); return r.text(); })
       .then(function(xml){
         var videos = parseRSS(xml);
         if(!videos.length) throw new Error('empty');
         saveCache(videos);
-        renderMain(videos[0]);
-        renderList(videos);
+        applyVideos(videos);
       })
       .catch(function(){ if(!silent) onError(); });
   }
@@ -2387,8 +2383,7 @@ function nrPlay(ytId) {
   // キャッシュ即表示 → バックグラウンド更新
   var cached = loadCache();
   if(cached && cached.length){
-    renderMain(cached[0]);
-    renderList(cached);
+    applyVideos(cached);
     setTimeout(function(){ doFetch(true); }, 300);
   } else {
     doFetch(false);
@@ -2404,39 +2399,48 @@ function nrPlay(ytId){
     'allowfullscreen></iframe>';
 }
 
+function nrPlaySP(ytId){
+  var p = document.getElementById('nr-sp-player');
+  if(!p) return;
+  p.innerHTML = '<iframe src="https://www.youtube.com/embed/' + ytId +
+    '?autoplay=1&rel=0&modestbranding=1" ' +
+    'allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" ' +
+    'allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:none;"></iframe>';
+}
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   🎵 SPOTIFY 最新曲設定
-   ──────────────────────────────────────
-   最新曲が出たらここだけ変更してください：
 
-   type: "track" / "album" / "playlist"
-   id  : SpotifyのURLの末尾のID
-         例）open.spotify.com/track/【ここ】
-             open.spotify.com/album/【ここ】
-   height: プレイヤーの高さ（track=80, album=352）
-   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-var SPOTIFY_LATEST = {
-  type:   'album',
-  id:     '0pvG8QkpF9AA0Zn5Pco2EH',  // ← ここを変更
-  height: 352
-};
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-
+/* ━━━ Spotify 最新リリース 自動取得 ━━━ */
 (function(){
-  var cfg = SPOTIFY_LATEST;
-  var el  = document.getElementById('nr-spotify-player');
+  var el = document.getElementById('nr-spotify-player');
   if (!el) return;
-  var iframe = document.createElement('iframe');
-  iframe.style.cssText = 'border-radius:0;display:block;';
-  iframe.src = 'https://open.spotify.com/embed/' + cfg.type + '/' + cfg.id +
-               '?utm_source=generator&theme=0';
-  iframe.width  = '100%';
-  iframe.height = cfg.height;
-  iframe.setAttribute('frameborder', '0');
-  iframe.setAttribute('allow', 'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture');
-  iframe.setAttribute('loading', 'lazy');
-  el.appendChild(iframe);
+
+  function embed(type, id) {
+    var height = (type === 'single' || type === 'track') ? 80 : 352;
+    var embedType = (type === 'single') ? 'track' : 'album';
+    var iframe = document.createElement('iframe');
+    iframe.style.cssText = 'border-radius:0;display:block;';
+    iframe.src = 'https://open.spotify.com/embed/' + embedType + '/' + id +
+                 '?utm_source=generator&theme=0';
+    iframe.width  = '100%';
+    iframe.height = height;
+    iframe.setAttribute('frameborder', '0');
+    iframe.setAttribute('allow', 'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture');
+    iframe.setAttribute('loading', 'lazy');
+    el.innerHTML = '';
+    el.appendChild(iframe);
+  }
+
+  // Workerから最新リリース情報を取得
+  fetch('https://cs4w-rss-proxy.yusuke-7328.workers.dev/spotify')
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if (!data.embedId) throw new Error('no data');
+      embed(data.type, data.embedId);
+    })
+    .catch(function(){
+      // フォールバック: COLLECTIONS 401
+      embed('album', '0pvG8QkpF9AA0Zn5Pco2EH');
+    });
 })();
 
 
