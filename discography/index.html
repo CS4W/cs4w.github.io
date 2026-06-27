@@ -104,6 +104,19 @@ nav::after{content:"";position:absolute;bottom:-3px;left:3.5rem;right:3.5rem;hei
 }
 .dc-card:hover::before{width:100%;}
 .dc-card:hover{background:rgba(184,159,255,0.045);}
+.dc-card.is-current{
+  z-index:3;
+  background:rgba(184,159,255,0.065);
+  box-shadow:inset 0 0 0 1px rgba(184,159,255,0.7),0 0 20px rgba(77,232,194,0.12);
+}
+.dc-card.is-current::before{width:100%;height:3px;}
+.dc-card.is-current .dc-thumb img{opacity:1;transform:scale(1.025);}
+.dc-card.is-current .dc-title{color:var(--ghost);}
+.dc-card.is-playing{animation:dcPlayingGlow 2.4s ease-in-out infinite;}
+@keyframes dcPlayingGlow{
+  0%,100%{box-shadow:inset 0 0 0 1px rgba(184,159,255,0.55),0 0 14px rgba(184,159,255,0.1);}
+  50%{box-shadow:inset 0 0 0 1px rgba(77,232,194,0.75),0 0 26px rgba(77,232,194,0.2);}
+}
 
 /* ── MEDIA ── */
 .dc-media{width:100%;overflow:hidden;background:var(--bg2);position:relative;}
@@ -130,6 +143,29 @@ nav::after{content:"";position:absolute;bottom:-3px;left:3.5rem;right:3.5rem;hei
   font-size:0.9rem;color:var(--ghost);transition:all 0.3s;
 }
 .dc-card:hover .dc-play span{background:rgba(184,159,255,0.38);transform:scale(1.08);}
+.dc-card.is-current .dc-play{background:rgba(15,15,28,0.08);}
+.dc-card.is-current .dc-play span{opacity:0;transform:scale(0.8);}
+.dc-now-playing{
+  position:absolute;left:0.65rem;bottom:0.55rem;z-index:3;
+  height:24px;display:flex;align-items:flex-end;gap:3px;
+  padding:5px 7px;background:rgba(10,10,20,0.78);
+  border:1px solid rgba(184,159,255,0.35);
+  opacity:0;transform:translateY(4px);transition:opacity 0.25s,transform 0.25s;
+  pointer-events:none;
+}
+.dc-card.is-current .dc-now-playing{opacity:1;transform:translateY(0);}
+.dc-now-playing span{
+  display:block;width:2px;height:4px;background:var(--teal);
+  transform-origin:bottom;animation:dcWave 0.72s ease-in-out infinite alternate;
+  animation-play-state:paused;
+}
+.dc-card.is-playing .dc-now-playing span{animation-play-state:running;}
+.dc-now-playing span:nth-child(2){animation-delay:-0.5s;}
+.dc-now-playing span:nth-child(3){animation-delay:-0.22s;}
+.dc-now-playing span:nth-child(4){animation-delay:-0.62s;}
+.dc-now-playing span:nth-child(5){animation-delay:-0.34s;}
+@keyframes dcWave{from{height:4px;}to{height:15px;}}
+@media(prefers-reduced-motion:reduce){.dc-card.is-playing,.dc-now-playing span{animation:none;}.dc-now-playing span:nth-child(2n){height:11px;}}
 .dc-yt-label{
   position:absolute;bottom:0.5rem;right:0.6rem;
   font-family:"Raleway",sans-serif;font-weight:300;
@@ -692,9 +728,15 @@ body{ padding-bottom:36px; }
 }
 .mp-art{
   width:52px;height:52px;flex-shrink:0;
-  background:#13132a;overflow:hidden;
+  position:relative;background:#13132a;overflow:hidden;
 }
 .mp-art img{width:100%;height:100%;object-fit:cover;opacity:0.85;}
+.mp-art iframe{
+  position:absolute;left:50%;top:50%;
+  width:200px;height:200px;
+  transform:translate(-50%,-50%);
+  border:0;pointer-events:auto;
+}
 .mp-info{
   flex:1;min-width:0;padding:0 0.7rem;
 }
@@ -721,6 +763,7 @@ body{ padding-bottom:36px; }
 #mp-play-btn{color:rgba(184,159,255,0.85);}
 #mp-play-btn:hover{color:#b89fff;}
 #mp-play-btn svg{width:18px;height:18px;}
+#mp-shuffle-btn.is-active{color:var(--teal);}
 .mp-vol-wrap{
   display:flex;align-items:center;gap:0.25rem;
   padding:0 0.3rem;flex-shrink:0;
@@ -898,9 +941,6 @@ body{ padding-bottom:36px; }
     <option value="dancerai13">DanceRail3</option>
   </select>
 </div>
-  <input id="searchBox" class="search-box" type="text" placeholder="Search title / platform...">
-  <span class="count-badge" id="countBadge">全 <em>47</em> 曲</span>
-</div>
 
 <div class="dc-main">
   <div id="dcGrid">
@@ -919,6 +959,7 @@ body{ padding-bottom:36px; }
   LIKE_ID    : 英数字のみ（例: mysong）
   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+-->
 <div class="dc-card" data-date="2026/06/06" data-title="subjugator" data-year="2026" data-genre="dubstep" data-game="">
     <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('W9nS0Wf_PlQ','Subjugator','')" style="cursor:pointer" title="Subjugator">
         <img src="https://img.youtube.com/vi/W9nS0Wf_PlQ/mqdefault.jpg" alt="Subjugator" loading="lazy">
@@ -933,17 +974,17 @@ body{ padding-bottom:36px; }
       
     </div>
   </div>
-<div class="dc-card" data-date="2026/05/25" data-title="collapse (new)" data-year="2026" data-genre="midtempo" data-game="">
-    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('yRK1A5yOMJ0','Collapse (new)','')" style="cursor:pointer" title="Collapse (new)">
-        <img src="https://img.youtube.com/vi/yRK1A5yOMJ0/mqdefault.jpg" alt="Collapse (new)" loading="lazy">
+<div class="dc-card" data-date="2026/05/25" data-title="collapse" data-year="2026" data-genre="midtempo" data-game="">
+    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('yRK1A5yOMJ0','Collapse','')" style="cursor:pointer" title="Collapse">
+        <img src="https://img.youtube.com/vi/yRK1A5yOMJ0/mqdefault.jpg" alt="Collapse" loading="lazy">
         <div class="dc-play"><span>▶</span></div>
       </div></div>
     <div class="dc-info">
       <div class="dc-meta-row">
         <span class="dc-date">2026/05/25</span>
       </div>
-      <h3 class="dc-title" title="Collapse (new)">Collapse (new)</h3>
-      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('Collapse (new)','yRK1A5yOMJ0')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="collapsenew" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
+      <h3 class="dc-title" title="Collapse">Collapse</h3>
+      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('Collapse','yRK1A5yOMJ0')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="collapse" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
       
     </div>
   </div>
@@ -1055,8 +1096,36 @@ body{ padding-bottom:36px; }
         <span class="dc-date">2025/07/11</span>
       </div>
       <h3 class="dc-title" title="WE KNOW">WE KNOW</h3>
-      <p class="dc-collab">feat. 冬街 緑</p><p class="dc-platform">DTM甲子園</p>
+      <p class="dc-collab">feat. 冬街 緑</p><p class="dc-platform">COLLECTIONS 401</p>
       <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('WE KNOW','96SqTO76_t4')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="weknow" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
+    </div>
+  </div>
+<div class="dc-card" data-date="2025/07/11" data-title="aethernix reverie" data-year="2025" data-genre="" data-game="">
+    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('eDx5XRYhx18','Aethernix Reverie','COLLECTIONS 401')" style="cursor:pointer" title="Aethernix Reverie">
+        <img src="https://img.youtube.com/vi/eDx5XRYhx18/mqdefault.jpg" alt="Aethernix Reverie" loading="lazy">
+        <div class="dc-play"><span>▶</span></div>
+      </div></div>
+    <div class="dc-info">
+      <div class="dc-meta-row">
+        <span class="dc-date">2025/07/11</span>
+      </div>
+      <h3 class="dc-title" title="Aethernix Reverie">Aethernix Reverie</h3>
+      <p class="dc-platform">COLLECTIONS 401</p>
+      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('Aethernix Reverie','eDx5XRYhx18')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="aethernixreverie" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
+    </div>
+  </div>
+<div class="dc-card" data-date="2025/07/11" data-title="run free" data-year="2025" data-genre="" data-game="">
+    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('XF9LvmDVMwg','Run Free','COLLECTIONS 401')" style="cursor:pointer" title="Run Free">
+        <img src="https://img.youtube.com/vi/XF9LvmDVMwg/mqdefault.jpg" alt="Run Free" loading="lazy">
+        <div class="dc-play"><span>▶</span></div>
+      </div></div>
+    <div class="dc-info">
+      <div class="dc-meta-row">
+        <span class="dc-date">2025/07/11</span>
+      </div>
+      <h3 class="dc-title" title="Run Free">Run Free</h3>
+      <p class="dc-platform">COLLECTIONS 401</p>
+      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('Run Free','XF9LvmDVMwg')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="runfree" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
     </div>
   </div>
 <div class="dc-card" data-date="2025/07/11" data-title="strange dominator" data-year="2025" data-genre="gothic-hardcore" data-game="">
@@ -1157,20 +1226,6 @@ body{ padding-bottom:36px; }
       <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('Complementary Contrast','b-eIFTy8DcM')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="complementarycontras" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
     </div>
   </div>
-<div class="dc-card" data-date="2024/10/25" data-title="happy halloween cs4w remix" data-year="2024" data-genre="gothic-hardcore" data-game="">
-    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('WkZ8SS1Hb5Q','Happy Halloween CS4W Remix','')" style="cursor:pointer" title="Happy Halloween CS4W Remix">
-        <img src="https://img.youtube.com/vi/WkZ8SS1Hb5Q/mqdefault.jpg" alt="Happy Halloween CS4W Remix" loading="lazy">
-        <div class="dc-play"><span>▶</span></div>
-      </div></div>
-    <div class="dc-info">
-      <div class="dc-meta-row">
-        <span class="dc-date">2024/10/25</span>
-      </div>
-      <h3 class="dc-title" title="Happy Halloween CS4W Remix">Happy Halloween CS4W Remix</h3>
-      <p class="dc-platform">Happy Halloween Remix!</p>
-      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('Happy Halloween CS4W Remix','WkZ8SS1Hb5Q')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="happyhalloweencs4wre" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
-    </div>
-  </div>
 <div class="dc-card" data-date="2024/09/09" data-title="traxxendenza" data-year="2024" data-genre="gothic" data-game="takumi3">
     <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('do-69S1inFM','Traxxendenza','')" style="cursor:pointer" title="Traxxendenza">
         <img src="https://img.youtube.com/vi/do-69S1inFM/mqdefault.jpg" alt="Traxxendenza" loading="lazy">
@@ -1183,20 +1238,6 @@ body{ padding-bottom:36px; }
       <h3 class="dc-title" title="Traxxendenza">Traxxendenza</h3>
       <p class="dc-platform">TAKUMI³ / Paradigm: Reboot</p>
       <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('Traxxendenza','do-69S1inFM')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="traxxendenza" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
-    </div>
-  </div>
-<div class="dc-card" data-date="2024/06/15" data-title="collapse" data-year="2024" data-genre="midtempo" data-game="orzmic">
-    <div class="dc-media"><div class="dc-thumb" onclick="mpOpen('yRK1A5yOMJ0','Collapse','')" style="cursor:pointer" title="Collapse">
-        <img src="https://img.youtube.com/vi/yRK1A5yOMJ0/mqdefault.jpg" alt="Collapse" loading="lazy">
-        <div class="dc-play"><span>▶</span></div>
-      </div></div>
-    <div class="dc-info">
-      <div class="dc-meta-row">
-        <span class="dc-date">2024/06/15</span>
-      </div>
-      <h3 class="dc-title" title="Collapse">Collapse</h3>
-      <p class="dc-platform">Immaculée Sekai / Orzmic</p>
-      <div class="dc-btn-row"><button class="share-btn" onclick="event.stopPropagation();shareTrack('Collapse','yRK1A5yOMJ0')" aria-label="シェア"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>シェア</button><button class="like-btn" data-id="collapse" onclick="event.stopPropagation();toggleLike(this)" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div>
     </div>
   </div>
 <div class="dc-card" data-date="2024/06/01" data-title="neo sakura" data-year="2024" data-genre="artcore" data-game="">
@@ -1604,44 +1645,50 @@ function setSort(order, btn) {
 }
 
 function rerender() {
-  var q     = (document.getElementById('searchBox')   ? document.getElementById('searchBox').value   : '').toLowerCase().trim();
-  var genre = (document.getElementById('genreFilter') ? document.getElementById('genreFilter').value : '');
-  var game  = (document.getElementById('gameFilter')  ? document.getElementById('gameFilter').value  : '');
+  var q     = (document.getElementById('searchBox')   || {value:''}).value.toLowerCase().trim();
+  var genre = (document.getElementById('genreFilter') || {value:''}).value;
+  var game  = (document.getElementById('gameFilter')  || {value:''}).value;
   var grid  = document.getElementById('dcGrid');
-  var pool  = document.getElementById('dc-pool');
-  if (!pool) {
-    pool = document.createElement('div');
-    pool.id = 'dc-pool';
-    pool.style.cssText = 'display:none!important;position:absolute;visibility:hidden;pointer-events:none;';
-    document.body.appendChild(pool);
-  }
-  var nr = document.getElementById('noResults');
-  if (nr && nr.parentNode === grid) grid.removeChild(nr);
+  if (!grid) return;
 
-  var all = Array.from(grid.querySelectorAll('.dc-card'))
-            .concat(Array.from(pool.querySelectorAll('.dc-card')));
+  // 全カードをdata-date順でソート（DOM操作）
+  var all = Array.from(grid.querySelectorAll(':scope > .dc-card'));
   all.sort(function(a,b){
     return sortOrder==='desc'
       ? b.dataset.date.localeCompare(a.dataset.date)
       : a.dataset.date.localeCompare(b.dataset.date);
   });
+
+  // ソート順を反映（DOMを並べ替える）
+  all.forEach(function(c){ grid.appendChild(c); });
+
+  // フィルタ（display:none/''で表示切替）
   var shown = 0;
   all.forEach(function(c){
-    c.style.opacity=''; c.style.transform=''; c.style.transition=''; c.style.display='';
+    var title  = c.dataset.title  || '';
+    var year   = c.dataset.year   || '';
     var plat   = (c.querySelector('.dc-platform')||{textContent:''}).textContent.toLowerCase();
     var collab = (c.querySelector('.dc-collab')  ||{textContent:''}).textContent.toLowerCase();
     var cGenre = c.dataset.genre || '';
     var cGame  = c.dataset.game  || '';
     var match  = true;
-    if (q)     match = match && (c.dataset.title.includes(q)||plat.includes(q)||collab.includes(q)||c.dataset.year.includes(q));
+    if (q)     match = match && (title.includes(q)||plat.includes(q)||collab.includes(q)||year.includes(q));
     if (genre) match = match && cGenre.includes(genre);
     if (game)  match = match && cGame.includes(game);
-    if (match) { grid.appendChild(c); shown++; }
-    else        { pool.appendChild(c); }
+    c.style.display = match ? '' : 'none';
+    if (match) shown++;
   });
-  if (!nr) { nr=document.createElement('div'); nr.id='noResults'; nr.className='no-results'; }
-  if (shown===0){ nr.textContent='No results.'; grid.appendChild(nr); }
-  else{ nr.textContent=''; if(nr.parentNode) nr.parentNode.removeChild(nr); }
+
+  // No results 表示
+  var nr = document.getElementById('noResults');
+  if (shown===0) {
+    if (!nr) { nr=document.createElement('div'); nr.id='noResults'; nr.className='no-results'; nr.textContent='No results.'; }
+    grid.appendChild(nr);
+  } else {
+    if (nr && nr.parentNode) nr.parentNode.removeChild(nr);
+  }
+
+  // バッジ更新
   var badge=document.getElementById('countBadge');
   if(badge) badge.innerHTML=(!q&&!genre&&!game)?'全 <em>'+all.length+'</em> 曲':'<em>'+shown+'</em> / '+all.length+' 曲';
 }
@@ -1809,17 +1856,56 @@ function shareTrack(title, ytId){
 }
 
 /* ── Mini Player ── */
-var MP={ytId:null,title:'',plat:'',playing:false,inited:false,muted:false,vol:70,iframe:null,dur:0,seekTimer:null};
+var MP={ytId:null,title:'',plat:'',playing:false,inited:false,muted:false,vol:70,iframe:null,player:null,playerReady:false,pendingStart:false,dur:0,seekTimer:null};
 
 var MP_PLAY_SVG  = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
 var MP_PAUSE_SVG = '<svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
 
 function mpFmt(s){s=Math.floor(s||0);return Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60;}
 
+function mpTrackCard(ytId){
+  var thumbs=document.querySelectorAll('.dc-thumb[onclick*="mpOpen"]');
+  for(var i=0;i<thumbs.length;i++){
+    var call=thumbs[i].getAttribute('onclick')||'';
+    if(call.indexOf("mpOpen('"+ytId+"'")!==-1)return thumbs[i].closest('.dc-card');
+  }
+  return null;
+}
+
+function mpUpdateCardState(){
+  document.querySelectorAll('.dc-card.is-current,.dc-card.is-playing').forEach(function(card){
+    card.classList.remove('is-current','is-playing');
+  });
+  if(!MP.ytId)return;
+  var card=mpTrackCard(MP.ytId);
+  if(!card)return;
+  card.classList.add('is-current');
+  if(MP.playing)card.classList.add('is-playing');
+  if(!card.querySelector('.dc-now-playing')){
+    var wave=document.createElement('div');
+    wave.className='dc-now-playing';
+    wave.setAttribute('aria-hidden','true');
+    wave.innerHTML='<span></span><span></span><span></span><span></span><span></span>';
+    card.querySelector('.dc-media').appendChild(wave);
+  }
+}
+
+function mpShuffle(){
+  var tracks=Array.prototype.filter.call(document.querySelectorAll('.dc-card'),function(card){
+    return card.offsetParent!==null&&card.querySelector('.dc-thumb[onclick*="mpOpen"]');
+  });
+  if(!tracks.length)return;
+  var choices=tracks.filter(function(card){return card!==mpTrackCard(MP.ytId);});
+  if(!choices.length)choices=tracks;
+  var next=choices[Math.floor(Math.random()*choices.length)];
+  var thumb=next.querySelector('.dc-thumb[onclick*="mpOpen"]');
+  if(thumb)thumb.click();
+}
+
 function mpOpen(ytId,title,plat){
   MP.ytId=ytId;MP.title=title;MP.plat=plat||'';
   MP.playing=false;MP.inited=false;MP.dur=0;
-  clearInterval(MP.seekTimer);
+  clearInterval(MP.seekTimer);MP.seekTimer=null;
   document.getElementById('mp-title').textContent=title;
   document.getElementById('mp-plat').textContent=plat||'';
   document.getElementById('mp-play-btn').innerHTML=MP_PLAY_SVG;
@@ -1827,30 +1913,24 @@ function mpOpen(ytId,title,plat){
   document.getElementById('mp-dur').textContent='0:00';
   var sk=document.getElementById('mp-seek');
   sk.value=0;sk.style.setProperty('--s','0%');
-  document.getElementById('mp-art').innerHTML='<img src="https://img.youtube.com/vi/'+ytId+'/mqdefault.jpg" alt="'+title.replace(/"/g,\'\')+'"> ';
+  if(!MP.player){
+    document.getElementById('mp-art').innerHTML='<img src="https://img.youtube.com/vi/'+ytId+'/mqdefault.jpg" alt="'+String(title).replace(/"/g,'&quot;')+'">';
+  }
   document.getElementById('mini-player').classList.add('mp-active');
+  mpUpdateCardState();
+  mpTogglePlay();
 }
 
 function mpTogglePlay(){
   if(!MP.ytId)return;
   var btn=document.getElementById('mp-play-btn');
   if(!MP.inited){
-    var slot=document.getElementById('mp-iframe-slot');
-    slot.innerHTML='';
-    var iframe=document.createElement('iframe');
-    // enablejsapi=1 でIFrame APIを有効化
-    // origin を設定してpostMessageを許可
-    iframe.src='https://www.youtube.com/embed/'+MP.ytId+
-      '?autoplay=1&rel=0&enablejsapi=1&origin='+encodeURIComponent(location.origin||'https://cs4w.net');
-    iframe.allow='accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture';
-    iframe.width='1';iframe.height='1';iframe.style.cssText='border:none;';
-    slot.appendChild(iframe);
-    MP.iframe=iframe;MP.playing=true;MP.inited=true;
+    MP.inited=true;
+    MP.pendingStart=true;
     btn.innerHTML=MP_PAUSE_SVG;
-    // YT IFrame APIのonReadyを待ってから定期取得
-    setTimeout(function(){
-      MP.seekTimer=setInterval(mpPollTime, 500);
-    }, 2000);
+    if(MP.playerReady)mpStartPlayer();
+    else mpEnsureYouTubeAPI();
+    return;
   } else {
     if(MP.playing){
       mpSendCmd('pauseVideo');
@@ -1864,7 +1944,87 @@ function mpTogglePlay(){
   }
 }
 
+function mpEnsureYouTubeAPI(){
+  if(window.YT&&typeof YT.Player==='function'){
+    mpCreatePlayer();
+    return;
+  }
+  if(!document.getElementById('youtube-iframe-api')){
+    var tag=document.createElement('script');
+    tag.id='youtube-iframe-api';
+    tag.src='https://www.youtube.com/iframe_api';
+    document.head.appendChild(tag);
+  }
+}
+
+window.onYouTubeIframeAPIReady=function(){
+  mpCreatePlayer();
+};
+
+function mpCreatePlayer(){
+  if(MP.player)return;
+  var slot=document.getElementById('mp-art');
+  slot.innerHTML='<div id="mp-youtube-player"></div>';
+  MP.player=new YT.Player('mp-youtube-player',{
+    width:200,
+    height:200,
+    playerVars:{
+      autoplay:0,
+      controls:0,
+      playsinline:1,
+      rel:0,
+      modestbranding:1,
+      iv_load_policy:3,
+      origin:location.origin
+    },
+    events:{
+      onReady:function(e){
+        MP.iframe=e.target.getIframe();
+        MP.playerReady=true;
+        if(MP.pendingStart)mpStartPlayer();
+      },
+      onStateChange:function(e){
+        var btn=document.getElementById('mp-play-btn');
+        MP.playing=e.data===YT.PlayerState.PLAYING;
+        if(btn)btn.innerHTML=MP.playing?MP_PAUSE_SVG:MP_PLAY_SVG;
+        mpUpdateCardState();
+      },
+      onError:function(){
+        MP.playing=false;
+        var btn=document.getElementById('mp-play-btn');
+        if(btn)btn.innerHTML=MP_PLAY_SVG;
+        mpUpdateCardState();
+      }
+    }
+  });
+}
+
+function mpStartPlayer(){
+  if(!MP.playerReady||!MP.pendingStart||!MP.ytId)return;
+  MP.pendingStart=false;
+  MP.player.setVolume(MP.vol);
+  MP.player.mute();
+  MP.player.loadVideoById(MP.ytId);
+  MP.player.playVideo();
+  if(!MP.muted){
+    setTimeout(function(){
+      if(MP.playerReady){
+        MP.player.unMute();
+        MP.player.setVolume(MP.vol);
+      }
+    },250);
+  }
+  clearInterval(MP.seekTimer);
+  MP.seekTimer=setInterval(mpPollTime,500);
+}
+
+window.addEventListener('load',mpEnsureYouTubeAPI);
+
 function mpSendCmd(func, args){
+  if(MP.player&&typeof MP.player[func]==='function'){
+    MP.player[func].apply(MP.player,args||[]);
+    return;
+  }
   if(MP.iframe&&MP.iframe.contentWindow){
     MP.iframe.contentWindow.postMessage(
       JSON.stringify({event:'command',func:func,args:args||[]}),
@@ -1874,6 +2034,22 @@ function mpSendCmd(func, args){
 }
 
 function mpPollTime(){
+  if(MP.player&&typeof MP.player.getCurrentTime==='function'){
+    var current=MP.player.getCurrentTime()||0;
+    var duration=MP.player.getDuration()||0;
+    if(duration>0)MP.dur=duration;
+    if(MP.dur>0){
+      var pct=(current/MP.dur)*100;
+      var seek=document.getElementById('mp-seek');
+      if(seek&&!mpSeekDragging){
+        seek.value=pct;
+        seek.style.setProperty('--s',pct.toFixed(1)+'%');
+      }
+      document.getElementById('mp-cur').textContent=mpFmt(current);
+      document.getElementById('mp-dur').textContent=mpFmt(MP.dur);
+    }
+    return;
+  }
   // YouTube IFrame API の時間取得は postMessage ではなく
   // iframe.contentWindow.YT経由が理想だが
   // クロスオリジンのためYT.Player オブジェクトを使う
@@ -1969,106 +2145,49 @@ function mpOpenYT(){
 
 function mpClose(){
   clearInterval(MP.seekTimer);MP.seekTimer=null;
-  var slot=document.getElementById('mp-iframe-slot');
-  if(slot) slot.innerHTML='';
-  if(MP.iframe){ try{MP.iframe.src='about:blank';}catch(ex){} MP.iframe=null; }
+  MP.pendingStart=false;
+  if(MP.playerReady){ try{MP.player.stopVideo();}catch(ex){} }
   MP.ytId=null;MP.playing=false;MP.inited=false;MP.dur=0;
+  mpUpdateCardState();
   var p=document.getElementById('mini-player');
   if(p) p.classList.remove('mp-active');
 }
 
 </script>
-<button class="sf-trigger" id="sf-trigger-btn" aria-label="SNSリンク">
-    <span class="sf-trigger-icon">✦</span>
-  </button>
-</div>
 
-
-  <div class="mp-info">
-    <div class="mp-title" id="mp-title">—</div>
-    <div class="mp-platform" id="mp-platform"></div>
-  </div>
-  <div class="mp-controls">
-    <button class="mp-btn play-btn" id="mp-play-btn" onclick="mpTogglePlay()" aria-label="再生/停止">▶</button>
-    <button class="mp-btn" onclick="mpOpenYT()" aria-label="YouTubeで開く" title="YouTubeで開く">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="rgba(221,217,231,0.5)"><path d="M10 6v2H5v11h11v-5h2v7H3V6h7zm11-3v8h-2V6.413l-7.793 7.794-1.414-1.414L17.585 5H13V3h8z"/></svg>
-    </button>
-  </div>
-  <button class="mp-close" onclick="mpClose()" aria-label="閉じる">✕</button>
-</div>
-
-  <div class="mp-info">
-    <div class="mp-title" id="mp-title">—</div>
-    <div class="mp-plat"  id="mp-plat"></div>
-  </div>
-  <div class="mp-controls">
-    <button class="mp-btn" id="mp-play-btn" onclick="mpTogglePlay()" aria-label="再生/停止">▶</button>
-    <button class="mp-btn" onclick="mpOpenYT()" aria-label="YouTubeで開く" title="YouTubeで開く">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="rgba(221,217,231,0.45)"><path d="M10 6v2H5v11h11v-5h2v7H3V6h7zm11-3v8h-2V6.413l-7.793 7.794-1.414-1.414L17.585 5H13V3h8z"/></svg>
-    </button>
-  </div>
-  <div class="mp-vol-wrap">
-    <span class="mp-vol-icon" id="mp-vol-icon" onclick="mpToggleMute()">🔊</span>
-    <input type="range" id="mp-vol" min="0" max="100" value="70" oninput="mpSetVolume(this.value)" aria-label="音量">
-  </div>
-  <button id="mp-close" onclick="mpClose()" aria-label="閉じる">✕</button>
-</div>
-
-<!-- ── Mini Player ── -->
-<div id="mp-iframe-wrap"><div id="mp-iframe-slot"></div></div>
+<!-- Mini Player -->
 <div id="mini-player">
   <div class="mp-main-row">
     <div class="mp-art" id="mp-art"></div>
     <div class="mp-info">
-      <div class="mp-title" id="mp-title">—</div>
-      <div class="mp-plat"  id="mp-plat"></div>
+      <div class="mp-title" id="mp-title">-</div>
+      <div class="mp-plat" id="mp-plat"></div>
     </div>
     <div class="mp-controls">
-      <button class="mp-btn" id="mp-play-btn" onclick="mpTogglePlay()" aria-label="再生/停止">
+      <button class="mp-btn" id="mp-shuffle-btn" onclick="mpShuffle()" aria-label="Random play" title="Random play">
+        <svg viewBox="0 0 24 24"><path d="M16 3h5v5h-2V6.41l-4.3 4.3-1.4-1.42L17.59 5H16V3zM3 6h3.5c1.9 0 3.14.82 4.21 2.08l-1.46 1.37C8.45 8.53 7.72 8 6.5 8H3V6zm16 9.59-4.29-4.3-1.42 1.42 4.3 4.29H16v2h5v-5h-2v1.59zM3 16h3.5c1.22 0 1.95-.53 2.75-1.45l4.04-4.84-1.54-1.28-4.04 4.84C8.1 14 7.54 14 6.5 14H3v2z"/></svg>
+      </button>
+      <button class="mp-btn" id="mp-play-btn" onclick="mpTogglePlay()" aria-label="Play / Pause">
         <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
       </button>
-      <button class="mp-btn" onclick="mpOpenYT()" aria-label="YouTubeで開く" title="YouTubeで開く">
+      <button class="mp-btn" onclick="mpOpenYT()" aria-label="Open on YouTube" title="Open on YouTube">
         <svg viewBox="0 0 24 24"><path d="M10 6v2H5v11h11v-5h2v7H3V6h7zm11-3v8h-2V6.413l-7.793 7.794-1.414-1.414L17.585 5H13V3h8z"/></svg>
       </button>
     </div>
     <div class="mp-vol-wrap">
-      <span class="mp-vol-icon" id="mp-vol-icon" onclick="mpToggleMute()">🔊</span>
-      <input type="range" id="mp-vol" min="0" max="100" value="70"
-             oninput="mpSetVolume(this.value)" aria-label="音量">
+      <span class="mp-vol-icon" id="mp-vol-icon" onclick="mpToggleMute()">Vol</span>
+      <input type="range" id="mp-vol" min="0" max="100" value="70" oninput="mpSetVolume(this.value)" aria-label="Volume">
     </div>
-    <button id="mp-close" onclick="mpClose()" aria-label="閉じる">✕</button>
+    <button id="mp-close" onclick="mpClose()" aria-label="Close">x</button>
   </div>
   <div class="mp-seek-row">
     <span class="mp-time" id="mp-cur">0:00</span>
-    <input type="range" id="mp-seek" min="0" max="100" value="0" step="0.1"
-           oninput="mpSeek(this.value)" aria-label="シーク">
-    <span class="mp-time" id="mp-dur">0:00</span>
-  </div>
-</div>
-    <div class="mp-info">
-      <div class="mp-title" id="mp-title">—</div>
-      <div class="mp-plat"  id="mp-plat"></div>
-    </div>
-    <div class="mp-controls">
-      <button class="mp-btn" id="mp-play-btn" onclick="mpTogglePlay()" aria-label="再生/停止">▶</button>
-      <button class="mp-btn" onclick="mpOpenYT()" aria-label="YouTubeで開く" title="YouTubeで開く">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="rgba(221,217,231,0.42)"><path d="M10 6v2H5v11h11v-5h2v7H3V6h7zm11-3v8h-2V6.413l-7.793 7.794-1.414-1.414L17.585 5H13V3h8z"/></svg>
-      </button>
-    </div>
-    <div class="mp-vol-wrap">
-      <span class="mp-vol-icon" id="mp-vol-icon" onclick="mpToggleMute()">🔊</span>
-      <input type="range" id="mp-vol" min="0" max="100" value="70" oninput="mpSetVolume(this.value)" aria-label="音量">
-    </div>
-    <button id="mp-close" onclick="mpClose()" aria-label="閉じる">✕</button>
-  </div>
-  <div class="mp-seek-row">
-    <span class="mp-time" id="mp-cur">0:00</span>
-    <input type="range" id="mp-seek" min="0" max="100" value="0" step="0.1" oninput="mpSeek(this.value)" aria-label="シーク">
+    <input type="range" id="mp-seek" min="0" max="100" value="0" step="0.1" oninput="mpSeek(this.value)" aria-label="Seek">
     <span class="mp-time" id="mp-dur">0:00</span>
   </div>
 </div>
 
-<button id="scroll-top" aria-label="ページトップへ"><svg viewBox="0 0 14 14"><polyline points="2,10 7,4 12,10"/></svg></button>
+<button id="scroll-top" aria-label="Page top"><svg viewBox="0 0 14 14"><polyline points="2,10 7,4 12,10"/></svg></button>
 <div id="swipe-indicator">swipe</div>
 </body>
 </html>
