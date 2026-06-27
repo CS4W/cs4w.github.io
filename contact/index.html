@@ -719,7 +719,10 @@ function handleSubmit(e){
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ name, email, category, subject, message })
   })
-  .then(function(r){ return r.json(); })
+  .then(function(r){ 
+    if (!r.ok) return r.json().then(function(d){ throw new Error(JSON.stringify(d)); });
+    return r.json(); 
+  })
   .then(function(data){
     if (data.ok) {
       btn.style.display = 'none';
@@ -727,15 +730,16 @@ function handleSubmit(e){
       msg.style.color = 'var(--teal)';
       msg.style.display = 'block';
     } else {
-      throw new Error('failed');
+      throw new Error(JSON.stringify(data));
     }
   })
-  .catch(function(){
+  .catch(function(err){
     btn.textContent = 'Send Message →';
     btn.disabled = false;
-    msg.textContent = '送信に失敗しました。時間をおいて再度お試しください。';
+    msg.textContent = '送信に失敗しました: ' + (err.message || err);
     msg.style.color = '#f87171';
     msg.style.display = 'block';
+    console.error('Contact error:', err);
   });
 }
 
