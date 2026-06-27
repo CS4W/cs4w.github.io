@@ -3,6 +3,7 @@ name: Update CS4W Tracks
 on:
   schedule:
     # 毎日 21:00 JST = 12:00 UTC
+    - cron: '0 0 * * *'
     - cron: '0 12 * * *'
   workflow_dispatch: # 手動実行も可能
 
