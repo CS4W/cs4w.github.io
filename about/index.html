@@ -496,6 +496,112 @@ body{ padding-bottom:36px; }
 <div class="nav-overlay" id="nav-overlay"></div>
 <div class="page-fade" id="page-fade"></div>
 <div class="bg-video-wrap" aria-hidden="true"><video autoplay muted loop playsinline preload="auto"><source src="../haikei_mp4.mp4" type="video/mp4"></video></div>
+<script>
+(function keepBackgroundVideoAlive(){
+  var video=document.querySelector('.bg-video-wrap video');
+  if(!video)return;
+
+  var retryTimer=0;
+  var lastTime=-1;
+  var frozenTicks=0;
+  var reloading=false;
+
+  video.muted=true;
+  video.defaultMuted=true;
+  video.loop=true;
+  video.playsInline=true;
+  video.setAttribute('muted','');
+  video.setAttribute('playsinline','');
+  video.setAttribute('webkit-playsinline','');
+
+  function safePlay(){
+    if(document.hidden||reloading)return;
+    clearTimeout(retryTimer);
+    var promise=video.play();
+    if(promise&&typeof promise.catch==='function'){
+      promise.catch(function(){
+        retryTimer=setTimeout(safePlay,1500);
+      });
+    }
+  }
+
+  function reloadVideo(){
+    if(document.hidden||reloading)return;
+    reloading=true;
+    var resumeAt=Number.isFinite(video.currentTime)?video.currentTime:0;
+    clearTimeout(retryTimer);
+
+    function onCanPlay(){
+      video.removeEventListener('canplay',onCanPlay);
+      if(resumeAt>0&&Number.isFinite(video.duration)){
+        video.currentTime=Math.min(resumeAt,Math.max(0,video.duration-0.25));
+      }
+      reloading=false;
+      frozenTicks=0;
+      safePlay();
+    }
+
+    video.addEventListener('canplay',onCanPlay);
+    video.load();
+    retryTimer=setTimeout(function(){
+      video.removeEventListener('canplay',onCanPlay);
+      reloading=false;
+      safePlay();
+    },4000);
+  }
+
+  function recover(){
+    if(document.hidden)return;
+    if(video.ended){
+      try{video.currentTime=0;}catch(ex){}
+    }
+    if(video.error||video.readyState<2)reloadVideo();
+    else safePlay();
+  }
+
+  video.addEventListener('pause',function(){
+    if(!document.hidden&&!reloading){
+      retryTimer=setTimeout(safePlay,250);
+    }
+  });
+  video.addEventListener('ended',recover);
+  video.addEventListener('error',reloadVideo);
+  video.addEventListener('stalled',function(){
+    retryTimer=setTimeout(function(){
+      if(!document.hidden&&!video.paused)reloadVideo();
+    },1200);
+  });
+  video.addEventListener('canplay',safePlay);
+  document.addEventListener('visibilitychange',function(){
+    if(document.hidden){
+      lastTime=-1;
+      frozenTicks=0;
+    }else{
+      recover();
+    }
+  });
+  window.addEventListener('pageshow',recover);
+  window.addEventListener('focus',recover);
+  window.addEventListener('online',recover);
+
+  setInterval(function(){
+    if(document.hidden||reloading)return;
+    if(video.paused||video.ended){
+      recover();
+      return;
+    }
+    if(video.readyState>=2){
+      var now=video.currentTime;
+      if(lastTime>=0&&Math.abs(now-lastTime)<0.05)frozenTicks++;
+      else frozenTicks=0;
+      lastTime=now;
+      if(frozenTicks>=2)reloadVideo();
+    }
+  },4000);
+
+  safePlay();
+})();
+</script>
 <nav><a href="../" class="logo"><span class="logo-cross">✛</span>CS4W</a><ul class="nav-links"><li><a href="../">Home</a></li><li><a href="../works/">Works</a></li><li><a href="../discography/">Discography</a></li><li><a href="../about/" class="nav-active">About</a></li><li><a href="../contact/">Contact</a></li></ul></nav>
 
 <!-- ── Social Icon Bar ── -->
