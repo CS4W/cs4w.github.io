@@ -17,7 +17,7 @@ from datetime import datetime, timezone, timedelta
 # 設定
 # ───────────────────────────────────────────────
 YOUTUBE_API_KEY  = os.environ["YOUTUBE_API_KEY"]
-CHANNEL_ID       = "UCNmJFAGQrjHlhKGSHRUVBUQ"   # CS4W の YouTube チャンネル ID
+CHANNEL_ID       = "UCRh8owDtQAUKvRfwnagz84g"   # CS4W の YouTube チャンネル ID
 TITLE_PREFIX     = "CS4W -"                        # 対象動画のタイトル接頭辞
 TRACKS_JS_PATH   = "tracks.js"                     # リポジトリルートからの相対パス
 MAX_RESULTS      = 50                              # 1 回のリクエストで取得する最大件数
