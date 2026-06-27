@@ -730,7 +730,7 @@ function handleSubmit(e){
       msg.style.color = 'var(--teal)';
       msg.style.display = 'block';
     } else {
-      throw new Error(JSON.stringify(data));
+      throw new Error(data.error || JSON.stringify(data));
     }
   })
   .catch(function(err){
