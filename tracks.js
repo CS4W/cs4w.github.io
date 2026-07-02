@@ -1,6 +1,7 @@
 /* Discography data: add, remove, or edit tracks here. */
 window.CS4W_TRACKS = [
-  {date:'2026/06/30',name:'Aberrant Destructor',ytId:'MMoDLhNUGz4',likeId:'aberrantdestructor'},
+  {date:'2023/01/02',name:'暮明',ytId:'T2Zjh2uptxI',genre:'piano',note:'PIANO SOLO',platform:'YouTube',likeId:'kureaka'},
+  {date:'2021/03/06',name:'Δ5^2[n-1]14+sqrt(-1)÷',ytId:'sc-52n-114sqrt-2',source:'soundcloud',soundcloudUrl:'https://soundcloud.com/yusuke-7328/52n-114sqrt-2',thumbnail:'https://i1.sndcdn.com/artworks-y6m5xYWYyQUQyyhc-h8jZOg-t500x500.jpg',genre:'gothic-hardcore',platform:'SoundCloud',likeId:'52n114sqrt2'},
   {date:'2026/06/07',name:'Subjugator',ytId:'W9nS0Wf_PlQ',genre:'gothic-hardcore',likeId:'subjugator'},
   {date:'2026/05/25',name:'Collapse',ytId:'yRK1A5yOMJ0',genre:'midtempo',likeId:'collapse'},
   {date:'2026/04/26',name:'Aether Portal',ytId:'92ZV24CXfWo',genre:'gothic-hardcore',platform:'Myth://2.0',likeId:'aetherportal'},
