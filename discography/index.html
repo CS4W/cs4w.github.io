@@ -9,12 +9,12 @@
   <meta name="apple-mobile-web-app-title" content="CS4W">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CS4W — Discography</title>
-  <meta name="description" content="CS4W（しーそー）の全楽曲リスト。2020年〜2026年の47曲を収録。Gothic Hardcore・Bass House・Artcore。">
+  <meta name="description" content="CS4W（しーそー）の全楽曲リスト。2020年〜2026年の49曲を収録。Gothic Hardcore・Bass House・Artcore。">
 
   <!-- OGP / Twitter Card -->
   <meta property="og:type"        content="website">
   <meta property="og:title"       content="Discography — CS4W | 全楽曲リスト">
-  <meta property="og:description" content="CS4W（しーそー）の全楽曲リスト。2020年〜2026年の47曲を収録。Gothic Hardcore・Bass House・Artcore。">
+  <meta property="og:description" content="CS4W（しーそー）の全楽曲リスト。2020年〜2026年の49曲を収録。Gothic Hardcore・Bass House・Artcore。">
   <meta property="og:url"         content="https://cs4w.net/discography/">
   <meta property="og:image"       content="https://cs4w.net/ogp.png">
   <meta property="og:image:width" content="1200">
@@ -1050,7 +1050,7 @@ body{ padding-bottom:36px; }
   </button>
   <div class="ctrl-sep"></div>
   <input id="searchBox" class="search-box" type="text" placeholder="Search...">
-  <span class="count-badge" id="countBadge">全 <em>47</em> 曲</span>
+  <span class="count-badge" id="countBadge">全 <em>49</em> 曲</span>
   <div class="ctrl-sep"></div>
   <select id="genreFilter" class="ctrl-select" onchange="rerender()">
     <option value="">Genre: All</option>
@@ -1117,9 +1117,11 @@ function renderTrackCard(track){
   var titleClass='dc-title'+(track.longTitle?' dc-title-long':'');
   var meta='<span class="dc-date">'+esc(track.date)+'</span>'+(track.note?'<span class="dc-note">'+esc(track.note)+'</span>':'');
   var details=(track.collab?'<p class="dc-collab">'+esc(track.collab)+'</p>':'')+(track.platform?'<p class="dc-platform">'+esc(track.platform)+'</p>':'');
+  var thumbnail=track.thumbnail||('https://img.youtube.com/vi/'+track.ytId+'/mqdefault.jpg');
+  var sourceLabel=track.source==='soundcloud'?'<span class="dc-yt-label">SoundCloud</span>':'';
+  var media='<button class="dc-thumb" type="button" data-play-id="'+esc(track.ytId)+'" title="'+esc(track.name)+'" aria-label="'+esc(track.name)+'を再生"><img src="'+esc(thumbnail)+'" alt="'+esc(track.name)+'" loading="lazy"><span class="dc-play" aria-hidden="true"><span>▶</span></span>'+sourceLabel+'</button>';
   return '<article class="dc-card" data-yt-id="'+esc(track.ytId)+'" data-source-index="'+track.sourceIndex+'" data-date="'+esc(track.date)+'" data-title="'+esc(track.name.toLowerCase())+'" data-year="'+esc(track.date.slice(0,4))+'" data-genre="'+esc(track.genre||'')+'" data-game="'+esc(track.game||'')+'">'+
-    '<div class="dc-media"><button class="dc-thumb" type="button" data-play-id="'+esc(track.ytId)+'" title="'+esc(track.name)+'" aria-label="'+esc(track.name)+'を再生">'+
-    '<img src="https://img.youtube.com/vi/'+esc(track.ytId)+'/mqdefault.jpg" alt="'+esc(track.name)+'" loading="lazy"><span class="dc-play" aria-hidden="true"><span>▶</span></span></button></div>'+
+    '<div class="dc-media">'+media+'</div>'+
     '<div class="dc-info"><div class="dc-meta-row">'+meta+'</div><h3 class="'+titleClass+'" title="'+esc(track.name)+'">'+esc(track.name)+'</h3>'+details+
     '<div class="dc-btn-row"><button class="share-btn" type="button" data-share-id="'+esc(track.ytId)+'" aria-label="'+esc(track.name)+'をシェア">'+SHARE_SVG+'シェア</button>'+
     '<button class="like-btn" type="button" data-id="'+esc(track.likeId||track.ytId)+'" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div></div></article>';
@@ -1416,17 +1418,18 @@ function trackURL(ytId){
 function shareTrackById(ytId){
   var track=getTrackById(ytId);
   if(!track)return;
-  var tw='https://twitter.com/intent/tweet?text='+encodeURIComponent('CS4W - '+track.name)+'&url='+encodeURIComponent(trackURL(ytId))+'&hashtags=CS4W';
+  var shareUrl=track.soundcloudUrl||trackURL(ytId);
+  var tw='https://twitter.com/intent/tweet?text='+encodeURIComponent('CS4W - '+track.name)+'&url='+encodeURIComponent(shareUrl)+'&hashtags=CS4W';
   window.open(tw,'_blank','width=550,height=420');
 }
 
 function mpOpenTrack(ytId){
   var track=getTrackById(ytId);
-  if(track)mpOpen(track.ytId,track.name,track.playerLabel||'');
+  if(track)mpOpen(track);
 }
 
 /* ── Mini Player ── */
-var MP={ytId:null,title:'',plat:'',playing:false,inited:false,muted:false,vol:70,iframe:null,player:null,playerReady:false,pendingStart:false,dur:0,seekTimer:null,mode:localStorage.getItem('cs4w_play_mode')==='shuffle'?'shuffle':'sequence',endedHandled:false,history:[],historyIndex:-1,historyNavigating:false};
+var MP={ytId:null,title:'',plat:'',source:'youtube',track:null,playing:false,inited:false,muted:false,vol:70,iframe:null,player:null,playerReady:false,pendingStart:false,dur:0,seekTimer:null,scWidget:null,scIframe:null,scReady:false,mode:localStorage.getItem('cs4w_play_mode')==='shuffle'?'shuffle':'sequence',endedHandled:false,history:[],historyIndex:-1,historyNavigating:false};
 
 var MP_PLAY_SVG  = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
 var MP_PAUSE_SVG = '<svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
@@ -1488,8 +1491,9 @@ function mpMove(direction){
     if(index<0)index=direction>0?-1:0;
     nextId=ids[(index+direction+ids.length)%ids.length];
   }
-  if(nextId===MP.ytId&&MP.playerReady){
-    MP.player.seekTo(0,true);MP.player.playVideo();return;
+  if(nextId===MP.ytId){
+    if(MP.source==='soundcloud'&&MP.scWidget){MP.scWidget.seekTo(0);MP.scWidget.play();return;}
+    if(MP.playerReady){MP.player.seekTo(0,true);MP.player.playVideo();return;}
   }
   mpOpenTrack(nextId);
 }
@@ -1518,6 +1522,7 @@ function mpNext(){
 function mpPrevious(){
   if(MP.mode==='shuffle'){
     if(MP.historyIndex>0)mpOpenHistory(MP.historyIndex-1);
+    else if(MP.source==='soundcloud'&&MP.scWidget){MP.scWidget.seekTo(0);MP.scWidget.play();}
     else if(MP.playerReady){MP.player.seekTo(0,true);MP.player.playVideo();}
     return;
   }
@@ -1530,11 +1535,34 @@ function mpHandleEnded(){
   setTimeout(mpNext,120);
 }
 
-function mpOpen(ytId,title,plat){
-  if(!MP||!ytId)return;
+function mpGetIframeWrap(){
+  var wrap=document.getElementById('mp-iframe-wrap');
+  if(!wrap){
+    wrap=document.createElement('div');
+    wrap.id='mp-iframe-wrap';
+    document.body.appendChild(wrap);
+  }
+  return wrap;
+}
+
+function mpStopActiveBackend(){
+  clearInterval(MP.seekTimer);MP.seekTimer=null;
+  MP.pendingStart=false;
+  if(MP.source==='soundcloud'&&MP.scWidget){try{MP.scWidget.pause();}catch(ex){}}
+  if(MP.source==='youtube'&&MP.playerReady){try{MP.player.stopVideo();}catch(ex){}}
+  if(MP.scIframe&&MP.scIframe.parentNode)MP.scIframe.parentNode.removeChild(MP.scIframe);
+  MP.scWidget=null;MP.scIframe=null;MP.scReady=false;
+}
+
+function mpOpen(track){
+  if(!MP||!track||!track.ytId)return;
+  mpStopActiveBackend();
+  var ytId=track.ytId;
+  var title=track.name;
+  var plat=track.playerLabel||(track.source==='soundcloud'?'SoundCloud':'');
   if(MP.historyNavigating)MP.historyNavigating=false;
   else mpRecordHistory(ytId);
-  MP.ytId=ytId;MP.title=title;MP.plat=plat||'';
+  MP.ytId=ytId;MP.title=title;MP.plat=plat||'';MP.track=track;MP.source=track.source||'youtube';
   MP.playing=false;MP.inited=false;MP.dur=0;MP.endedHandled=false;
   clearInterval(MP.seekTimer);MP.seekTimer=null;
   document.getElementById('mp-title').textContent=title;
@@ -1544,9 +1572,8 @@ function mpOpen(ytId,title,plat){
   document.getElementById('mp-dur').textContent='0:00';
   var sk=document.getElementById('mp-seek');
   sk.value=0;sk.style.setProperty('--s','0%');
-  if(!MP.player){
-    document.getElementById('mp-art').innerHTML='<img src="https://img.youtube.com/vi/'+ytId+'/mqdefault.jpg" alt="'+String(title).replace(/"/g,'&quot;')+'">';
-  }
+  var artwork=track.thumbnail||('https://img.youtube.com/vi/'+ytId+'/mqdefault.jpg');
+  document.getElementById('mp-art').innerHTML='<img src="'+artwork+'" alt="'+String(title).replace(/"/g,'&quot;')+'">';
   document.getElementById('mini-player').classList.add('mp-active');
   var pageUrl=new URL(location.href);
   pageUrl.searchParams.set('track',ytId);
@@ -1559,6 +1586,20 @@ function mpOpen(ytId,title,plat){
 function mpTogglePlay(){
   if(!MP.ytId)return;
   var btn=document.getElementById('mp-play-btn');
+  if(MP.source==='soundcloud'){
+    if(!MP.inited){
+      MP.inited=true;MP.pendingStart=true;
+      btn.innerHTML=MP_PAUSE_SVG;
+      mpEnsureSoundCloudAPI();
+    }else if(MP.playing&&MP.scWidget){
+      MP.scWidget.pause();
+    }else if(MP.scWidget){
+      MP.scWidget.play();
+    }else{
+      MP.pendingStart=true;mpEnsureSoundCloudAPI();
+    }
+    return;
+  }
   if(!MP.inited){
     MP.inited=true;
     MP.pendingStart=true;
@@ -1600,8 +1641,10 @@ window.onYouTubeIframeAPIReady=function(){
 
 function mpCreatePlayer(){
   if(MP.player)return;
-  var slot=document.getElementById('mp-art');
-  slot.innerHTML='<div id="mp-youtube-player"></div>';
+  var slot=mpGetIframeWrap();
+  var host=document.createElement('div');
+  host.id='mp-youtube-player';
+  slot.appendChild(host);
   MP.player=new YT.Player('mp-youtube-player',{
     width:200,
     height:200,
@@ -1618,9 +1661,10 @@ function mpCreatePlayer(){
       onReady:function(e){
         MP.iframe=e.target.getIframe();
         MP.playerReady=true;
-        if(MP.pendingStart)mpStartPlayer();
+        if(MP.source==='youtube'&&MP.pendingStart)mpStartPlayer();
       },
       onStateChange:function(e){
+        if(MP.source!=='youtube')return;
         var btn=document.getElementById('mp-play-btn');
         if(e.data===YT.PlayerState.ENDED){
           MP.playing=false;
@@ -1634,6 +1678,7 @@ function mpCreatePlayer(){
         mpUpdateCardState();
       },
       onError:function(){
+        if(MP.source!=='youtube')return;
         MP.playing=false;
         var btn=document.getElementById('mp-play-btn');
         if(btn)btn.innerHTML=MP_PLAY_SVG;
@@ -1644,7 +1689,7 @@ function mpCreatePlayer(){
 }
 
 function mpStartPlayer(){
-  if(!MP.playerReady||!MP.pendingStart||!MP.ytId)return;
+  if(MP.source!=='youtube'||!MP.playerReady||!MP.pendingStart||!MP.ytId)return;
   MP.pendingStart=false;
   MP.player.setVolume(MP.vol);
   MP.player.mute();
@@ -1662,9 +1707,76 @@ function mpStartPlayer(){
   MP.seekTimer=setInterval(mpPollTime,500);
 }
 
+function mpEnsureSoundCloudAPI(){
+  if(window.SC&&typeof SC.Widget==='function'){
+    mpCreateSoundCloudPlayer();
+    return;
+  }
+  var tag=document.getElementById('soundcloud-widget-api');
+  if(!tag){
+    tag=document.createElement('script');
+    tag.id='soundcloud-widget-api';
+    tag.src='https://w.soundcloud.com/player/api.js';
+    tag.onload=mpCreateSoundCloudPlayer;
+    document.head.appendChild(tag);
+  }else{
+    tag.addEventListener('load',mpCreateSoundCloudPlayer,{once:true});
+  }
+}
+
+function mpCreateSoundCloudPlayer(){
+  if(MP.source!=='soundcloud'||!MP.track||!MP.track.soundcloudUrl||!(window.SC&&SC.Widget))return;
+  if(MP.scIframe&&MP.scIframe.parentNode)MP.scIframe.parentNode.removeChild(MP.scIframe);
+  var iframe=document.createElement('iframe');
+  iframe.id='mp-soundcloud-player';
+  iframe.allow='autoplay';
+  iframe.src='https://w.soundcloud.com/player/?url='+encodeURIComponent(MP.track.soundcloudUrl)+'&color=%23b89fff&auto_play=true&hide_related=true&show_comments=false&show_user=false&show_reposts=false';
+  mpGetIframeWrap().appendChild(iframe);
+  MP.scIframe=iframe;
+  var widget=SC.Widget(iframe);
+  MP.scWidget=widget;
+  widget.bind(SC.Widget.Events.READY,function(){
+    if(MP.source!=='soundcloud'||MP.scWidget!==widget)return;
+    MP.scReady=true;
+    widget.setVolume(MP.muted?0:MP.vol);
+    widget.getDuration(function(ms){
+      if(MP.scWidget===widget&&ms>0){MP.dur=ms/1000;document.getElementById('mp-dur').textContent=mpFmt(MP.dur);}
+    });
+    if(MP.pendingStart){MP.pendingStart=false;widget.play();}
+    clearInterval(MP.seekTimer);MP.seekTimer=setInterval(mpPollTime,500);
+  });
+  widget.bind(SC.Widget.Events.PLAY,function(){
+    if(MP.source!=='soundcloud'||MP.scWidget!==widget)return;
+    MP.playing=true;MP.endedHandled=false;
+    document.getElementById('mp-play-btn').innerHTML=MP_PAUSE_SVG;
+    mpUpdateCardState();
+  });
+  widget.bind(SC.Widget.Events.PAUSE,function(){
+    if(MP.source!=='soundcloud'||MP.scWidget!==widget)return;
+    MP.playing=false;
+    document.getElementById('mp-play-btn').innerHTML=MP_PLAY_SVG;
+    mpUpdateCardState();
+  });
+  widget.bind(SC.Widget.Events.FINISH,function(){
+    if(MP.source!=='soundcloud'||MP.scWidget!==widget)return;
+    MP.playing=false;
+    document.getElementById('mp-play-btn').innerHTML=MP_PLAY_SVG;
+    mpUpdateCardState();mpHandleEnded();
+  });
+}
+
 window.addEventListener('load',mpEnsureYouTubeAPI);
 
 function mpSendCmd(func, args){
+  if(MP.source==='soundcloud'&&MP.scWidget){
+    if(func==='playVideo')MP.scWidget.play();
+    else if(func==='pauseVideo')MP.scWidget.pause();
+    else if(func==='seekTo')MP.scWidget.seekTo(((args&&args[0])||0)*1000);
+    else if(func==='setVolume')MP.scWidget.setVolume((args&&args[0])||0);
+    else if(func==='mute')MP.scWidget.setVolume(0);
+    else if(func==='unMute')MP.scWidget.setVolume(MP.vol);
+    return;
+  }
   if(MP.player&&typeof MP.player[func]==='function'){
     MP.player[func].apply(MP.player,args||[]);
     return;
@@ -1678,6 +1790,21 @@ function mpSendCmd(func, args){
 }
 
 function mpPollTime(){
+  if(MP.source==='soundcloud'&&MP.scWidget){
+    var widget=MP.scWidget;
+    widget.getPosition(function(ms){
+      if(MP.source!=='soundcloud'||MP.scWidget!==widget)return;
+      var current=(ms||0)/1000;
+      if(MP.dur>0){
+        var pct=(current/MP.dur)*100;
+        var seek=document.getElementById('mp-seek');
+        if(seek&&!mpSeekDragging){seek.value=pct;seek.style.setProperty('--s',pct.toFixed(1)+'%');}
+      }
+      document.getElementById('mp-cur').textContent=mpFmt(current);
+    });
+    if(!MP.dur)widget.getDuration(function(ms){if(MP.scWidget===widget&&ms>0){MP.dur=ms/1000;document.getElementById('mp-dur').textContent=mpFmt(MP.dur);}});
+    return;
+  }
   if(MP.player&&typeof MP.player.getCurrentTime==='function'){
     var current=MP.player.getCurrentTime()||0;
     var duration=MP.player.getDuration()||0;
@@ -1713,6 +1840,7 @@ window.addEventListener('message', function(e){
   var data;
   try{ data = typeof e.data==='string' ? JSON.parse(e.data) : e.data; }
   catch(err){ return; }
+  if(MP.source!=='youtube')return;
 
   // YT IFrame API の応答形式
   if(data.event === 'onStateChange'){
@@ -1766,7 +1894,8 @@ function mpSeek(val){
   document.getElementById('mp-seek').style.setProperty('--s',pct.toFixed(1)+'%');
   if(MP.dur>0){
     var sec=(pct/100)*MP.dur;
-    mpSendCmd('seekTo',[sec,true]);
+    if(MP.source==='soundcloud'&&MP.scWidget)MP.scWidget.seekTo(sec*1000);
+    else mpSendCmd('seekTo',[sec,true]);
   }
 }
 
@@ -1775,7 +1904,7 @@ function mpSetVolume(val){
   var icon=document.getElementById('mp-vol-icon');
   if(icon) icon.textContent=MP.vol===0?'🔇':MP.vol<40?'🔉':'🔊';
   document.getElementById('mp-vol').style.setProperty('--v',MP.vol+'%');
-  mpSendCmd('setVolume',[MP.vol]);
+  mpSendCmd('setVolume',[MP.muted?0:MP.vol]);
 }
 
 function mpToggleMute(){
@@ -1785,15 +1914,15 @@ function mpToggleMute(){
   mpSendCmd(MP.muted?'mute':'unMute',[]);
 }
 
-function mpOpenYT(){
-  if(MP.ytId) window.open('https://www.youtube.com/watch?v='+MP.ytId,'_blank');
+function mpOpenExternal(){
+  if(!MP.track)return;
+  var url=MP.track.soundcloudUrl||('https://www.youtube.com/watch?v='+MP.track.ytId);
+  window.open(url,'_blank');
 }
 
 function mpClose(){
-  clearInterval(MP.seekTimer);MP.seekTimer=null;
-  MP.pendingStart=false;
-  if(MP.playerReady){ try{MP.player.stopVideo();}catch(ex){} }
-  MP.ytId=null;MP.playing=false;MP.inited=false;MP.dur=0;
+  mpStopActiveBackend();
+  MP.ytId=null;MP.track=null;MP.playing=false;MP.inited=false;MP.dur=0;
   MP.history=[];MP.historyIndex=-1;MP.historyNavigating=false;
   mpUpdateCardState();
   var p=document.getElementById('mini-player');
@@ -1830,8 +1959,10 @@ document.addEventListener('keydown',function(event){
     event.preventDefault();mpTogglePlay();
   }else if(event.key==='ArrowRight'||event.key==='ArrowLeft'){
     event.preventDefault();
-    if(MP.playerReady){
-      var delta=event.key==='ArrowRight'?5:-5;
+    var delta=event.key==='ArrowRight'?5:-5;
+    if(MP.source==='soundcloud'&&MP.scWidget){
+      MP.scWidget.getPosition(function(ms){MP.scWidget.seekTo(Math.max(0,Math.min((MP.dur||Infinity)*1000,ms+delta*1000)));});
+    }else if(MP.playerReady){
       MP.player.seekTo(Math.max(0,Math.min(MP.dur||Infinity,MP.player.getCurrentTime()+delta)),true);
     }
   }else if(event.key==='ArrowUp'||event.key==='ArrowDown'){
@@ -1868,7 +1999,7 @@ window.addEventListener('load',function(){mpUpdateModeButton();openTrackFromURL(
       <button class="mp-btn" id="mp-next-btn" onclick="mpNext()" aria-label="次の曲" title="次の曲">
         <svg viewBox="0 0 24 24"><path d="M16 6h2v12h-2zM6 18l8.5-6L6 6z"/></svg>
       </button>
-      <button class="mp-btn mp-external-btn" onclick="mpOpenYT()" aria-label="YouTubeで開く" title="YouTubeで開く">
+      <button class="mp-btn mp-external-btn" onclick="mpOpenExternal()" aria-label="配信ページで開く" title="配信ページで開く">
         <svg viewBox="0 0 24 24"><path d="M10 6v2H5v11h11v-5h2v7H3V6h7zm11-3v8h-2V6.413l-7.793 7.794-1.414-1.414L17.585 5H13V3h8z"/></svg>
       </button>
     </div>
