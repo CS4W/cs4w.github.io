@@ -78,13 +78,30 @@ def fetch_channel_videos(api_key: str, channel_id: str, max_results: int) -> lis
 # ───────────────────────────────────────────────
 # 動画タイトルから曲名と likeId を生成する
 # ───────────────────────────────────────────────
-def parse_title(title: str) -> str:
+def parse_title(title: str) -> tuple[str, str]:
+    """YouTubeタイトルから ``(曲名, platform)`` を生成する。
+
+    ``【...】`` 内の文字は曲名から除外し、複数ある場合は `` / `` で
+    連結してplatformへ保存する。
     """
-    例: 「CS4W - Subjugator」→「Subjugator」
-    """
-    # 「CS4W -」以降を曲名とする（前後の空白を除去）
     name = re.sub(r"^CS4W\s*-\s*", "", title).strip()
-    return name
+    platforms = [
+        value.strip()
+        for value in re.findall(r"【([^】]+)】", name)
+        if value.strip()
+    ]
+    name = re.sub(r"\s*【[^】]*】\s*", " ", name)
+    name = re.sub(r"\s+", " ", name).strip()
+    return name, " / ".join(platforms)
+
+
+def escape_js_string(value: str) -> str:
+    """シングルクォートのJavaScript文字列用にエスケープする。"""
+    return (str(value)
+            .replace("\\", "\\\\")
+            .replace("'", "\\'")
+            .replace("\r", " ")
+            .replace("\n", " "))
 
 
 def make_like_id(name: str) -> str:
@@ -110,13 +127,20 @@ def iso_to_date(iso: str) -> str:
 # tracks.js に新しいエントリを追記する
 # ───────────────────────────────────────────────
 def build_entry(video: dict) -> str:
-    name    = parse_title(video["title"])
+    name, platform = parse_title(video["title"])
     yt_id   = video["ytId"]
     date    = iso_to_date(video["publishedAt"])
     like_id = make_like_id(name)
 
-    # genre / collab / platform などは自動取得不可のため省略
-    return f"  {{date:'{date}',name:'{name}',ytId:'{yt_id}',likeId:'{like_id}'}},"
+    fields = [
+        f"date:'{escape_js_string(date)}'",
+        f"name:'{escape_js_string(name)}'",
+        f"ytId:'{escape_js_string(yt_id)}'",
+    ]
+    if platform:
+        fields.append(f"platform:'{escape_js_string(platform)}'")
+    fields.append(f"likeId:'{escape_js_string(like_id)}'")
+    return "  {" + ",".join(fields) + "},"
 
 
 def insert_new_entries(content: str, new_entries: list[str]) -> str:
