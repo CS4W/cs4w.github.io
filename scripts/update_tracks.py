@@ -85,12 +85,15 @@ def parse_title(title: str) -> tuple[str, str]:
     連結してplatformへ保存する。
     """
     name = re.sub(r"^CS4W\s*-\s*", "", title).strip()
-    platforms = [
-        value.strip()
-        for value in re.findall(r"【([^】]+)】", name)
-        if value.strip()
-    ]
+    platforms = []
+    for value in re.findall(r"【([^】]+)】", name):
+        value = re.sub(r"^\s*from\s*[:：]\s*", "", value,
+                       flags=re.IGNORECASE).strip()
+        if value:
+            platforms.append(value)
     name = re.sub(r"\s*【[^】]*】\s*", " ", name)
+    name = re.sub(r"\bfrom\s*[:：]\s*", "", name,
+                  flags=re.IGNORECASE)
     name = re.sub(r"\s+", " ", name).strip()
     return name, " / ".join(platforms)
 
