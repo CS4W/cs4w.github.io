@@ -1085,7 +1085,7 @@ body{ padding-bottom:36px; }
   <div class="footer-r">© 2026 CS4W / しーそー · All rights reserved.</div>
 </footer>
 
-<script src="../tracks.js"></script>
+<script src="../tracks.js?live=1"></script>
 <script>
 /* ── Reveal ── */
 const ro=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');ro.unobserve(e.target);}});},{threshold:0.06,rootMargin:'0px 0px -20px 0px'});
@@ -1337,7 +1337,9 @@ rerender();
 /* ── PWA Service Worker ── */
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
-    navigator.serviceWorker.register('/sw.js').catch(function(){});
+    navigator.serviceWorker.register('/sw.js',{updateViaCache:'none'}).then(function(registration){
+      registration.update();
+    }).catch(function(){});
   });
 }
 
