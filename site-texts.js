@@ -101,6 +101,7 @@
 
   function applyRow(row, page){
     if(!pageMatches(row.page, page)) return;
+    if(row.value == null || String(row.value).trim() === '') return;
 
     var nodes;
     try{
