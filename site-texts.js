@@ -139,6 +139,10 @@
     var url = SHEET_CSV_URLS[page] || SHEET_CSV_URL || FALLBACK_CSV;
     fetch(noCacheUrl(url), { cache: 'no-store' })
       .then(function(res){
+        if(res.ok) return res;
+        return fetch(url, { cache: 'reload' });
+      })
+      .then(function(res){
         if(!res.ok) throw new Error('CSV load failed');
         return res.text();
       })
