@@ -18,6 +18,7 @@
     about: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR0vsq56OBCKUC-Xjpc32-SBASQVBh2FzqEAAJ-z5WtqN6C-O0qW_WbseEz6iSqBkSPhavNN8c_zxJp/pub?gid=955376999&single=true&output=csv',
     contact: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR0vsq56OBCKUC-Xjpc32-SBASQVBh2FzqEAAJ-z5WtqN6C-O0qW_WbseEz6iSqBkSPhavNN8c_zxJp/pub?gid=1060767638&single=true&output=csv'
   };
+  var AUTO_REFRESH_MS = 30000;
   var FALLBACK_CSV = rootUrl('site-texts.csv');
 
   function rootUrl(file){
@@ -123,10 +124,20 @@
     });
   }
 
+  function noCacheUrl(url){
+    try{
+      var u = new URL(url, location.href);
+      u.searchParams.set('_', String(Date.now()));
+      return u.href;
+    }catch(e){
+      return url + (url.indexOf('?') === -1 ? '?' : '&') + '_=' + Date.now();
+    }
+  }
+
   function loadTexts(){
     var page = currentPage();
     var url = SHEET_CSV_URLS[page] || SHEET_CSV_URL || FALLBACK_CSV;
-    fetch(url, { cache: 'no-store' })
+    fetch(noCacheUrl(url), { cache: 'no-store' })
       .then(function(res){
         if(!res.ok) throw new Error('CSV load failed');
         return res.text();
@@ -144,5 +155,9 @@
     document.addEventListener('DOMContentLoaded', loadTexts);
   }else{
     loadTexts();
+  }
+
+  if(AUTO_REFRESH_MS > 0){
+    setInterval(loadTexts, AUTO_REFRESH_MS);
   }
 })();
