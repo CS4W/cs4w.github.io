@@ -1627,6 +1627,7 @@ body{ padding-bottom:36px; }
 </style>
 <!-- Google Analytics (GA4) - IDをG-RVNXNJB2Q1に置き換えてください -->
 <script defer src="https://www.googletagmanager.com/gtag/js?id=G-RVNXNJB2Q1"></script>
+<script src="./tracks.js?live=1"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -2407,7 +2408,10 @@ function nrPlay(ytId) {
   // ── Recent Videos（CS4W - で始まる、メイン除いた最新4件）
   function renderList(mainId, cs4wVideos){
     if(!listEl) return;
-    var items = cs4wVideos.filter(function(v){ return v.id !== mainId; }).slice(0,4);
+    var items = latestTrackVideos(4);
+    if(!items.length){
+      items = cs4wVideos.filter(function(v){ return v.id !== mainId; }).slice(0,4);
+    }
     if(!items.length){ listEl.innerHTML = ''; return; }
     listEl.innerHTML = items.map(function(v){
       return '<a class="nr-item" href="' + ytUrl(v.id) + '" target="_blank" rel="noopener">' +
@@ -2415,6 +2419,29 @@ function nrPlay(ytId) {
         '<div class="nr-item-info"><h4>' + v.title + '</h4><p>' + v.date + '</p></div>' +
       '</a>';
     }).join('');
+  }
+
+  function parseTrackDate(date){
+    var t = Date.parse(String(date || '').replace(/\//g, '-'));
+    return isNaN(t) ? 0 : t;
+  }
+
+  function latestTrackVideos(limit){
+    var tracks = window.CS4W_TRACKS || [];
+    return tracks
+      .filter(function(t){
+        return t && t.ytId && t.source !== 'soundcloud' && String(t.ytId).indexOf('sc-') !== 0;
+      })
+      .slice()
+      .sort(function(a,b){ return parseTrackDate(b.date) - parseTrackDate(a.date); })
+      .slice(0, limit)
+      .map(function(t){
+        return {
+          id: t.ytId,
+          title: t.name || t.title || t.ytId,
+          date: t.date || ''
+        };
+      });
   }
 
   function applyVideos(allVideos){
