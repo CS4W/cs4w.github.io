@@ -1090,6 +1090,10 @@ body{ padding-bottom:36px; }
 <script>
 /* ── Reveal ── */
 function initRevealAnimations(){
+  document.querySelectorAll('.dc-card').forEach((card,index)=>{
+    card.classList.add('reveal');
+    card.style.setProperty('--delay',Math.min(index % 4,3)*70+'ms');
+  });
   const ro=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');ro.unobserve(e.target);}});},{threshold:0.06,rootMargin:'0px 0px -20px 0px'});
   document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
 }
@@ -1099,7 +1103,7 @@ if(document.documentElement.getAttribute('data-sheet-texts')==='loading'){
   initRevealAnimations();
 }
 
-/* card individual animation removed */
+/* 楽曲カードも見出しと同じスクロール演出で表示する */
 
 /* ── Track data / Sort / Search ── */
 var TRACKS=Array.isArray(window.CS4W_TRACKS)?window.CS4W_TRACKS:[];
