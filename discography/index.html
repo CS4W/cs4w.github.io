@@ -1089,8 +1089,15 @@ body{ padding-bottom:36px; }
 <script src="../tracks.js?live=1"></script>
 <script>
 /* ── Reveal ── */
-const ro=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');ro.unobserve(e.target);}});},{threshold:0.06,rootMargin:'0px 0px -20px 0px'});
-document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+function initRevealAnimations(){
+  const ro=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');ro.unobserve(e.target);}});},{threshold:0.06,rootMargin:'0px 0px -20px 0px'});
+  document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+}
+if(document.documentElement.getAttribute('data-sheet-texts')==='loading'){
+  window.addEventListener('site-texts-ready',initRevealAnimations,{once:true});
+}else{
+  initRevealAnimations();
+}
 
 /* card individual animation removed */
 
