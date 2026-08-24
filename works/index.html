@@ -1040,10 +1040,17 @@ body{ padding-bottom:36px; }
   <div class="footer-r">© 2026 CS4W / しーそー · All rights reserved.</div>
 </footer>
 <script>
-const ro = new IntersectionObserver(entries => {
-  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); ro.unobserve(e.target); } });
-}, {threshold:0.06, rootMargin:'0px 0px -20px 0px'});
-document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
+function initRevealAnimations(){
+  const ro = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); ro.unobserve(e.target); } });
+  }, {threshold:0.06, rootMargin:'0px 0px -20px 0px'});
+  document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
+}
+if(document.documentElement.getAttribute('data-sheet-texts') === 'loading'){
+  window.addEventListener('site-texts-ready', initRevealAnimations, {once:true});
+}else{
+  initRevealAnimations();
+}
 /* wcard individual animation removed */
 function filterWorks(type, btn) {
   document.querySelectorAll('.filter-btn').forEach(function(b){ b.classList.remove('active'); });
