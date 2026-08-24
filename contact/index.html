@@ -715,7 +715,8 @@ body{ padding-bottom:36px; }
 
 <footer><div class="footer-l"><span style="color:var(--violet);margin-right:0.45rem;font-family:'Raleway',sans-serif;font-weight:300;font-size:0.75rem;">✛</span>CS4W</div><div class="footer-r">© 2026 CS4W / しーそー · All rights reserved.</div></footer>
 <script>
-const _ro=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');_ro.unobserve(e.target);}});},{threshold:0.08,rootMargin:'0px 0px -30px 0px'});document.querySelectorAll('.reveal').forEach(el=>_ro.observe(el));
+function initRevealAnimations(){const _ro=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');_ro.unobserve(e.target);}});},{threshold:0.08,rootMargin:'0px 0px -30px 0px'});document.querySelectorAll('.reveal').forEach(el=>_ro.observe(el));}
+if(document.documentElement.getAttribute('data-sheet-texts')==='loading'){window.addEventListener('site-texts-ready',initRevealAnimations,{once:true});}else{initRevealAnimations();}
 window._turnstileToken = "";
 function onTurnstileSuccess(token){ window._turnstileToken = token; }
 function handleSubmit(e){
