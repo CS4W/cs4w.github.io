@@ -1041,6 +1041,10 @@ body{ padding-bottom:36px; }
 </footer>
 <script>
 function initRevealAnimations(){
+  document.querySelectorAll('.wcard').forEach((card,index) => {
+    card.classList.add('reveal');
+    card.style.setProperty('--delay', Math.min(index % 4, 3) * 70 + 'ms');
+  });
   const ro = new IntersectionObserver(entries => {
     entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); ro.unobserve(e.target); } });
   }, {threshold:0.06, rootMargin:'0px 0px -20px 0px'});
@@ -1051,7 +1055,7 @@ if(document.documentElement.getAttribute('data-sheet-texts') === 'loading'){
 }else{
   initRevealAnimations();
 }
-/* wcard individual animation removed */
+/* 作品カードも見出しと同じスクロール演出で表示する */
 function filterWorks(type, btn) {
   document.querySelectorAll('.filter-btn').forEach(function(b){ b.classList.remove('active'); });
   btn.classList.add('active');
