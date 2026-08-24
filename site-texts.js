@@ -1,6 +1,15 @@
 (function(){
   'use strict';
 
+  // 初回アニメーションが古いHTML文言で始まらないよう、CSV反映まで待機する。
+  document.documentElement.setAttribute('data-sheet-texts', 'loading');
+  var gateStyle = document.createElement('style');
+  gateStyle.id = 'sheet-texts-gate';
+  gateStyle.textContent =
+    'html[data-sheet-texts="loading"] body{visibility:hidden;}' +
+    'html[data-sheet-texts="loading"] body *{animation-play-state:paused!important;}';
+  document.head.appendChild(gateStyle);
+
   /*
     Googleスプレッドシート連動用。
     公開CSVのURLをここに貼ると、サイト表示時に文章が自動で差し替わります。
@@ -135,10 +144,9 @@
     }
   }
 
-  function loadTexts(){
-    var page = currentPage();
+  function fetchTexts(page){
     var url = SHEET_CSV_URLS[page] || SHEET_CSV_URL || FALLBACK_CSV;
-    fetch(noCacheUrl(url), { cache: 'no-store' })
+    return fetch(noCacheUrl(url), { cache: 'no-store' })
       .then(function(res){
         if(res.ok) return res;
         return fetch(url, { cache: 'reload' });
@@ -146,20 +154,46 @@
       .then(function(res){
         if(!res.ok) throw new Error('CSV load failed');
         return res.text();
-      })
-      .then(function(text){
-        toObjects(parseCsv(text)).forEach(function(row){ applyRow(row, page); });
-        document.documentElement.setAttribute('data-sheet-texts', 'loaded');
-      })
-      .catch(function(err){
-        console.warn('[site-texts]', err.message);
       });
   }
 
+  function applyTexts(text, page){
+    toObjects(parseCsv(text)).forEach(function(row){ applyRow(row, page); });
+  }
+
+  function finishInitialLoad(status){
+    document.documentElement.setAttribute('data-sheet-texts', status);
+    if(gateStyle.parentNode) gateStyle.parentNode.removeChild(gateStyle);
+  }
+
+  function loadTexts(){
+    var page = currentPage();
+    return fetchTexts(page).then(function(text){
+      applyTexts(text, page);
+      document.documentElement.setAttribute('data-sheet-texts', 'loaded');
+    }).catch(function(err){
+      console.warn('[site-texts]', err.message);
+    });
+  }
+
+  // head内で取得を始め、残りのHTMLを解析している間にCSVを読み込む。
+  var initialPage = currentPage();
+  var initialTexts = fetchTexts(initialPage);
+
+  function applyInitialTexts(){
+    initialTexts.then(function(text){
+      applyTexts(text, initialPage);
+      finishInitialLoad('loaded');
+    }).catch(function(err){
+      console.warn('[site-texts]', err.message);
+      finishInitialLoad('failed');
+    });
+  }
+
   if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', loadTexts);
+    document.addEventListener('DOMContentLoaded', applyInitialTexts);
   }else{
-    loadTexts();
+    applyInitialTexts();
   }
 
   if(AUTO_REFRESH_MS > 0){
