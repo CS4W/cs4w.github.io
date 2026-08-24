@@ -164,12 +164,10 @@
   function finishInitialLoad(status){
     document.documentElement.setAttribute('data-sheet-texts', status);
     if(gateStyle.parentNode) gateStyle.parentNode.removeChild(gateStyle);
-    // ページが一度描画されてから、各ページの表示アニメーションを開始する。
-    requestAnimationFrame(function(){
-      requestAnimationFrame(function(){
-        window.dispatchEvent(new Event('site-texts-ready'));
-      });
-    });
+    // bodyを表示したあとに開始する。非表示タブで停止し得るrAFには依存しない。
+    setTimeout(function(){
+      window.dispatchEvent(new Event('site-texts-ready'));
+    }, 80);
   }
 
   function loadTexts(){
