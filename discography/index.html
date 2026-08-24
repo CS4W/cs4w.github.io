@@ -112,6 +112,7 @@ nav::after{content:"";position:absolute;bottom:-3px;left:3.5rem;right:3.5rem;hei
   border-right:1px solid var(--line);
   border-bottom:1px solid var(--line);
 }
+.dc-card.reveal{transition:opacity 0.75s cubic-bezier(.22,1,.36,1),transform 0.75s cubic-bezier(.22,1,.36,1),background 0.3s;transition-delay:var(--delay,0ms);}
 .dc-card::before{
   content:"";position:absolute;top:0;left:0;
   width:0;height:2px;
@@ -1090,10 +1091,6 @@ body{ padding-bottom:36px; }
 <script>
 /* ── Reveal ── */
 function initRevealAnimations(){
-  document.querySelectorAll('.dc-card').forEach((card,index)=>{
-    card.classList.add('reveal');
-    card.style.setProperty('--delay',Math.min(index % 4,3)*70+'ms');
-  });
   const ro=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');ro.unobserve(e.target);}});},{threshold:0.06,rootMargin:'0px 0px -20px 0px'});
   document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
 }
@@ -1132,7 +1129,7 @@ function renderTrackCard(track){
   var thumbnail=track.thumbnail||('https://img.youtube.com/vi/'+track.ytId+'/mqdefault.jpg');
   var sourceLabel=track.source==='soundcloud'?'<span class="dc-yt-label">SoundCloud</span>':'';
   var media='<button class="dc-thumb" type="button" data-play-id="'+esc(track.ytId)+'" title="'+esc(track.name)+'" aria-label="'+esc(track.name)+'を再生"><img src="'+esc(thumbnail)+'" alt="'+esc(track.name)+'" loading="lazy"><span class="dc-play" aria-hidden="true"><span>▶</span></span>'+sourceLabel+'</button>';
-  return '<article class="dc-card" data-yt-id="'+esc(track.ytId)+'" data-source-index="'+track.sourceIndex+'" data-date="'+esc(track.date)+'" data-title="'+esc(track.name.toLowerCase())+'" data-year="'+esc(track.date.slice(0,4))+'" data-genre="'+esc(track.genre||'')+'" data-game="'+esc(track.game||'')+'">'+
+  return '<article class="dc-card reveal" style="--delay:'+Math.min(track.sourceIndex%4,3)*70+'ms" data-yt-id="'+esc(track.ytId)+'" data-source-index="'+track.sourceIndex+'" data-date="'+esc(track.date)+'" data-title="'+esc(track.name.toLowerCase())+'" data-year="'+esc(track.date.slice(0,4))+'" data-genre="'+esc(track.genre||'')+'" data-game="'+esc(track.game||'')+'">'+
     '<div class="dc-media">'+media+'</div>'+
     '<div class="dc-info"><div class="dc-meta-row">'+meta+'</div><h3 class="'+titleClass+'" title="'+esc(track.name)+'">'+esc(track.name)+'</h3>'+details+
     '<div class="dc-btn-row"><button class="share-btn" type="button" data-share-id="'+esc(track.ytId)+'" aria-label="'+esc(track.name)+'をシェア">'+SHARE_SVG+'シェア</button>'+
