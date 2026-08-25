@@ -2451,7 +2451,10 @@ function nrPlay(ytId) {
     // SAMPLEPACKを含むもの
     var spVideo    = allVideos.filter(function(v){ return isSamplePack(v.title); })[0] || null;
 
-    var mainVideo  = cs4wVideos[0] || allVideos[0];
+    // Latest VideoもDiscographyと同じ楽曲データの日付順1位を使う。
+    // RSSのタイトル表記や取得順に左右されないようにする。
+    var latestTracks = latestTrackVideos(1);
+    var mainVideo  = latestTracks[0] || cs4wVideos[0] || allVideos[0];
     if(mainVideo)  renderMain(mainVideo);
     renderSamplePack(spVideo);
     renderList(mainVideo ? mainVideo.id : '', cs4wVideos);
