@@ -1,4 +1,4 @@
-const CACHE = 'cs4w-v2';
+const CACHE = 'cs4w-v3';
 const PRECACHE = ['/', '/works/', '/discography/', '/about/', '/contact/'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(PRECACHE)).catch(()=>{}));
@@ -22,8 +22,11 @@ self.addEventListener('fetch', e => {
     );
     return;
   }
+  const request = e.request.mode === 'navigate'
+    ? new Request(e.request, {cache: 'reload'})
+    : e.request;
   e.respondWith(
-    fetch(e.request).then(res => {
+    fetch(request).then(res => {
       const clone = res.clone();
       caches.open(CACHE).then(c => c.put(e.request, clone));
       return res;
