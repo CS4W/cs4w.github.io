@@ -73,6 +73,10 @@ nav::after{content:"";position:absolute;bottom:-3px;left:3.5rem;right:3.5rem;hei
 .filter-bar{position:sticky;top:62px;z-index:200;transition:top 0.3s ease;background:rgba(15,15,28,0.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:0.65rem 3.5rem;display:flex;align-items:center;gap:0.6rem;flex-wrap:wrap;}
 .filter-btn{font-family:"Raleway",sans-serif;font-weight:300;font-style:italic;font-size:0.64rem;letter-spacing:0.18em;text-transform:uppercase;padding:0.28rem 0.85rem;border:1px solid var(--line);color:var(--muted);background:transparent;cursor:pointer;transition:all 0.25s;}
 .filter-btn:hover,.filter-btn.active{border-color:var(--violet);color:var(--violet);background:rgba(184,159,255,0.06);}
+.sort-controls{display:flex;align-items:center;gap:0.35rem;margin-left:0.5rem;padding-left:0.8rem;border-left:1px solid var(--line);}
+.sort-label{font-family:"Raleway",sans-serif;font-weight:300;font-size:0.56rem;letter-spacing:0.16em;color:var(--muted);}
+.sort-btn{font-family:"Shippori Mincho",serif;font-size:0.62rem;letter-spacing:0.08em;padding:0.28rem 0.7rem;border:1px solid var(--line);color:var(--muted);background:transparent;cursor:pointer;transition:all 0.25s;}
+.sort-btn:hover,.sort-btn.active{border-color:var(--teal);color:var(--teal);background:rgba(77,232,194,0.06);}
 .filter-count{font-family:"Raleway",sans-serif;font-weight:300;font-size:0.6rem;letter-spacing:0.15em;color:var(--muted);margin-left:auto;}
 .filter-count em{color:var(--violet);font-style:normal;}
 .works-main{position:relative;z-index:1;padding:0 3.5rem 100px;max-width:1300px;margin:0 auto;}
@@ -728,6 +732,11 @@ body{ padding-bottom:36px; }
   <button class="filter-btn active" onclick="filterWorks('all',this)">All</button>
   <button class="filter-btn" onclick="filterWorks('music_game',this)">音楽ゲーム</button>
   <button class="filter-btn" onclick="filterWorks('commission',this)">楽曲提供</button>
+  <div class="sort-controls" aria-label="表示順">
+    <span class="sort-label">SORT</span>
+    <button class="sort-btn" type="button" onclick="sortWorks('desc',this)">新しい順</button>
+    <button class="sort-btn active" type="button" onclick="sortWorks('asc',this)">古い順</button>
+  </div>
   <span class="filter-count" id="filterCount">全 <em>23</em> 曲</span>
 </div>
 <div class="works-main">
@@ -1087,6 +1096,23 @@ function filterWorks(type, btn) {
   if (badge) badge.innerHTML = type==='all'
     ? '全 <em>'+all.length+'</em> 曲'
     : '<em>'+shown+'</em> / '+all.length+' 曲';
+  sortWorks(window.worksSortDirection || 'asc');
+}
+
+window.worksSortDirection = 'asc';
+function sortWorks(direction, btn) {
+  window.worksSortDirection = direction === 'desc' ? 'desc' : 'asc';
+  document.querySelectorAll('.sort-btn').forEach(function(b){ b.classList.toggle('active', b === btn || (!btn && b.getAttribute('onclick').includes("'"+window.worksSortDirection+"'"))); });
+  var grid = document.getElementById('worksGrid');
+  var pool = document.getElementById('wc-pool');
+  [grid, pool].forEach(function(container){
+    if (!container) return;
+    Array.from(container.querySelectorAll('.wcard')).sort(function(a,b){
+      var ad = ((a.dataset.workDate || (a.querySelector('.wcard-date') || {}).textContent || '') + '').replace(/\D/g,'');
+      var bd = ((b.dataset.workDate || (b.querySelector('.wcard-date') || {}).textContent || '') + '').replace(/\D/g,'');
+      return window.worksSortDirection === 'desc' ? bd.localeCompare(ad) : ad.localeCompare(bd);
+    }).forEach(function(card){ container.appendChild(card); });
+  });
 }
 
 /* ════ SHARED UX JS ════ */
