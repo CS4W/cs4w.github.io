@@ -27,6 +27,7 @@
     about: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR0vsq56OBCKUC-Xjpc32-SBASQVBh2FzqEAAJ-z5WtqN6C-O0qW_WbseEz6iSqBkSPhavNN8c_zxJp/pub?gid=2109793789&single=true&output=csv',
     contact: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR0vsq56OBCKUC-Xjpc32-SBASQVBh2FzqEAAJ-z5WtqN6C-O0qW_WbseEz6iSqBkSPhavNN8c_zxJp/pub?gid=1332200278&single=true&output=csv'
   };
+  window.CS4W_SHEET_URLS = SHEET_CSV_URLS;
   var AUTO_REFRESH_MS = 30000;
   var FALLBACK_CSV = rootUrl('site-texts.csv');
 
