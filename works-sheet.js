@@ -123,11 +123,7 @@
       existing[key]=true;
     });
 
-    Array.from(grid.querySelectorAll('.wcard')).sort(function(a,b){
-      var ad=(a.dataset.workDate||(a.querySelector('.wcard-date')||{}).textContent||'').replace(/\D/g,'');
-      var bd=(b.dataset.workDate||(b.querySelector('.wcard-date')||{}).textContent||'').replace(/\D/g,'');
-      return ad.localeCompare(bd);
-    }).forEach(function(card){grid.appendChild(card);});
+    if(typeof window.sortWorks==='function')window.sortWorks(window.worksSortDirection||'asc');
 
     var cards=grid.querySelectorAll('.wcard');
     document.querySelectorAll('.ph-count em').forEach(function(el){el.textContent=cards.length;});
