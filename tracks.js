@@ -1,5 +1,6 @@
 /* Discography data: add, remove, or edit tracks here. */
 window.CS4W_TRACKS = [
+  {date:'2026/10/24',name:'Dissonant Qualia',ytId:'zX3n33B8fHU',platform:'Dissonant Qualia',likeId:'dissonantqualia'},
   {date:'2026/08/16',name:'Almisael',ytId:'uAmEKApaX78',likeId:'almisael'},
   {date:'2026/06/30',name:'Aberrant Destructor',ytId:'MMoDLhNUGz4',platform:'Resurrection Cup 2026',likeId:'aberrantdestructor'},
   {date:'2023/01/02',name:'暮明',ytId:'T2Zjh2uptxI',genre:'piano',note:'PIANO SOLO',platform:'YouTube',likeId:'kureaka'},
