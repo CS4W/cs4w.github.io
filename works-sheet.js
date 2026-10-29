@@ -123,7 +123,7 @@
       existing[key]=true;
     });
 
-    if(typeof window.sortWorks==='function')window.sortWorks(window.worksSortDirection||'asc');
+    if(typeof window.sortWorks==='function')window.sortWorks(window.worksSortDirection||'desc');
 
     var cards=grid.querySelectorAll('.wcard');
     document.querySelectorAll('.ph-count em').forEach(function(el){el.textContent=cards.length;});
