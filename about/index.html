@@ -89,12 +89,10 @@ body{background:var(--bg);color:var(--ghost);font-family:"Shippori Mincho",serif
 .tl-desc strong{color:var(--ghost);font-weight:500;}
 
 /* ── GAMES ── */
-.games-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);}
-.game-cell{background:var(--bg2);padding:1.2rem 1rem;text-align:center;transition:background 0.3s;}
-.game-cell:hover{background:rgba(184,159,255,0.05);}
-.game-icon{font-size:1.3rem;margin-bottom:0.5rem;}
-.game-name{font-family:"Cinzel",serif;font-weight:400;font-size:0.72rem;letter-spacing:0.06em;color:var(--ghost);}
-.game-note{font-family:"Raleway",sans-serif;font-weight:300;font-size:0.58rem;letter-spacing:0.12em;color:var(--muted);margin-top:0.2rem;}
+.games-list{list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:0;border-top:1px solid var(--line);margin:0;padding:0;}
+.game-item{position:relative;display:flex;align-items:baseline;gap:0.65rem;padding:0.8rem 0.9rem 0.8rem 1.25rem;border-bottom:1px solid var(--line);font-family:"Cinzel",serif;font-size:0.74rem;letter-spacing:0.05em;color:var(--ghost);}
+.game-item::before{content:"";position:absolute;left:0.35rem;top:1.15rem;width:4px;height:4px;border-radius:50%;background:var(--teal);}
+.game-note{font-family:"Raleway",sans-serif;font-weight:300;font-size:0.58rem;letter-spacing:0.1em;color:var(--muted);}
 
 footer{position:relative;z-index:1;padding-bottom:calc(1.5rem + 36px);padding:1.5rem 3.5rem;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;background:rgba(15,15,28,0.88);}.footer-l{font-family:"Cinzel",serif;font-weight:600;font-size:0.82rem;letter-spacing:0.2em;color:var(--muted);}.footer-r{font-family:"Raleway",sans-serif;font-weight:300;font-size:0.55rem;letter-spacing:0.14em;color:rgba(106,101,133,0.4);}
 @media(max-width:700px){
@@ -503,6 +501,7 @@ body{ padding-bottom:36px; }
   gtag('config', 'G-RVNXNJB2Q1');
 </script>
 <script src="../site-texts.js"></script>
+<script src="../about-games.js"></script>
 </head>
 <body data-page="about">
 <a href="#main" class="skip-link">コンテンツへスキップ</a>
@@ -746,20 +745,20 @@ body{ padding-bottom:36px; }
     <h2 class="ab-section-h2" data-text-id="about-presence-heading">収録タイトル</h2>
     <p class="ab-section-sub" data-text-id="about-presence-sub">音楽ゲームへの収録実績</p>
   </div>
-  <div class="games-grid reveal" style="--delay:60ms">
-    <div class="game-cell"><div class="game-icon">🎮</div><div class="game-name">Dynamix</div><div class="game-note">複数曲収録</div></div>
-    <div class="game-cell"><div class="game-icon">🥁</div><div class="game-name">太鼓の達人</div><div class="game-note">AC収録</div></div>
-    <div class="game-cell"><div class="game-icon">🌸</div><div class="game-name">maimai</div><div class="game-note">AC収録</div></div>
-    <div class="game-cell"><div class="game-icon">🎵</div><div class="game-name">Muse Dash</div><div class="game-note">収録</div></div>
-    <div class="game-cell"><div class="game-icon">🎯</div><div class="game-name">Cytus II</div><div class="game-note">収録</div></div>
-    <div class="game-cell"><div class="game-icon">⚡</div><div class="game-name">TAKUMI³</div><div class="game-note">最優秀賞</div></div>
-    <div class="game-cell"><div class="game-icon">🎼</div><div class="game-name">Lanota</div><div class="game-note">収録</div></div>
-    <div class="game-cell"><div class="game-icon">🎪</div><div class="game-name">Orzmic</div><div class="game-note">複数曲収録</div></div>
-    <div class="game-cell"><div class="game-icon">🌊</div><div class="game-name">VOEZ</div><div class="game-note">収録</div></div>
-    <div class="game-cell"><div class="game-icon">🚂</div><div class="game-name">DanceRail3</div><div class="game-note">収録</div></div>
-    <div class="game-cell"><div class="game-icon">🔮</div><div class="game-name">MUSYNX</div><div class="game-note">書き下ろし</div></div>
-    <div class="game-cell"><div class="game-icon">🎻</div><div class="game-name">Berry Melody</div><div class="game-note">収録</div></div>
-  </div>
+  <ul class="games-list reveal" id="gamesList" style="--delay:60ms">
+    <li class="game-item"><span class="game-name">Dynamix</span><span class="game-note">複数曲収録</span></li>
+    <li class="game-item"><span class="game-name">太鼓の達人</span><span class="game-note">AC収録</span></li>
+    <li class="game-item"><span class="game-name">maimai</span><span class="game-note">AC収録</span></li>
+    <li class="game-item"><span class="game-name">Muse Dash</span><span class="game-note">収録</span></li>
+    <li class="game-item"><span class="game-name">Cytus II</span><span class="game-note">収録</span></li>
+    <li class="game-item"><span class="game-name">TAKUMI³</span><span class="game-note">最優秀賞</span></li>
+    <li class="game-item"><span class="game-name">Lanota</span><span class="game-note">収録</span></li>
+    <li class="game-item"><span class="game-name">Orzmic</span><span class="game-note">複数曲収録</span></li>
+    <li class="game-item"><span class="game-name">VOEZ</span><span class="game-note">収録</span></li>
+    <li class="game-item"><span class="game-name">DanceRail3</span><span class="game-note">収録</span></li>
+    <li class="game-item"><span class="game-name">MUSYNX</span><span class="game-note">書き下ろし</span></li>
+    <li class="game-item"><span class="game-name">Berry Melody</span><span class="game-note">収録</span></li>
+  </ul>
 
 </div>
 <footer><div class="footer-l"><span style="color:var(--violet);margin-right:0.45rem;font-family:'Raleway',sans-serif;font-weight:300;font-size:0.75rem;">✛</span>CS4W</div><div class="footer-r">© 2026 CS4W / しーそー · All rights reserved.</div></footer>
