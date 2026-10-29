@@ -110,6 +110,10 @@
     });
     if(!items.length)return;
 
+    // 管理対象の行がある場合は、シートを唯一の表示元として扱う。
+    // HTML内の既存カードは通信失敗時のフォールバックとしてだけ残す。
+    grid.replaceChildren();
+
     var existing={};
     grid.querySelectorAll('.wcard').forEach(function(card){
       var title=card.querySelector('.wcard-title');

@@ -44,11 +44,16 @@
   function appendGames(rows){
     var list=document.getElementById('gamesList');
     if(!list)return;
+    var items=rows.filter(function(row){
+      return value(row,['mode']).toLowerCase()==='game_title'&&enabled(row)&&value(row,['ゲームタイトル','タイトル','game_title','title']);
+    });
+    if(!items.length)return;
+
+    // シートに管理行がある場合は、固定HTMLではなくシート内容を表示する。
+    list.replaceChildren();
     var existing={};
     list.querySelectorAll('.game-name').forEach(function(el){existing[el.textContent.trim().toLowerCase()]=true;});
-    rows.filter(function(row){
-      return value(row,['mode']).toLowerCase()==='game_title'&&enabled(row)&&value(row,['ゲームタイトル','タイトル','game_title','title']);
-    }).forEach(function(row){
+    items.forEach(function(row){
       var title=value(row,['ゲームタイトル','タイトル','game_title','title']);
       var note=value(row,['補足','note']);
       var key=title.toLowerCase();
