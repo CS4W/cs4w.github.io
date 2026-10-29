@@ -734,8 +734,8 @@ body{ padding-bottom:36px; }
   <button class="filter-btn" onclick="filterWorks('commission',this)">楽曲提供</button>
   <div class="sort-controls" aria-label="表示順">
     <span class="sort-label">SORT</span>
-    <button class="sort-btn" type="button" onclick="sortWorks('desc',this)">新しい順</button>
-    <button class="sort-btn active" type="button" onclick="sortWorks('asc',this)">古い順</button>
+    <button class="sort-btn active" type="button" onclick="sortWorks('desc',this)">新しい順</button>
+    <button class="sort-btn" type="button" onclick="sortWorks('asc',this)">古い順</button>
   </div>
   <span class="filter-count" id="filterCount">全 <em>23</em> 曲</span>
 </div>
@@ -1096,10 +1096,10 @@ function filterWorks(type, btn) {
   if (badge) badge.innerHTML = type==='all'
     ? '全 <em>'+all.length+'</em> 曲'
     : '<em>'+shown+'</em> / '+all.length+' 曲';
-  sortWorks(window.worksSortDirection || 'asc');
+  sortWorks(window.worksSortDirection || 'desc');
 }
 
-window.worksSortDirection = 'asc';
+window.worksSortDirection = 'desc';
 function sortWorks(direction, btn) {
   window.worksSortDirection = direction === 'desc' ? 'desc' : 'asc';
   document.querySelectorAll('.sort-btn').forEach(function(b){ b.classList.toggle('active', b === btn || (!btn && b.getAttribute('onclick').includes("'"+window.worksSortDirection+"'"))); });
@@ -1114,6 +1114,7 @@ function sortWorks(direction, btn) {
     }).forEach(function(card){ container.appendChild(card); });
   });
 }
+sortWorks('desc');
 
 /* ════ SHARED UX JS ════ */
 (function(){
