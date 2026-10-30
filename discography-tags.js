@@ -51,6 +51,22 @@
     });
   }
 
+  function splitDestinations(raw){
+    var seen={};
+    return String(raw||'').split(/[,，、;；|／/]/).map(function(item){return item.trim();}).filter(function(item){
+      var key=item.toLowerCase();
+      if(!key||seen[key])return false;
+      seen[key]=true;
+      return true;
+    });
+  }
+
+  function youtubeId(raw){
+    var text=String(raw||'').trim();
+    var match=text.match(/(?:youtu\.be\/|[?&]v=|\/embed\/|\/shorts\/)([\w-]{6,})/i);
+    return match?match[1].toLowerCase():'';
+  }
+
   function keyFor(label){
     return String(label||'').trim().toLowerCase().replace(/\s+/g,'-');
   }
@@ -106,18 +122,47 @@
     return tracks;
   }
 
-  function start(){
-    var url=(window.CS4W_SHEET_URLS||{}).discography;
-    prepareTracks();
+  function applyWorksGames(rows){
+    var tracks=Array.isArray(window.CS4W_TRACKS)?window.CS4W_TRACKS:[];
+    var byId={},byName={};
+    tracks.forEach(function(track){
+      byId[String(track.ytId||'').toLowerCase()]=track;
+      byName[String(track.name||'').trim().toLowerCase()]=track;
+    });
+    rows.forEach(function(row){
+      if(value(row,['mode']).toLowerCase()!=='work_item'||!enabled(row))return;
+      if(value(row,['分類','category','type']).toLowerCase()!=='music_game')return;
+      var id=youtubeId(value(row,['リンク','URL','url','link']));
+      var name=value(row,['作品名','曲名','title','name']).toLowerCase();
+      var track=byId[id]||byName[name];
+      var games=splitDestinations(value(row,['掲載先・収録先','収録先','ゲーム','game']));
+      if(track&&games.length)setClassification(track,'game',games);
+    });
+    return tracks;
+  }
+
+  function loadRows(url,label){
     if(!url)return Promise.resolve([]);
     var fresh=new URL(url,location.href);
     fresh.searchParams.set('_',String(Date.now()));
     return fetch(fresh.href,{cache:'no-store'}).then(function(response){
-      if(!response.ok)throw new Error('Discography classification sheet load failed');
+      if(!response.ok)throw new Error(label+' sheet load failed');
       return response.text();
-    }).then(function(text){return applyClassifications(objects(parseCsv(text)));}).catch(function(error){
+    }).then(function(text){return objects(parseCsv(text));}).catch(function(error){
       console.warn('[discography-classifications]',error.message);
       return [];
+    });
+  }
+
+  function start(){
+    var urls=window.CS4W_SHEET_URLS||{};
+    prepareTracks();
+    return Promise.all([
+      loadRows(urls.discography,'Discography classification'),
+      loadRows(urls.works,'Works')
+    ]).then(function(results){
+      applyClassifications(results[0]);
+      return applyWorksGames(results[1]);
     });
   }
 
