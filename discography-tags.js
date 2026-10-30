@@ -41,7 +41,7 @@
     return !/^(false|0|off|no|非表示)$/.test(flag);
   }
 
-  function splitTags(raw){
+  function splitValues(raw){
     var seen={};
     return String(raw||'').split(/[,，、;；|]/).map(function(tag){return tag.trim();}).filter(function(tag){
       var key=tag.toLowerCase();
@@ -51,7 +51,42 @@
     });
   }
 
-  function applyTags(rows){
+  function keyFor(label){
+    return String(label||'').trim().toLowerCase().replace(/\s+/g,'-');
+  }
+
+  function fallbackLabels(track,field){
+    var genreLabels={
+      'gothic-hardcore':'Gothic Hardcore','artcore':'Artcore','bass-house':'Bass House',
+      'dubstep':'Dubstep','midtempo':'Midtempo','gothic':'Gothic','frenchcore':'Frenchcore',
+      'piano':'Piano','ambient':'Ambient','gothic-hitech':'Gothic Hi-Tech'
+    };
+    var gameLabels={
+      'dynamix':'Dynamix','takumi3':'TAKUMI³','orzmic':'Orzmic','lanota':'Lanota',
+      'osu':'osu!','musynx':'MUSYNX','dancerai13':'DanceRail3','berry-melody':'Berry Melody'
+    };
+    var labels=field==='genre'?genreLabels:gameLabels;
+    return String(track[field]||'').split(/[|,]/).map(function(item){
+      var key=item.trim().toLowerCase();
+      return labels[key]||item.trim();
+    }).filter(Boolean);
+  }
+
+  function setClassification(track,field,labels){
+    track[field+'Labels']=labels;
+    track[field]=labels.map(keyFor).join('|');
+  }
+
+  function prepareTracks(){
+    var tracks=Array.isArray(window.CS4W_TRACKS)?window.CS4W_TRACKS:[];
+    tracks.forEach(function(track){
+      setClassification(track,'genre',fallbackLabels(track,'genre'));
+      setClassification(track,'game',fallbackLabels(track,'game'));
+    });
+    return tracks;
+  }
+
+  function applyClassifications(rows){
     var tracks=Array.isArray(window.CS4W_TRACKS)?window.CS4W_TRACKS:[];
     var byId={},byName={};
     tracks.forEach(function(track){
@@ -63,21 +98,25 @@
       var id=value(row,['曲ID（YouTube ID）','YouTube ID','ytId','track_id']).toLowerCase();
       var name=value(row,['曲名','作品名','title','name']).toLowerCase();
       var track=byId[id]||byName[name];
-      if(track)track.tags=splitTags(value(row,['タグ（カンマ区切り）','タグ','tags','tag']));
+      if(track){
+        setClassification(track,'genre',splitValues(value(row,['ジャンル（複数はカンマ区切り）','ジャンル','genre'])));
+        setClassification(track,'game',splitValues(value(row,['ゲーム（複数はカンマ区切り）','ゲーム','game'])));
+      }
     });
     return tracks;
   }
 
   function start(){
     var url=(window.CS4W_SHEET_URLS||{}).discography;
+    prepareTracks();
     if(!url)return Promise.resolve([]);
     var fresh=new URL(url,location.href);
     fresh.searchParams.set('_',String(Date.now()));
     return fetch(fresh.href,{cache:'no-store'}).then(function(response){
-      if(!response.ok)throw new Error('Discography tags sheet load failed');
+      if(!response.ok)throw new Error('Discography classification sheet load failed');
       return response.text();
-    }).then(function(text){return applyTags(objects(parseCsv(text)));}).catch(function(error){
-      console.warn('[discography-tags]',error.message);
+    }).then(function(text){return applyClassifications(objects(parseCsv(text)));}).catch(function(error){
+      console.warn('[discography-classifications]',error.message);
       return [];
     });
   }
