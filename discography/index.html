@@ -226,6 +226,8 @@ nav::after{content:"";position:absolute;bottom:-3px;left:3.5rem;right:3.5rem;hei
 .dc-title{color:var(--violet);}
 .dc-collab{font-family:"Raleway",sans-serif;font-weight:300;font-style:italic;font-size:0.62rem;letter-spacing:0.1em;color:var(--teal);}
 .dc-platform{font-family:"Shippori Mincho",serif;font-size:0.7rem;line-height:1.7;color:var(--muted);letter-spacing:0.04em;}
+.dc-tags{display:flex;flex-wrap:wrap;gap:0.3rem;margin-top:0.45rem;}
+.dc-tag{font-family:"Raleway",sans-serif;font-weight:300;font-size:0.5rem;letter-spacing:0.1em;color:var(--teal);border:1px solid rgba(77,232,194,0.24);padding:0.12rem 0.38rem;}
 .dc-ext-link{
   margin-top:0.4rem;
   font-family:"Raleway",sans-serif;font-weight:300;font-style:italic;
@@ -1076,6 +1078,9 @@ body{ padding-bottom:36px; }
     <option value="musynx">MUSYNX</option>
     <option value="dancerai13">DanceRail3</option>
   </select>
+  <select id="tagFilter" class="ctrl-select" onchange="rerender()">
+    <option value="">Tag: All</option>
+  </select>
 </div>
 
 <div class="dc-main">
@@ -1088,6 +1093,7 @@ body{ padding-bottom:36px; }
 </footer>
 
 <script src="../tracks.js?live=1"></script>
+<script src="../discography-tags.js"></script>
 <script>
 /* ── Reveal ── */
 function initRevealAnimations(){
@@ -1128,10 +1134,12 @@ function renderTrackCard(track){
   var details=(track.collab?'<p class="dc-collab">'+esc(track.collab)+'</p>':'')+(track.platform?'<p class="dc-platform">'+esc(track.platform)+'</p>':'');
   var thumbnail=track.thumbnail||('https://img.youtube.com/vi/'+track.ytId+'/mqdefault.jpg');
   var sourceLabel=track.source==='soundcloud'?'<span class="dc-yt-label">SoundCloud</span>':'';
+  var tags=Array.isArray(track.tags)?track.tags:[];
+  var tagHtml=tags.length?'<div class="dc-tags">'+tags.map(function(tag){return '<span class="dc-tag">'+esc(tag)+'</span>';}).join('')+'</div>':'';
   var media='<button class="dc-thumb" type="button" data-play-id="'+esc(track.ytId)+'" title="'+esc(track.name)+'" aria-label="'+esc(track.name)+'を再生"><img src="'+esc(thumbnail)+'" alt="'+esc(track.name)+'" loading="lazy"><span class="dc-play" aria-hidden="true"><span>▶</span></span>'+sourceLabel+'</button>';
-  return '<article class="dc-card reveal" style="--delay:'+Math.min(track.sourceIndex%4,3)*70+'ms" data-yt-id="'+esc(track.ytId)+'" data-source-index="'+track.sourceIndex+'" data-date="'+esc(track.date)+'" data-title="'+esc(track.name.toLowerCase())+'" data-year="'+esc(track.date.slice(0,4))+'" data-genre="'+esc(track.genre||'')+'" data-game="'+esc(track.game||'')+'">'+
+  return '<article class="dc-card reveal" style="--delay:'+Math.min(track.sourceIndex%4,3)*70+'ms" data-yt-id="'+esc(track.ytId)+'" data-source-index="'+track.sourceIndex+'" data-date="'+esc(track.date)+'" data-title="'+esc(track.name.toLowerCase())+'" data-year="'+esc(track.date.slice(0,4))+'" data-genre="'+esc(track.genre||'')+'" data-game="'+esc(track.game||'')+'" data-tags="'+esc(tags.join('|').toLowerCase())+'">'+
     '<div class="dc-media">'+media+'</div>'+
-    '<div class="dc-info"><div class="dc-meta-row">'+meta+'</div><h3 class="'+titleClass+'" title="'+esc(track.name)+'">'+esc(track.name)+'</h3>'+details+
+    '<div class="dc-info"><div class="dc-meta-row">'+meta+'</div><h3 class="'+titleClass+'" title="'+esc(track.name)+'">'+esc(track.name)+'</h3>'+details+tagHtml+
     '<div class="dc-btn-row"><button class="share-btn" type="button" data-share-id="'+esc(track.ytId)+'" aria-label="'+esc(track.name)+'をシェア">'+SHARE_SVG+'シェア</button>'+
     '<button class="like-btn" type="button" data-id="'+esc(track.likeId||track.ytId)+'" aria-label="いいね"><span class="lheart">♡</span><span class="lcnt">0</span></button></div></div></article>';
 }
@@ -1144,12 +1152,29 @@ function renderTrackCards(){
   if(total)total.textContent=TRACKS.length;
 }
 
+function populateTagFilter(){
+  var select=document.getElementById('tagFilter');
+  if(!select)return;
+  var selected=select.value;
+  var tags=[],seen={};
+  TRACKS.forEach(function(track){
+    (track.tags||[]).forEach(function(tag){
+      var key=tag.toLowerCase();
+      if(!seen[key]){seen[key]=true;tags.push(tag);}
+    });
+  });
+  tags.sort(function(a,b){return a.localeCompare(b,'ja');});
+  select.innerHTML='<option value="">Tag: All</option>'+tags.map(function(tag){return '<option value="'+esc(tag.toLowerCase())+'">'+esc(tag)+'</option>';}).join('');
+  if(seen[selected])select.value=selected;
+}
+
 function saveUIState(){
   localStorage.setItem(UI_STATE_KEY,JSON.stringify({
     sort:sortOrder,
     search:document.getElementById('searchBox').value,
     genre:document.getElementById('genreFilter').value,
     game:document.getElementById('gameFilter').value,
+    tag:document.getElementById('tagFilter').value,
     favoriteOnly:favoriteOnly
   }));
 }
@@ -1158,6 +1183,7 @@ function restoreUIState(){
   document.getElementById('searchBox').value=savedUIState.search||'';
   document.getElementById('genreFilter').value=savedUIState.genre||'';
   document.getElementById('gameFilter').value=savedUIState.game||'';
+  document.getElementById('tagFilter').value=savedUIState.tag||'';
   document.querySelectorAll('[data-sort]').forEach(function(btn){btn.classList.toggle('active',btn.dataset.sort===sortOrder);});
   updateFavoriteFilterButton();
 }
@@ -1184,6 +1210,7 @@ function rerender(){
   var q=document.getElementById('searchBox').value.toLowerCase().trim();
   var genre=document.getElementById('genreFilter').value;
   var game=document.getElementById('gameFilter').value;
+  var tag=document.getElementById('tagFilter').value;
   var grid=document.getElementById('dcGrid');
   if(!grid)return;
   var all=Array.from(grid.querySelectorAll(':scope > .dc-card'));
@@ -1196,8 +1223,8 @@ function rerender(){
   var shown=0;
   all.forEach(function(card){
     var track=getTrackById(card.dataset.ytId);
-    var text=[card.dataset.title,card.dataset.year,track&&track.platform,track&&track.collab,track&&track.note].join(' ').toLowerCase();
-    var match=(!q||text.includes(q))&&(!genre||(card.dataset.genre||'').includes(genre))&&(!game||(card.dataset.game||'').includes(game));
+    var text=[card.dataset.title,card.dataset.year,track&&track.platform,track&&track.collab,track&&track.note,track&&(track.tags||[]).join(' ')].join(' ').toLowerCase();
+    var match=(!q||text.includes(q))&&(!genre||(card.dataset.genre||'').includes(genre))&&(!game||(card.dataset.game||'').includes(game))&&(!tag||(card.dataset.tags||'').split('|').includes(tag));
     if(favoriteOnly)match=match&&!!(track&&LIKES[(track.likeId||track.ytId)+'_voted']);
     card.style.display=match?'':'none';
     if(match)shown++;
@@ -1208,14 +1235,25 @@ function rerender(){
     grid.appendChild(nr);
   }else if(nr&&nr.parentNode){nr.parentNode.removeChild(nr);}
   var badge=document.getElementById('countBadge');
-  if(badge)badge.innerHTML=(!q&&!genre&&!game&&!favoriteOnly)?'全 <em>'+all.length+'</em> 曲':'<em>'+shown+'</em> / '+all.length+' 曲';
+  if(badge)badge.innerHTML=(!q&&!genre&&!game&&!tag&&!favoriteOnly)?'全 <em>'+all.length+'</em> 曲':'<em>'+shown+'</em> / '+all.length+' 曲';
   saveUIState();
   if(typeof mpUpdateCardState==="function"&&typeof MP!=="undefined")mpUpdateCardState();
 }
 
 renderTrackCards();
+populateTagFilter();
 restoreUIState();
 initLikes();
+if(window.CS4W_DISCOGRAPHY_TAGS_PROMISE){
+  window.CS4W_DISCOGRAPHY_TAGS_PROMISE.then(function(){
+    renderTrackCards();
+    populateTagFilter();
+    restoreUIState();
+    rerender();
+    initLikes();
+    initRevealAnimations();
+  });
+}
 document.getElementById('searchBox').addEventListener('input',rerender);
 document.getElementById('dcGrid').addEventListener('click',function(event){
   var play=event.target.closest('[data-play-id]');
